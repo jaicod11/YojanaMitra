@@ -1,0 +1,9 @@
+cat > .gitignore << 'EOF'
+data/external/
+data/interim/
+data/raw/
+.env
+__pycache__/
+.venv/
+.DS_Store
+EOF
