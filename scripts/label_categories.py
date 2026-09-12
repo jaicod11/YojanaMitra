@@ -51,14 +51,27 @@ TO_VERIFY_PATH = LABELS_DIR / "to_verify.csv"
 PREDICTIONS_PATH = LABELS_DIR / "predictions.json"
 LABEL_RUN_PATH = LABELS_DIR / "label_run.json"
 
-GEMINI_MODEL = "gemini-3.6-flash"
+
+def set_labels_dir(path):
+    """Point every output at `path` (used by --out-dir so a config experiment
+    can never write over the real labels or an archived verification round)."""
+    global LABELS_DIR, SAMPLE_SLUGS_PATH, TO_VERIFY_PATH, PREDICTIONS_PATH, LABEL_RUN_PATH
+    LABELS_DIR = Path(path)
+    SAMPLE_SLUGS_PATH = LABELS_DIR / "sample_slugs.json"
+    TO_VERIFY_PATH = LABELS_DIR / "to_verify.csv"
+    PREDICTIONS_PATH = LABELS_DIR / "predictions.json"
+    LABEL_RUN_PATH = LABELS_DIR / "label_run.json"
+
+DEFAULT_GEMINI_MODEL = "gemini-3.1-flash-lite"
 GROQ_MODEL = "openai/gpt-oss-120b"
-# NOTE: the spec called for gemini-2.0-flash / llama-3.3-70b-versatile, but
-# both are retired on their respective platforms as of this run (verified
-# live against the actual API keys) -- gemini-2.0-flash and gemini-2.5-flash
-# both 404, and Groq has removed every Llama model from its active lineup.
-# gemini-3.6-flash is Google's own suggested replacement; openai/gpt-oss-120b
-# is the largest model Groq still serves, closest in spirit to a 70b fallback.
+# Model history, all verified live against the real keys rather than assumed:
+# the original spec's gemini-2.0-flash and llama-3.3-70b-versatile are both
+# retired (2.0 and 2.5 flash now 404; Groq has dropped every Llama), so this
+# ran on gemini-3.6-flash with openai/gpt-oss-120b as fallback. Probing the
+# key then showed the -lite variants spend zero thinking tokens (7 vs 67 on
+# an identical trivial prompt), which is the right trade for a closed-set
+# classification that needs no internal reasoning -- hence the default below.
+# Override with --gemini-model if lite quality proves worse.
 
 MAX_SAMPLE_WITHOUT_OVERRIDE = 100
 MIN_CENTRAL = 5
@@ -504,9 +517,9 @@ def make_groq_client(api_key):
     return Groq(api_key=api_key, timeout=60.0, max_retries=0)
 
 
-def call_gemini(client, prompt):
+def call_gemini(client, prompt, model):
     resp = client.models.generate_content(
-        model=GEMINI_MODEL,
+        model=model,
         contents=prompt,
         config=genai_types.GenerateContentConfig(temperature=0),
     )
@@ -517,10 +530,10 @@ def call_gemini(client, prompt):
     return resp.text, (prompt_t, completion_t, total_t)
 
 
-def call_groq(client, prompt, reasoning_effort=None):
+def call_groq(client, prompt, model, reasoning_effort=None):
     kwargs = {"reasoning_effort": reasoning_effort} if reasoning_effort else {}
     resp = client.chat.completions.create(
-        model=GROQ_MODEL,
+        model=model,
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
         **kwargs,
@@ -568,9 +581,9 @@ def pool_generate(pool, prompt, delay, reasoning_effort=None):
         attempt += 1
         try:
             if pool.name == "gemini":
-                text, usage = call_gemini(pool.client(), prompt)
+                text, usage = call_gemini(pool.client(), prompt, pool.model)
             else:
-                text, usage = call_groq(pool.client(), prompt, reasoning_effort)
+                text, usage = call_groq(pool.client(), prompt, pool.model, reasoning_effort)
         except Exception as e:  # noqa: BLE001
             kind = classify_error(e)
             _, message = error_status_and_message(e)
@@ -737,7 +750,15 @@ def main():
     ap.add_argument("--provider", choices=["gemini", "groq"], default=None,
                      help="restrict to one provider (e.g. drive Groq directly once "
                           "Gemini's daily request quota is spent)")
+    ap.add_argument("--gemini-model", default=DEFAULT_GEMINI_MODEL,
+                     help=f"Gemini model id (default: {DEFAULT_GEMINI_MODEL})")
+    ap.add_argument("--out-dir", type=Path, default=None,
+                     help="write sample/predictions/run metadata to this directory instead of "
+                          "data/interim/labels (for side-by-side config evaluation)")
     args = ap.parse_args()
+
+    if args.out_dir:
+        set_labels_dir(args.out_dir)
 
     load_dotenv(ROOT / ".env")
     logging.getLogger("google_genai.models").setLevel(logging.ERROR)  # silence benign AFC notice
@@ -747,7 +768,7 @@ def main():
     brief = args.brief if args.brief is not None else (args.slug is None)
 
     pools = [
-        ProviderPool("gemini", GEMINI_MODEL, "GEMINI_API_KEY", make_gemini_client),
+        ProviderPool("gemini", args.gemini_model, "GEMINI_API_KEY", make_gemini_client),
         ProviderPool("groq", GROQ_MODEL, "GROQ_API_KEY", make_groq_client),
     ]
     if args.provider:
