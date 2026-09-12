@@ -9,7 +9,14 @@ and writes:
   - data/interim/labels/to_verify.csv      (blind sheet for a human to fill in)
   - data/interim/labels/predictions.json   (model output; do not open until
                                              human verification is complete)
-  - data/interim/labels/label_run.json     (run metadata)
+  - data/interim/labels/label_run.json     (run metadata + token accounting)
+
+Token budget matters: the providers' free tiers cap daily tokens (Groq) and
+daily requests (Gemini), so schemes are classified in batches that amortise
+the shared instruction block, and --brief drops the per-label rationale
+fields. Cumulative token usage is tracked from the API usage fields, and the
+run stops cleanly when a provider reports its daily cap rather than retrying
+into an exhausted quota.
 
 Never writes to data/interim/schemes/. Never uses the `tags` field as an LLM
 input feature (stratification only).
@@ -24,6 +31,7 @@ import random
 import re
 import sys
 import time
+from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -55,6 +63,16 @@ GROQ_MODEL = "openai/gpt-oss-120b"
 MAX_SAMPLE_WITHOUT_OVERRIDE = 100
 MIN_CENTRAL = 5
 MIN_STATE = 15
+
+# Free-tier daily caps, used only to project how far a day's budget stretches.
+# The two providers are capped on different axes, so batching helps both but
+# for different reasons: Groq is token-capped (bigger batches cut the shared
+# instruction block per label), Gemini is request-capped (bigger batches mean
+# more labels per request). Neither number is discoverable from the APIs --
+# both come from observed behaviour: a previous run consumed 199,622 Groq
+# tokens before Groq reported its daily cap.
+GROQ_DAILY_TOKEN_QUOTA = 200_000
+GEMINI_DAILY_REQUEST_QUOTA = 20
 
 CATEGORIES = [
     "Agriculture, Rural & Environment",
@@ -153,6 +171,21 @@ Respond with ONLY a JSON object, no markdown fences, no preamble:
 # survives str.format() -- .format() is only ever called with scheme_name /
 # description / benefits_text, so the doubled braces render back to single
 # braces in the actual prompt sent to the model, unchanged from the spec.
+
+# The taxonomy + classification rules, sliced straight out of the verbatim
+# template so the batch prompt and the single-scheme prompt always share
+# byte-identical instructions (no second copy to drift out of sync).
+INSTRUCTION_BLOCK = PROMPT_TEMPLATE.split("\nScheme name:")[0]
+
+# Per-scheme context budget. Brief mode is the bulk default: it is the single
+# biggest lever on tokens-per-label after batching.
+FULL_DESC_CHARS, FULL_BENEFITS_CHARS = 1500, 1500
+BRIEF_DESC_CHARS, BRIEF_BENEFITS_CHARS = 400, 200
+
+# A slug that comes back missing/invalid this many times is retried on its
+# own (batch of 1) to isolate it from whatever else confused the model.
+SINGLETON_AFTER_ATTEMPTS = 2
+MAX_ATTEMPTS_PER_SLUG = 3
 
 
 # ---------------------------------------------------------------------------
@@ -264,54 +297,211 @@ def truncate(s, n):
 
 
 def build_prompt(record):
+    """Single-scheme, full-detail prompt -- the spec's prompt, unchanged."""
     return PROMPT_TEMPLATE.format(
         scheme_name=record["scheme_name"],
-        description=truncate(record["description"], 1500),
-        benefits_text=truncate(record["benefits_text"], 1500),
+        description=truncate(record["description"], FULL_DESC_CHARS),
+        benefits_text=truncate(record["benefits_text"], FULL_BENEFITS_CHARS),
     )
+
+
+def build_batch_prompt(records, brief):
+    """One shared instruction block + N schemes -> one JSON array of results.
+
+    The taxonomy and classification rules are identical to the single-scheme
+    prompt; only the input framing and the response schema change, so labels
+    stay comparable across batch sizes.
+    """
+    desc_n = BRIEF_DESC_CHARS if brief else FULL_DESC_CHARS
+    ben_n = BRIEF_BENEFITS_CHARS if brief else FULL_BENEFITS_CHARS
+
+    parts = [INSTRUCTION_BLOCK.rstrip(), "",
+             f"You will be given {len(records)} schemes. Classify EACH ONE independently,",
+             "applying the rules above to each scheme on its own.", ""]
+    for i, r in enumerate(records, 1):
+        parts += [
+            f"--- Scheme {i} ---",
+            f"slug: {r['slug']}",
+            f"Scheme name: {r['scheme_name']}",
+            f"Description: {truncate(r['description'], desc_n)}",
+            f"Benefits: {truncate(r['benefits_text'], ben_n)}",
+            "",
+        ]
+    parts += [
+        f"Respond with ONLY a JSON array of {len(records)} objects, no markdown fences, "
+        "no preamble. Include every slug exactly as given above, in the same order:",
+    ]
+    if brief:
+        parts.append('[{"slug": "<slug>", "category": "<exact string from the list above>", '
+                     '"confidence": "high" | "medium" | "low"}]')
+    else:
+        parts.append('[{"slug": "<slug>", "category": "<exact string from the list above>", '
+                     '"confidence": "high" | "medium" | "low", '
+                     '"reason": "<one sentence, max 25 words>", '
+                     '"runner_up": "<second-most-likely category, or null if unambiguous>"}]')
+    return "\n".join(parts)
 
 
 FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
 
 
-def parse_and_validate(raw_text):
-    text = FENCE_RE.sub("", raw_text.strip()).strip()
+def _strip_fences(raw_text):
+    return FENCE_RE.sub("", (raw_text or "").strip()).strip()
+
+
+def validate_fields(obj, brief):
+    """Shared field validation for both the single and batched schemas."""
+    required = ["category", "confidence"] if brief else ["category", "confidence", "reason", "runner_up"]
+    missing = [k for k in required if k not in obj]
+    if missing:
+        return f"missing_keys: {missing}"
+    if obj["category"] not in CATEGORIES_SET:
+        return f"invalid_category: {obj['category']!r}"
+    if obj["confidence"] not in CONFIDENCE_LEVELS:
+        return f"invalid_confidence: {obj['confidence']!r}"
+    if not brief:
+        if obj["runner_up"] is not None and obj["runner_up"] not in CATEGORIES_SET:
+            return f"invalid_runner_up: {obj['runner_up']!r}"
+        if not isinstance(obj["reason"], str) or not obj["reason"].strip():
+            return "empty_reason"
+    return None
+
+
+def parse_and_validate(raw_text, brief=False):
+    text = _strip_fences(raw_text)
     try:
         obj = json.loads(text)
     except json.JSONDecodeError as e:
         return None, f"invalid_json: {e}"
     if not isinstance(obj, dict):
         return None, "response_not_a_json_object"
-    missing = [k for k in ("category", "confidence", "reason", "runner_up") if k not in obj]
-    if missing:
-        return None, f"missing_keys: {missing}"
-    if obj["category"] not in CATEGORIES_SET:
-        return None, f"invalid_category: {obj['category']!r}"
-    if obj["confidence"] not in CONFIDENCE_LEVELS:
-        return None, f"invalid_confidence: {obj['confidence']!r}"
-    if obj["runner_up"] is not None and obj["runner_up"] not in CATEGORIES_SET:
-        return None, f"invalid_runner_up: {obj['runner_up']!r}"
-    if not isinstance(obj["reason"], str) or not obj["reason"].strip():
-        return None, "empty_reason"
-    return obj, None
+    err = validate_fields(obj, brief)
+    return (None, err) if err else (obj, None)
+
+
+def parse_batch_response(raw_text, requested_slugs, brief):
+    """Return (results_by_slug, per_slug_errors, fatal_error).
+
+    Every requested slug is accounted for: it either lands in results or in
+    per_slug_errors, so the caller can re-queue the stragglers instead of
+    silently dropping them.
+    """
+    text = _strip_fences(raw_text)
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError as e:
+        return {}, {}, f"invalid_json: {e}"
+    if isinstance(payload, dict):  # tolerate {"results": [...]} shapes
+        for key in ("results", "schemes", "classifications", "data"):
+            if isinstance(payload.get(key), list):
+                payload = payload[key]
+                break
+    if not isinstance(payload, list):
+        return {}, {}, "response_not_a_json_array"
+
+    by_slug, errors = {}, {}
+    seen = {}
+    for item in payload:
+        if isinstance(item, dict) and isinstance(item.get("slug"), str):
+            seen[item["slug"].strip()] = item
+
+    for slug in requested_slugs:
+        obj = seen.get(slug)
+        if obj is None:
+            errors[slug] = "missing_from_response"
+            continue
+        err = validate_fields(obj, brief)
+        if err:
+            errors[slug] = err
+        else:
+            by_slug[slug] = obj
+    return by_slug, errors, None
 
 
 # ---------------------------------------------------------------------------
 # Providers
 # ---------------------------------------------------------------------------
 
-def make_gemini_client():
+def collect_keys(prefix):
+    """GEMINI_API_KEY, GEMINI_API_KEY_2, ... _9 (gaps tolerated)."""
+    keys = []
+    primary = (os.environ.get(prefix) or "").strip()
+    if primary:
+        keys.append((prefix, primary))
+    for i in range(2, 10):
+        name = f"{prefix}_{i}"
+        val = (os.environ.get(name) or "").strip()
+        if val:
+            keys.append((name, val))
+    return keys
+
+
+# A 429 that names a per-minute window recovers in seconds and is worth
+# waiting out; one that names a per-day window does not, and retrying into it
+# is what burned 8 hours last run.
+DAILY_QUOTA_RE = re.compile(r"per\s*-?\s*day|perday|\bTPD\b|\bRPD\b|daily", re.IGNORECASE)
+MINUTE_QUOTA_RE = re.compile(r"per\s*-?\s*minute|perminute|\bTPM\b|\bRPM\b", re.IGNORECASE)
+MAX_CONSECUTIVE_429 = 3
+
+
+class ProviderPool:
+    """One provider, one or more API keys, with usage + exhaustion tracking."""
+
+    def __init__(self, name, model, key_prefix, client_factory):
+        self.name = name
+        self.model = model
+        self.keys = collect_keys(key_prefix)
+        self.client_factory = client_factory
+        self.idx = 0
+        self._clients = {}
+        self.exhausted_keys = []
+        self.usage = collections.Counter()  # prompt / completion / total / requests
+        self.per_key_usage = collections.defaultdict(collections.Counter)
+        self.consecutive_429 = 0
+
+    @property
+    def available(self):
+        return self.idx < len(self.keys)
+
+    @property
+    def key_name(self):
+        return self.keys[self.idx][0] if self.available else None
+
+    def client(self):
+        name, key = self.keys[self.idx]
+        if name not in self._clients:
+            self._clients[name] = self.client_factory(key)
+        return self._clients[name]
+
+    def record_usage(self, prompt_t, completion_t, total_t):
+        key = self.key_name or "exhausted"
+        for counter in (self.usage, self.per_key_usage[key]):
+            counter["prompt"] += prompt_t
+            counter["completion"] += completion_t
+            counter["total"] += total_t
+            counter["requests"] += 1
+
+    def retire_current_key(self, reason):
+        """Daily cap on this key -> rotate to the next one, if any."""
+        if self.available:
+            self.exhausted_keys.append({"key": self.key_name, "reason": reason})
+            self.idx += 1
+            self.consecutive_429 = 0
+        return self.available
+
+
+def make_gemini_client(api_key):
     return genai.Client(
-        api_key=os.environ["GEMINI_API_KEY"],
+        api_key=api_key,
         http_options=genai_types.HttpOptions(
-            timeout=30000,
+            timeout=60000,
             retry_options=genai_types.HttpRetryOptions(attempts=1),  # we drive retries ourselves
         ),
     )
 
 
-def make_groq_client():
-    return Groq(api_key=os.environ["GROQ_API_KEY"], timeout=30.0, max_retries=0)
+def make_groq_client(api_key):
+    return Groq(api_key=api_key, timeout=60.0, max_retries=0)
 
 
 def call_gemini(client, prompt):
@@ -320,107 +510,170 @@ def call_gemini(client, prompt):
         contents=prompt,
         config=genai_types.GenerateContentConfig(temperature=0),
     )
-    return resp.text
+    um = resp.usage_metadata
+    prompt_t = um.prompt_token_count or 0
+    completion_t = (um.candidates_token_count or 0) + (getattr(um, "thoughts_token_count", None) or 0)
+    total_t = um.total_token_count or (prompt_t + completion_t)
+    return resp.text, (prompt_t, completion_t, total_t)
 
 
-def call_groq(client, prompt):
+def call_groq(client, prompt, reasoning_effort=None):
+    kwargs = {"reasoning_effort": reasoning_effort} if reasoning_effort else {}
     resp = client.chat.completions.create(
         model=GROQ_MODEL,
         messages=[{"role": "user", "content": prompt}],
         temperature=0,
+        **kwargs,
     )
-    return resp.choices[0].message.content
+    u = resp.usage
+    return resp.choices[0].message.content, (u.prompt_tokens or 0, u.completion_tokens or 0, u.total_tokens or 0)
 
 
-def classify_gemini_error(exc):
-    """retryable: 429 / 5xx / timeout, per spec. Anything else is fatal --
-    no retry, no fallback (e.g. auth or malformed-request errors, which a
-    retry or a different provider wouldn't fix anyway)."""
+def error_status_and_message(exc):
+    """(http_status_or_None, message) for either SDK's error types."""
     if isinstance(exc, genai_errors.APIError):
-        code = getattr(exc, "code", None) or 0
-        return "retryable" if (code == 429 or code >= 500) else "fatal"
+        return getattr(exc, "code", None), f"{getattr(exc, 'message', '')} {getattr(exc, 'details', '')}"
+    status = getattr(exc, "status_code", None)
+    body = getattr(exc, "body", None) or getattr(exc, "message", None) or str(exc)
+    return status, str(body)
+
+
+def classify_error(exc):
+    """-> 'daily_quota' | 'rate_minute' | 'retryable' | 'fatal'."""
     if isinstance(exc, httpx.TimeoutException):
         return "retryable"
+    status, message = error_status_and_message(exc)
+    if status == 429:
+        if MINUTE_QUOTA_RE.search(message):
+            return "rate_minute"
+        if DAILY_QUOTA_RE.search(message):
+            return "daily_quota"
+        return "rate_minute"  # unlabelled 429: back off, but see MAX_CONSECUTIVE_429
+    if status is not None and status >= 500:
+        return "retryable"
+    if isinstance(exc, (genai_errors.APIError,)) or status is not None:
+        return "fatal"
     return "fatal"
 
 
-def try_gemini(client, prompt):
-    """Primary provider: up to 2 attempts (1 retry) with exponential backoff,
-    for either a retryable transport error or a schema-validation failure."""
-    raw, err = None, None
-    for attempt in (1, 2):
+def pool_generate(pool, prompt, delay, reasoning_effort=None):
+    """One provider attempt, including its own retries.
+
+    Returns {"ok", "text", "error", "status"} where status is one of
+    'ok' | 'exhausted' | 'fatal' | 'failed'. 'exhausted' means every key for
+    this provider has reported its daily cap.
+    """
+    attempt = 0
+    while pool.available:
+        attempt += 1
         try:
-            raw = call_gemini(client, prompt)
+            if pool.name == "gemini":
+                text, usage = call_gemini(pool.client(), prompt)
+            else:
+                text, usage = call_groq(pool.client(), prompt, reasoning_effort)
         except Exception as e:  # noqa: BLE001
-            kind = classify_gemini_error(e)
-            err = f"{kind}_error: {type(e).__name__}: {e}"
-            if kind == "fatal":
-                return {"ok": False, "raw": None, "parsed": None, "error": err, "allow_fallback": False}
-            if attempt == 1:
-                time.sleep(2 ** attempt)
+            kind = classify_error(e)
+            _, message = error_status_and_message(e)
+            short = f"{type(e).__name__}: {message[:200]}"
+
+            if kind == "daily_quota":
+                tqdm.write(f"  [{pool.name}] daily cap reported on {pool.key_name}: {message[:160]}")
+                if not pool.retire_current_key("daily_quota"):
+                    return {"ok": False, "text": None, "error": short, "status": "exhausted"}
+                tqdm.write(f"  [{pool.name}] rotating to key {pool.key_name}")
+                attempt = 0
                 continue
-            return {"ok": False, "raw": None, "parsed": None, "error": err, "allow_fallback": True}
 
-        parsed, verr = parse_and_validate(raw)
-        if parsed is not None:
-            return {"ok": True, "raw": raw, "parsed": parsed, "error": None, "allow_fallback": False}
-        err = f"schema_validation_failed: {verr}"
-        if attempt == 1:
-            time.sleep(1.0)
+            if kind == "rate_minute":
+                pool.consecutive_429 += 1
+                if pool.consecutive_429 >= MAX_CONSECUTIVE_429:
+                    tqdm.write(f"  [{pool.name}] {MAX_CONSECUTIVE_429} consecutive 429s on "
+                               f"{pool.key_name}; treating as exhausted")
+                    if not pool.retire_current_key("repeated_429"):
+                        return {"ok": False, "text": None, "error": short, "status": "exhausted"}
+                    attempt = 0
+                    continue
+                if attempt <= 2:
+                    wait = max(delay, 20.0 * attempt)
+                    tqdm.write(f"  [{pool.name}] per-minute rate limit; waiting {wait:.0f}s")
+                    time.sleep(wait)
+                    continue
+                return {"ok": False, "text": None, "error": short, "status": "failed"}
+
+            if kind == "retryable":
+                if attempt <= 2:
+                    time.sleep(2 ** attempt)
+                    continue
+                return {"ok": False, "text": None, "error": short, "status": "failed"}
+
+            return {"ok": False, "text": None, "error": short, "status": "fatal"}
+
+        pool.record_usage(*usage)
+        pool.consecutive_429 = 0
+        return {"ok": True, "text": text, "error": None, "status": "ok"}
+
+    return {"ok": False, "text": None, "error": "no keys available", "status": "exhausted"}
+
+
+def classify_batch(pools, records, slugs, brief, delay, reasoning_effort=None):
+    """Classify a batch of slugs, Gemini first then Groq.
+
+    Returns (results_by_slug, errors_by_slug, provider, model, status).
+    """
+    # A single scheme in full-detail mode uses the spec's original
+    # single-scheme prompt and schema, so anything labeled that way stays
+    # directly comparable with the verification sample.
+    single_full = len(slugs) == 1 and not brief
+    prompt = build_prompt(records[slugs[0]]) if single_full \
+        else build_batch_prompt([records[s] for s in slugs], brief)
+    last_errors = {s: "not_attempted" for s in slugs}
+
+    for pool in pools:
+        if not pool.available:
             continue
-        return {"ok": False, "raw": raw, "parsed": None, "error": err, "allow_fallback": True}
-    return {"ok": False, "raw": raw, "parsed": None, "error": err, "allow_fallback": True}
+        res = pool_generate(pool, prompt, delay, reasoning_effort if pool.name == "groq" else None)
+
+        if res["status"] == "ok":
+            if single_full:
+                obj, verr = parse_and_validate(res["text"], brief=False)
+                by_slug = {slugs[0]: obj} if obj else {}
+                errors = {} if obj else {slugs[0]: verr}
+                fatal = None
+            else:
+                by_slug, errors, fatal = parse_batch_response(res["text"], slugs, brief)
+            if fatal:
+                last_errors = {s: fatal for s in slugs}
+                continue  # malformed payload -> let the next provider try
+            if by_slug:
+                return by_slug, errors, pool.name, pool.model, "ok"
+            last_errors = errors or {s: "empty_response" for s in slugs}
+            continue
+
+        if res["status"] == "fatal":
+            # Matches the original policy: a fatal primary error (auth, bad
+            # request) is not something a different provider would fix.
+            return {}, {s: res["error"] for s in slugs}, pool.name, pool.model, "fatal"
+
+        last_errors = {s: res["error"] for s in slugs}
+
+    status = "exhausted" if not any(p.available for p in pools) else "failed"
+    return {}, last_errors, None, None, status
 
 
-def try_groq(client, prompt):
-    """Fallback provider: single attempt, per spec (no further fallback exists)."""
-    try:
-        raw = call_groq(client, prompt)
-    except Exception as e:  # noqa: BLE001
-        return {"ok": False, "raw": None, "parsed": None, "error": f"groq_error: {type(e).__name__}: {e}"}
-    parsed, verr = parse_and_validate(raw)
-    if parsed is None:
-        return {"ok": False, "raw": raw, "parsed": None, "error": f"groq_schema_validation_failed: {verr}"}
-    return {"ok": True, "raw": raw, "parsed": parsed, "error": None}
-
-
-def classify_scheme(gemini_client, groq_client, record):
-    prompt = build_prompt(record)
-    t0 = time.monotonic()
-
-    g = try_gemini(gemini_client, prompt)
-    if g["ok"]:
-        latency = time.monotonic() - t0
-        return _prediction(record["slug"], g["parsed"], g["raw"], "gemini", GEMINI_MODEL, latency), None
-
-    if not g["allow_fallback"]:
-        latency = time.monotonic() - t0
-        return None, {"slug": record["slug"], "error": g["error"], "latency": latency}
-
-    gr = try_groq(groq_client, prompt)
-    latency = time.monotonic() - t0
-    if gr["ok"]:
-        return _prediction(record["slug"], gr["parsed"], gr["raw"], "groq", GROQ_MODEL, latency), None
-
-    return None, {
-        "slug": record["slug"],
-        "error": f"gemini: {g['error']} || groq: {gr['error']}",
-        "latency": latency,
-    }
-
-
-def _prediction(slug, parsed, raw, provider, model, latency):
+def _prediction(slug, parsed, raw, provider, model, latency, mode, batch_size):
     return {
         "slug": slug,
         "category": parsed["category"],
         "confidence": parsed["confidence"],
-        "reason": parsed["reason"],
-        "runner_up": parsed["runner_up"],
+        "reason": parsed.get("reason"),
+        "runner_up": parsed.get("runner_up"),
         "provider": provider,
         "model": model,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "raw_response": raw,
         "latency_seconds": round(latency, 3),
+        "mode": mode,
+        "batch_size": batch_size,
     }
 
 
@@ -472,33 +725,69 @@ def main():
                      help="classify a single scheme and print the full request/response for debugging")
     ap.add_argument("--i-know-what-im-doing", action="store_true",
                      help="required to use --sample > 100")
+    ap.add_argument("--batch", type=int, default=10,
+                     help="schemes per API call; amortises the shared instruction block")
+    ap.add_argument("--limit", type=int, default=None,
+                     help="process at most N still-unlabeled schemes this run")
+    ap.add_argument("--brief", action=argparse.BooleanOptionalAction, default=None,
+                     help="short context, and ask only for slug/category/confidence "
+                          "(default: on for bulk runs, off for --slug)")
+    ap.add_argument("--groq-reasoning-effort", choices=["low", "medium", "high"], default=None,
+                     help="lower effort cuts Groq completion tokens substantially")
+    ap.add_argument("--provider", choices=["gemini", "groq"], default=None,
+                     help="restrict to one provider (e.g. drive Groq directly once "
+                          "Gemini's daily request quota is spent)")
     args = ap.parse_args()
 
     load_dotenv(ROOT / ".env")
-    if "GEMINI_API_KEY" not in os.environ or "GROQ_API_KEY" not in os.environ:
-        print("GEMINI_API_KEY and GROQ_API_KEY must be set (see .env.example).", file=sys.stderr)
-        sys.exit(1)
     logging.getLogger("google_genai.models").setLevel(logging.ERROR)  # silence benign AFC notice
 
-    gemini_client = make_gemini_client()
-    groq_client = make_groq_client()
+    # Brief mode is the bulk default; the debug path stays full-detail so it
+    # still exercises the same prompt the verification sample was labeled with.
+    brief = args.brief if args.brief is not None else (args.slug is None)
+
+    pools = [
+        ProviderPool("gemini", GEMINI_MODEL, "GEMINI_API_KEY", make_gemini_client),
+        ProviderPool("groq", GROQ_MODEL, "GROQ_API_KEY", make_groq_client),
+    ]
+    if args.provider:
+        pools = [p for p in pools if p.name == args.provider]
+    for pool in pools:
+        if not pool.keys:
+            print(f"No API keys found for {pool.name} (see .env.example).", file=sys.stderr)
+            sys.exit(1)
+    print("Providers: " + ", ".join(
+        f"{p.name}={p.model} ({len(p.keys)} key{'s' if len(p.keys) > 1 else ''}: "
+        f"{', '.join(n for n, _ in p.keys)})" for p in pools))
 
     if args.slug:
         records = load_records()
         if args.slug not in records:
             print(f"no such slug: {args.slug}", file=sys.stderr)
             sys.exit(1)
-        record = records[args.slug]
-        prompt = build_prompt(record)
+        prompt = (build_batch_prompt([records[args.slug]], brief) if brief
+                  else build_prompt(records[args.slug]))
         print("=" * 70)
         print("REQUEST PROMPT")
         print("=" * 70)
         print(prompt)
-        prediction, failure = classify_scheme(gemini_client, groq_client, record)
+        t0 = time.monotonic()
+        by_slug, errors, provider, model, status = classify_batch(
+            pools, records, [args.slug], brief, args.delay, args.groq_reasoning_effort)
         print("=" * 70)
         print("RESULT")
         print("=" * 70)
-        print(json.dumps(prediction or failure, indent=2, ensure_ascii=False))
+        if args.slug in by_slug:
+            obj = by_slug[args.slug]
+            print(json.dumps(_prediction(args.slug, obj, json.dumps(obj), provider, model,
+                                          time.monotonic() - t0, "brief" if brief else "full", 1),
+                              indent=2, ensure_ascii=False))
+        else:
+            print(json.dumps({"slug": args.slug, "status": status,
+                               "error": errors.get(args.slug)}, indent=2, ensure_ascii=False))
+        for p in pools:
+            if p.usage["requests"]:
+                print(f"  {p.name}: {p.usage['requests']} request(s), {p.usage['total']} tokens")
         return
 
     if args.sample > MAX_SAMPLE_WITHOUT_OVERRIDE and not args.i_know_what_im_doing:
@@ -543,43 +832,153 @@ def main():
 
     predictions = load_json(PREDICTIONS_PATH, {})
 
-    to_process = [s for s in slugs if args.force or s not in predictions]
-    skipped = len(slugs) - len(to_process)
+    pending = [s for s in slugs if args.force or s not in predictions]
+    already_labeled = len(slugs) - len(pending)
+    if args.limit is not None:
+        pending = pending[: args.limit]
+    print(f"{already_labeled} already labeled, {len(pending)} queued this run "
+          f"(batch={args.batch}, mode={'brief' if brief else 'full'}).")
 
+    queue = deque(pending)
+    attempts = collections.Counter()
     provider_counts = collections.Counter()
     latencies = []
-    failures = []
+    failures = {}
+    stopped_reason = "completed"
 
-    for slug in tqdm(to_process, desc="classifying"):
-        record = records[slug]
-        prediction, failure = classify_scheme(gemini_client, groq_client, record)
-        if prediction:
-            predictions[slug] = prediction
-            provider_counts[prediction["provider"]] += 1
-            latencies.append(prediction["latency_seconds"])
-        else:
-            failures.append(failure["slug"])
-            latencies.append(round(failure["latency"], 3))
-            tqdm.write(f"FAILED {slug}: {failure['error']}")
-        time.sleep(args.delay)
+    with tqdm(total=len(pending), desc="labeling", unit="label") as bar:
+        while queue:
+            if not any(p.available for p in pools):
+                stopped_reason = "quota_exhausted"
+                break
+
+            # A slug that has already come back missing/invalid twice gets a
+            # call to itself, so one bad scheme can't keep poisoning a batch.
+            size = 1 if attempts[queue[0]] >= SINGLETON_AFTER_ATTEMPTS else max(1, args.batch)
+            batch = [queue.popleft() for _ in range(min(size, len(queue)))]
+
+            t0 = time.monotonic()
+            by_slug, errors, provider, model, status = classify_batch(
+                pools, records, batch, brief, args.delay, args.groq_reasoning_effort)
+            elapsed = time.monotonic() - t0
+
+            if status == "exhausted":
+                queue.extendleft(reversed(batch))  # nothing was consumed; keep them queued
+                stopped_reason = "quota_exhausted"
+                break
+
+            per_label_latency = round(elapsed / max(1, len(batch)), 3)
+            for slug in batch:
+                if slug in by_slug:
+                    predictions[slug] = _prediction(
+                        slug, by_slug[slug], json.dumps(by_slug[slug], ensure_ascii=False),
+                        provider, model, per_label_latency,
+                        "brief" if brief else "full", len(batch))
+                    provider_counts[provider] += 1
+                    latencies.append(per_label_latency)
+                    failures.pop(slug, None)
+                    bar.update(1)
+                else:
+                    attempts[slug] += 1
+                    reason = errors.get(slug, "unknown")
+                    if status == "fatal" or attempts[slug] >= MAX_ATTEMPTS_PER_SLUG:
+                        failures[slug] = reason
+                        bar.update(1)
+                        tqdm.write(f"  giving up on {slug} after {attempts[slug]} attempt(s): {reason}")
+                    else:
+                        queue.append(slug)  # re-queue rather than drop
+
+            bar.set_postfix_str(" ".join(
+                f"{p.name}={p.usage['total'] / 1000:.1f}k" for p in pools if p.usage["requests"]))
+            if queue:
+                time.sleep(args.delay)
 
     PREDICTIONS_PATH.write_text(json.dumps(predictions, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    labels_this_run = sum(provider_counts.values())
+    total_tokens = sum(p.usage["total"] for p in pools)
+    token_usage = {
+        p.name: {
+            "model": p.model,
+            "requests": p.usage["requests"],
+            "prompt_tokens": p.usage["prompt"],
+            "completion_tokens": p.usage["completion"],
+            "total_tokens": p.usage["total"],
+            "labels": provider_counts.get(p.name, 0),
+            "tokens_per_label": round(p.usage["total"] / provider_counts[p.name], 1)
+            if provider_counts.get(p.name) else None,
+            "keys_configured": [n for n, _ in p.keys],
+            "keys_exhausted": p.exhausted_keys,
+            "per_key_tokens": {k: dict(v) for k, v in p.per_key_usage.items()},
+        }
+        for p in pools
+    }
+    tokens_per_label = round(total_tokens / labels_this_run, 1) if labels_this_run else None
+    groq_tpl = token_usage.get("groq", {}).get("tokens_per_label")
+
+    # Each provider is rationed on a different axis, so project each on its own:
+    # Groq by tokens/day, Gemini by requests/day x schemes per request.
+    projection = {}
+    if groq_tpl:
+        projection["groq_labels_per_day"] = int(GROQ_DAILY_TOKEN_QUOTA / groq_tpl)
+        projection["groq_basis"] = (f"{GROQ_DAILY_TOKEN_QUOTA:,} tokens/day / {groq_tpl} tokens per label")
+    if "gemini" in token_usage and token_usage["gemini"]["requests"]:
+        labels_per_req = token_usage["gemini"]["labels"] / token_usage["gemini"]["requests"]
+        projection["gemini_labels_per_day"] = int(GEMINI_DAILY_REQUEST_QUOTA * labels_per_req)
+        projection["gemini_basis"] = (f"{GEMINI_DAILY_REQUEST_QUOTA} requests/day x "
+                                       f"{labels_per_req:.1f} labels per request")
+    if "groq_labels_per_day" in projection and "gemini_labels_per_day" in projection:
+        projection["combined_labels_per_day"] = (projection["groq_labels_per_day"]
+                                                  + projection["gemini_labels_per_day"])
 
     run_meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "sample_size": len(slugs),
         "seed": sample_meta["seed"],
-        "attempted_this_run": len(to_process),
-        "skipped_already_labeled": skipped,
+        "batch_size": args.batch,
+        "mode": "brief" if brief else "full",
+        "groq_reasoning_effort": args.groq_reasoning_effort,
+        "queued_this_run": len(pending),
+        "skipped_already_labeled": already_labeled,
+        "labels_produced_this_run": labels_this_run,
         "provider_counts": dict(provider_counts),
+        "token_usage": token_usage,
+        "total_tokens": total_tokens,
+        "tokens_per_label": tokens_per_label,
+        "daily_projection": projection,
+        "stopped_reason": stopped_reason,
+        "requeued_still_pending": list(queue),
         "failure_count": len(failures),
-        "failed_slugs": failures,
+        "failed_slugs": sorted(failures),
+        "failure_reasons": failures,
         "mean_latency_seconds": round(sum(latencies) / len(latencies), 3) if latencies else None,
         "total_labeled_so_far": len(predictions),
     }
     LABEL_RUN_PATH.write_text(json.dumps(run_meta, indent=2, ensure_ascii=False), encoding="utf-8")
 
     print()
+    print("=" * 62)
+    if stopped_reason == "quota_exhausted":
+        print("STOPPED EARLY: every provider reported its daily cap.")
+    print(f"labels produced this run : {labels_this_run}")
+    print(f"total labeled so far     : {len(predictions)} / {len(slugs)}")
+    print(f"failed (gave up)         : {len(failures)}")
+    print(f"still queued             : {len(queue)}")
+    for name, u in token_usage.items():
+        if u["requests"]:
+            print(f"  {name:6s} {u['requests']:4d} req  {u['total_tokens']:7d} tok  "
+                  f"{u['labels']:4d} labels  {u['tokens_per_label']} tok/label")
+    print(f"total tokens             : {total_tokens}")
+    print(f"tokens per label         : {tokens_per_label}")
+    if projection:
+        print("projected labels/day (free tier):")
+        for key in ("groq", "gemini"):
+            if f"{key}_labels_per_day" in projection:
+                print(f"  {key:6s} {projection[f'{key}_labels_per_day']:5d}   "
+                      f"({projection[f'{key}_basis']})")
+        if "combined_labels_per_day" in projection:
+            print(f"  {'both':6s} {projection['combined_labels_per_day']:5d}")
+    print("=" * 62)
     print(f"Verification sheet: {TO_VERIFY_PATH}")
     print(f"Run metadata:       {LABEL_RUN_PATH}")
     print("Do NOT open predictions.json until human verification of to_verify.csv is complete.")
