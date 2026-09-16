@@ -169,6 +169,8 @@ def validate_constraints(c):
             continue
         v = c[field]
         if subkeys is not None:
+            if v is None:
+                continue  # null nested object == no constraint stated
             if not isinstance(v, dict):
                 return f"{field} must be an object"
             extra = sorted(set(v) - subkeys)
@@ -324,8 +326,10 @@ def parse_and_validate(raw_text, eligibility_text):
     # fill in any omitted optional keys so downstream code sees a uniform shape
     merged = json.loads(json.dumps(EMPTY_CONSTRAINTS))
     for field, value in constraints.items():
-        if isinstance(merged.get(field), dict) and isinstance(value, dict):
-            merged[field].update(value)
+        if isinstance(merged.get(field), dict):
+            if isinstance(value, dict):
+                merged[field].update(value)
+            # value is None -> keep the all-null default for that object
         else:
             merged[field] = value
 
@@ -662,12 +666,14 @@ def main():
 
     on_disk = []
     for path in sorted(out_dir.glob("*.json")):
-        if path.name == REPORT_FILENAME:
-            continue
         try:
-            on_disk.append(json.loads(path.read_text(encoding="utf-8")))
+            rec = json.loads(path.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             continue
+        # The directory also holds report files (extract_report.json,
+        # coverage_report.json), so identify records by shape, not filename.
+        if isinstance(rec, dict) and "constraints" in rec and "slug" in rec:
+            on_disk.append(rec)
     report = build_report(on_disk, len(pending), failures, pools, skipped)
     report["extracted_this_run"] = len(extracted)
     report["total_on_disk"] = len(on_disk)
