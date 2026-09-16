@@ -199,6 +199,11 @@ BRIEF_DESC_CHARS, BRIEF_BENEFITS_CHARS = 400, 200
 # own (batch of 1) to isolate it from whatever else confused the model.
 SINGLETON_AFTER_ATTEMPTS = 2
 MAX_ATTEMPTS_PER_SLUG = 3
+# If every provider keeps failing whole calls, stop rather than grind through
+# the corpus; the queue is left intact for the next run.
+MAX_CONSECUTIVE_CALL_FAILURES = 6
+# Long runs checkpoint to disk so an interruption costs at most this many labels.
+CHECKPOINT_EVERY = 25
 
 
 # ---------------------------------------------------------------------------
@@ -460,11 +465,17 @@ MAX_CONSECUTIVE_429 = 3
 class ProviderPool:
     """One provider, one or more API keys, with usage + exhaustion tracking."""
 
-    def __init__(self, name, model, key_prefix, client_factory):
+    def __init__(self, name, model, key_prefix, client_factory, brief=True, batch_size=10):
         self.name = name
         self.model = model
         self.keys = collect_keys(key_prefix)
         self.client_factory = client_factory
+        # Prompt mode and batch size are per-provider: the two models degrade
+        # differently under batching, so each runs in the shape it was
+        # validated in rather than a single global setting.
+        self.brief = brief
+        self.batch_size = batch_size
+        self.cooldown = 0  # skip this pool for N selections after a non-quota failure
         self.idx = 0
         self._clients = {}
         self.exhausted_keys = []
@@ -501,6 +512,11 @@ class ProviderPool:
             self.idx += 1
             self.consecutive_429 = 0
         return self.available
+
+    def disable(self, reason):
+        """Take the whole provider out of this run (misconfiguration, not quota)."""
+        while self.available:
+            self.retire_current_key(reason)
 
 
 def make_gemini_client(api_key):
@@ -628,49 +644,51 @@ def pool_generate(pool, prompt, delay, reasoning_effort=None):
     return {"ok": False, "text": None, "error": "no keys available", "status": "exhausted"}
 
 
-def classify_batch(pools, records, slugs, brief, delay, reasoning_effort=None):
-    """Classify a batch of slugs, Gemini first then Groq.
+def classify_with_pool(pool, records, slugs, delay, reasoning_effort=None):
+    """Classify a batch of slugs with one specific provider, in that
+    provider's own prompt mode.
 
-    Returns (results_by_slug, errors_by_slug, provider, model, status).
+    Returns (results_by_slug, errors_by_slug, status) where status is
+    'ok' | 'invalid' | 'failed' | 'fatal' | 'exhausted'. Provider selection
+    and fallback are the caller's job, because each provider batches
+    differently and a re-queued slug must be re-chunked for whoever picks
+    it up next.
     """
     # A single scheme in full-detail mode uses the spec's original
     # single-scheme prompt and schema, so anything labeled that way stays
     # directly comparable with the verification sample.
-    single_full = len(slugs) == 1 and not brief
+    single_full = len(slugs) == 1 and not pool.brief
     prompt = build_prompt(records[slugs[0]]) if single_full \
-        else build_batch_prompt([records[s] for s in slugs], brief)
-    last_errors = {s: "not_attempted" for s in slugs}
+        else build_batch_prompt([records[s] for s in slugs], pool.brief)
 
-    for pool in pools:
-        if not pool.available:
-            continue
-        res = pool_generate(pool, prompt, delay, reasoning_effort if pool.name == "groq" else None)
+    res = pool_generate(pool, prompt, delay,
+                        reasoning_effort if pool.name == "groq" else None)
+    if res["status"] != "ok":
+        return {}, {s: res["error"] for s in slugs}, res["status"]
 
-        if res["status"] == "ok":
-            if single_full:
-                obj, verr = parse_and_validate(res["text"], brief=False)
-                by_slug = {slugs[0]: obj} if obj else {}
-                errors = {} if obj else {slugs[0]: verr}
-                fatal = None
-            else:
-                by_slug, errors, fatal = parse_batch_response(res["text"], slugs, brief)
-            if fatal:
-                last_errors = {s: fatal for s in slugs}
-                continue  # malformed payload -> let the next provider try
-            if by_slug:
-                return by_slug, errors, pool.name, pool.model, "ok"
-            last_errors = errors or {s: "empty_response" for s in slugs}
-            continue
+    if single_full:
+        obj, verr = parse_and_validate(res["text"], brief=False)
+        if obj is not None:
+            return {slugs[0]: obj}, {}, "ok"
+        return {}, {slugs[0]: verr}, "invalid"
 
-        if res["status"] == "fatal":
-            # Matches the original policy: a fatal primary error (auth, bad
-            # request) is not something a different provider would fix.
-            return {}, {s: res["error"] for s in slugs}, pool.name, pool.model, "fatal"
+    by_slug, errors, fatal = parse_batch_response(res["text"], slugs, pool.brief)
+    if fatal:
+        return {}, {s: fatal for s in slugs}, "invalid"
+    if not by_slug:
+        return {}, errors or {s: "empty_response" for s in slugs}, "invalid"
+    return by_slug, errors, "ok"
 
-        last_errors = {s: res["error"] for s in slugs}
 
-    status = "exhausted" if not any(p.available for p in pools) else "failed"
-    return {}, last_errors, None, None, status
+def select_pool(pools):
+    """First available provider, skipping any cooling off after a failure so
+    the other provider gets a turn (this is the fallback path now that each
+    provider has its own batch shape)."""
+    available = [p for p in pools if p.available]
+    if not available:
+        return None
+    ready = [p for p in available if p.cooldown == 0]
+    return ready[0] if ready else available[0]
 
 
 def _prediction(slug, parsed, raw, provider, model, latency, mode, batch_size):
@@ -752,6 +770,14 @@ def main():
                           "Gemini's daily request quota is spent)")
     ap.add_argument("--gemini-model", default=DEFAULT_GEMINI_MODEL,
                      help=f"Gemini model id (default: {DEFAULT_GEMINI_MODEL})")
+    ap.add_argument("--gemini-batch", type=int, default=None,
+                     help="schemes per Gemini call (default: --batch)")
+    ap.add_argument("--groq-batch", type=int, default=None,
+                     help="schemes per Groq call; 1 = unbatched (default: --batch)")
+    ap.add_argument("--gemini-brief", action=argparse.BooleanOptionalAction, default=None,
+                     help="prompt mode for Gemini (default: --brief)")
+    ap.add_argument("--groq-brief", action=argparse.BooleanOptionalAction, default=None,
+                     help="prompt mode for Groq (default: --brief)")
     ap.add_argument("--out-dir", type=Path, default=None,
                      help="write sample/predictions/run metadata to this directory instead of "
                           "data/interim/labels (for side-by-side config evaluation)")
@@ -767,9 +793,14 @@ def main():
     # still exercises the same prompt the verification sample was labeled with.
     brief = args.brief if args.brief is not None else (args.slug is None)
 
+    pick = lambda specific, fallback: fallback if specific is None else specific
     pools = [
-        ProviderPool("gemini", args.gemini_model, "GEMINI_API_KEY", make_gemini_client),
-        ProviderPool("groq", GROQ_MODEL, "GROQ_API_KEY", make_groq_client),
+        ProviderPool("gemini", args.gemini_model, "GEMINI_API_KEY", make_gemini_client,
+                     brief=pick(args.gemini_brief, brief),
+                     batch_size=max(1, pick(args.gemini_batch, args.batch))),
+        ProviderPool("groq", GROQ_MODEL, "GROQ_API_KEY", make_groq_client,
+                     brief=pick(args.groq_brief, brief),
+                     batch_size=max(1, pick(args.groq_batch, args.batch))),
     ]
     if args.provider:
         pools = [p for p in pools if p.name == args.provider]
@@ -777,31 +808,34 @@ def main():
         if not pool.keys:
             print(f"No API keys found for {pool.name} (see .env.example).", file=sys.stderr)
             sys.exit(1)
-    print("Providers: " + ", ".join(
-        f"{p.name}={p.model} ({len(p.keys)} key{'s' if len(p.keys) > 1 else ''}: "
-        f"{', '.join(n for n, _ in p.keys)})" for p in pools))
+    print("Providers (tried in order):")
+    for p in pools:
+        print(f"  {p.name:7s} {p.model:24s} mode={'brief' if p.brief else 'full ':5s} "
+              f"batch={p.batch_size:<3d} keys={', '.join(n for n, _ in p.keys)}")
 
     if args.slug:
         records = load_records()
         if args.slug not in records:
             print(f"no such slug: {args.slug}", file=sys.stderr)
             sys.exit(1)
-        prompt = (build_batch_prompt([records[args.slug]], brief) if brief
+        pool = pools[0]
+        prompt = (build_batch_prompt([records[args.slug]], pool.brief) if pool.brief
                   else build_prompt(records[args.slug]))
         print("=" * 70)
-        print("REQUEST PROMPT")
+        print(f"REQUEST PROMPT  ({pool.name} / {pool.model}, mode={'brief' if pool.brief else 'full'})")
         print("=" * 70)
         print(prompt)
         t0 = time.monotonic()
-        by_slug, errors, provider, model, status = classify_batch(
-            pools, records, [args.slug], brief, args.delay, args.groq_reasoning_effort)
+        by_slug, errors, status = classify_with_pool(
+            pool, records, [args.slug], args.delay, args.groq_reasoning_effort)
         print("=" * 70)
         print("RESULT")
         print("=" * 70)
         if args.slug in by_slug:
             obj = by_slug[args.slug]
-            print(json.dumps(_prediction(args.slug, obj, json.dumps(obj), provider, model,
-                                          time.monotonic() - t0, "brief" if brief else "full", 1),
+            print(json.dumps(_prediction(args.slug, obj, json.dumps(obj), pool.name, pool.model,
+                                          time.monotonic() - t0,
+                                          "brief" if pool.brief else "full", 1),
                               indent=2, ensure_ascii=False))
         else:
             print(json.dumps({"slug": args.slug, "status": status,
@@ -858,7 +892,7 @@ def main():
     if args.limit is not None:
         pending = pending[: args.limit]
     print(f"{already_labeled} already labeled, {len(pending)} queued this run "
-          f"(batch={args.batch}, mode={'brief' if brief else 'full'}).")
+          f"({len(pools)} provider(s) configured above).")
 
     queue = deque(pending)
     attempts = collections.Counter()
@@ -867,54 +901,101 @@ def main():
     failures = {}
     stopped_reason = "completed"
 
-    with tqdm(total=len(pending), desc="labeling", unit="label") as bar:
-        while queue:
-            if not any(p.available for p in pools):
-                stopped_reason = "quota_exhausted"
-                break
+    provenance = collections.Counter()
+    consecutive_call_failures = 0
+    since_checkpoint = 0
+    interrupted = False
 
-            # A slug that has already come back missing/invalid twice gets a
-            # call to itself, so one bad scheme can't keep poisoning a batch.
-            size = 1 if attempts[queue[0]] >= SINGLETON_AFTER_ATTEMPTS else max(1, args.batch)
-            batch = [queue.popleft() for _ in range(min(size, len(queue)))]
+    def save_predictions():
+        tmp = PREDICTIONS_PATH.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(predictions, indent=2, ensure_ascii=False), encoding="utf-8")
+        tmp.replace(PREDICTIONS_PATH)  # atomic, so a crash can't truncate the file
 
-            t0 = time.monotonic()
-            by_slug, errors, provider, model, status = classify_batch(
-                pools, records, batch, brief, args.delay, args.groq_reasoning_effort)
-            elapsed = time.monotonic() - t0
+    try:
+        with tqdm(total=len(pending), desc="labeling", unit="label") as bar:
+            while queue:
+                pool = select_pool(pools)
+                if pool is None:
+                    stopped_reason = "quota_exhausted"
+                    break
+                for p in pools:  # cooldowns tick down once per selection round
+                    if p is not pool and p.cooldown:
+                        p.cooldown -= 1
 
-            if status == "exhausted":
-                queue.extendleft(reversed(batch))  # nothing was consumed; keep them queued
-                stopped_reason = "quota_exhausted"
-                break
+                # A slug that has already come back missing/invalid twice gets a
+                # call to itself, so one bad scheme can't keep poisoning a batch.
+                size = 1 if attempts[queue[0]] >= SINGLETON_AFTER_ATTEMPTS else pool.batch_size
+                batch = [queue.popleft() for _ in range(min(size, len(queue)))]
 
-            per_label_latency = round(elapsed / max(1, len(batch)), 3)
-            for slug in batch:
-                if slug in by_slug:
-                    predictions[slug] = _prediction(
-                        slug, by_slug[slug], json.dumps(by_slug[slug], ensure_ascii=False),
-                        provider, model, per_label_latency,
-                        "brief" if brief else "full", len(batch))
-                    provider_counts[provider] += 1
-                    latencies.append(per_label_latency)
-                    failures.pop(slug, None)
-                    bar.update(1)
-                else:
-                    attempts[slug] += 1
-                    reason = errors.get(slug, "unknown")
-                    if status == "fatal" or attempts[slug] >= MAX_ATTEMPTS_PER_SLUG:
-                        failures[slug] = reason
-                        bar.update(1)
-                        tqdm.write(f"  giving up on {slug} after {attempts[slug]} attempt(s): {reason}")
+                t0 = time.monotonic()
+                by_slug, errors, status = classify_with_pool(
+                    pool, records, batch, args.delay, args.groq_reasoning_effort)
+                elapsed = time.monotonic() - t0
+
+                if status == "exhausted":
+                    queue.extendleft(reversed(batch))  # nothing consumed; keep them queued
+                    tqdm.write(f"  [{pool.name}] out of quota; handing off to the next provider")
+                    continue  # another provider may still be available
+
+                if status != "ok":
+                    # The whole call failed, so this is the provider's fault, not
+                    # the schemes' -- re-queue them without spending their retry
+                    # budget, and bench the provider so the other one gets a turn.
+                    # (Burning attempts here would mark perfectly good schemes as
+                    # failed just because one provider was misbehaving.)
+                    sample_error = next(iter(errors.values()), "unknown")
+                    if status == "fatal":
+                        pool.disable("fatal_error")
+                        tqdm.write(f"  [{pool.name}] disabled for this run: {sample_error}")
                     else:
-                        queue.append(slug)  # re-queue rather than drop
+                        pool.cooldown = 2
+                        tqdm.write(f"  [{pool.name}] call failed ({sample_error}); benching it briefly")
+                    queue.extendleft(reversed(batch))
+                    consecutive_call_failures += 1
+                    if consecutive_call_failures >= MAX_CONSECUTIVE_CALL_FAILURES:
+                        stopped_reason = "repeated_provider_failures"
+                        break
+                    continue
+                consecutive_call_failures = 0
 
-            bar.set_postfix_str(" ".join(
-                f"{p.name}={p.usage['total'] / 1000:.1f}k" for p in pools if p.usage["requests"]))
-            if queue:
-                time.sleep(args.delay)
+                mode = "brief" if pool.brief else "full"
+                per_label_latency = round(elapsed / max(1, len(batch)), 3)
+                for slug in batch:
+                    if slug in by_slug:
+                        predictions[slug] = _prediction(
+                            slug, by_slug[slug], json.dumps(by_slug[slug], ensure_ascii=False),
+                            pool.name, pool.model, per_label_latency, mode, len(batch))
+                        provider_counts[pool.name] += 1
+                        provenance[(pool.name, pool.model, mode, len(batch))] += 1
+                        latencies.append(per_label_latency)
+                        failures.pop(slug, None)
+                        bar.update(1)
+                    else:
+                        attempts[slug] += 1
+                        reason = errors.get(slug, "unknown")
+                        if attempts[slug] >= MAX_ATTEMPTS_PER_SLUG:
+                            failures[slug] = reason
+                            bar.update(1)
+                            tqdm.write(f"  giving up on {slug} after {attempts[slug]} attempt(s): {reason}")
+                        else:
+                            queue.append(slug)  # re-queue rather than drop
 
-    PREDICTIONS_PATH.write_text(json.dumps(predictions, indent=2, ensure_ascii=False), encoding="utf-8")
+                since_checkpoint += len(by_slug)
+                if since_checkpoint >= CHECKPOINT_EVERY:
+                    save_predictions()
+                    since_checkpoint = 0
+
+                bar.set_postfix_str(" ".join(
+                    f"{p.name}={p.usage['total'] / 1000:.1f}k" for p in pools if p.usage["requests"]))
+                if queue:
+                    time.sleep(args.delay)
+
+    except KeyboardInterrupt:
+        interrupted = True
+        stopped_reason = "interrupted"
+        print("\n  interrupted -- saving everything labeled so far")
+
+    save_predictions()
 
     labels_this_run = sum(provider_counts.values())
     total_tokens = sum(p.usage["total"] for p in pools)
@@ -956,8 +1037,9 @@ def main():
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "sample_size": len(slugs),
         "seed": sample_meta["seed"],
-        "batch_size": args.batch,
-        "mode": "brief" if brief else "full",
+        "provider_config": {p.name: {"model": p.model, "mode": "brief" if p.brief else "full",
+                                      "batch_size": p.batch_size} for p in pools},
+        "labels_by_provenance": {" / ".join(map(str, k)): v for k, v in sorted(provenance.items())},
         "groq_reasoning_effort": args.groq_reasoning_effort,
         "queued_this_run": len(pending),
         "skipped_already_labeled": already_labeled,
