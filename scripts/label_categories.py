@@ -40,6 +40,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import errors as genai_errors
 from google.genai import types as genai_types
+import groq
 from groq import Groq
 from tqdm import tqdm
 
@@ -568,9 +569,16 @@ def error_status_and_message(exc):
 
 
 def classify_error(exc):
-    """-> 'daily_quota' | 'rate_minute' | 'retryable' | 'fatal'."""
-    if isinstance(exc, httpx.TimeoutException):
-        return "retryable"
+    """-> 'daily_quota' | 'rate_minute' | 'retryable' | 'fatal'.
+
+    'fatal' is reserved for a definite non-429 HTTP status (auth, bad request,
+    unknown model) -- things a retry or a different key cannot fix. Everything
+    at the transport layer (connection reset, timeout, DNS) is transient and
+    must stay retryable: treating a dropped connection as fatal takes a
+    perfectly healthy provider out of the run for hours.
+    """
+    if isinstance(exc, (httpx.TransportError, groq.APIConnectionError)):
+        return "retryable"  # covers timeouts, connection resets, protocol errors
     status, message = error_status_and_message(exc)
     if status == 429:
         if MINUTE_QUOTA_RE.search(message):
@@ -580,9 +588,9 @@ def classify_error(exc):
         return "rate_minute"  # unlabelled 429: back off, but see MAX_CONSECUTIVE_429
     if status is not None and status >= 500:
         return "retryable"
-    if isinstance(exc, (genai_errors.APIError,)) or status is not None:
+    if status is not None:
         return "fatal"
-    return "fatal"
+    return "retryable"  # no status at all: assume transient, bounded by retries
 
 
 def pool_generate(pool, prompt, delay, reasoning_effort=None):
@@ -916,7 +924,10 @@ def main():
             while queue:
                 pool = select_pool(pools)
                 if pool is None:
-                    stopped_reason = "quota_exhausted"
+                    reasons = {k["reason"] for p in pools for k in p.exhausted_keys}
+                    stopped_reason = ("quota_exhausted"
+                                      if reasons and reasons <= {"daily_quota", "repeated_429"}
+                                      else "providers_unavailable")
                     break
                 for p in pools:  # cooldowns tick down once per selection round
                     if p is not pool and p.cooldown:
@@ -1025,10 +1036,19 @@ def main():
         projection["groq_labels_per_day"] = int(GROQ_DAILY_TOKEN_QUOTA / groq_tpl)
         projection["groq_basis"] = (f"{GROQ_DAILY_TOKEN_QUOTA:,} tokens/day / {groq_tpl} tokens per label")
     if "gemini" in token_usage and token_usage["gemini"]["requests"]:
-        labels_per_req = token_usage["gemini"]["labels"] / token_usage["gemini"]["requests"]
-        projection["gemini_labels_per_day"] = int(GEMINI_DAILY_REQUEST_QUOTA * labels_per_req)
-        projection["gemini_basis"] = (f"{GEMINI_DAILY_REQUEST_QUOTA} requests/day x "
-                                       f"{labels_per_req:.1f} labels per request")
+        gem = token_usage["gemini"]
+        labels_per_req = gem["labels"] / gem["requests"]
+        hit_cap = any(k["reason"] in ("daily_quota", "repeated_429") for k in gem["keys_exhausted"])
+        if hit_cap:
+            projection["gemini_labels_per_day"] = int(GEMINI_DAILY_REQUEST_QUOTA * labels_per_req)
+            projection["gemini_basis"] = (f"{GEMINI_DAILY_REQUEST_QUOTA} requests/day x "
+                                           f"{labels_per_req:.1f} labels per request")
+        else:
+            # Never hit a cap, so any per-day figure would be invented. Report
+            # the observed floor instead.
+            projection["gemini_basis"] = (f"no daily cap observed: {gem['requests']} requests / "
+                                           f"{gem['labels']} labels / {gem['total_tokens']} tokens "
+                                           f"this run without one")
     if "groq_labels_per_day" in projection and "gemini_labels_per_day" in projection:
         projection["combined_labels_per_day"] = (projection["groq_labels_per_day"]
                                                   + projection["gemini_labels_per_day"])
@@ -1063,6 +1083,11 @@ def main():
     print("=" * 62)
     if stopped_reason == "quota_exhausted":
         print("STOPPED EARLY: every provider reported its daily cap.")
+    elif stopped_reason == "providers_unavailable":
+        print("STOPPED EARLY: every provider became unavailable (see keys_exhausted "
+              "in label_run.json for why -- this is NOT necessarily a quota cap).")
+    elif stopped_reason == "repeated_provider_failures":
+        print("STOPPED EARLY: too many consecutive failed calls across all providers.")
     print(f"labels produced this run : {labels_this_run}")
     print(f"total labeled so far     : {len(predictions)} / {len(slugs)}")
     print(f"failed (gave up)         : {len(failures)}")
