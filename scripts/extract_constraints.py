@@ -12,6 +12,9 @@ touches data/interim/schemes/. Provider chain, key rotation, quota-aware stop
 and resumability are reused from label_categories.py. Unlike classification
 this is NOT batched: the output is long and batching measurably hurt accuracy
 there, so each scheme gets its own call with its full eligibility_text.
+
+Runs are capped at --limit (default 30) unless --all is passed; the run stops
+cleanly on a daily cap and the next run picks up where it left off.
 """
 import argparse
 import collections
@@ -482,8 +485,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--limit", type=int, default=30,
                      help="max schemes to extract this run (default 30; 0 extracts nothing "
-                          "and just rebuilds the report). This script is not for the full "
-                          "corpus yet -- there is deliberately no unlimited mode.")
+                          "and just rebuilds the report). Use --all for the whole corpus.")
     ap.add_argument("--slug", type=str, default=None,
                      help="extract a single scheme and print the full request/response")
     ap.add_argument("--force", action="store_true", help="re-extract schemes that already have output")
@@ -494,6 +496,8 @@ def main():
     ap.add_argument("--gemini-model", default=lc.DEFAULT_GEMINI_MODEL)
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between API calls")
     ap.add_argument("--groq-reasoning-effort", choices=["low", "medium", "high"], default=None)
+    ap.add_argument("--all", action="store_true",
+                     help="no cap: extract every remaining scheme (resumable across sittings)")
     ap.add_argument("--slugs", type=str, default=None,
                      help="comma-separated slugs to extract (e.g. to re-run specific failures)")
     ap.add_argument("--order", choices=["alpha", "varied"], default="alpha",
@@ -562,6 +566,8 @@ def main():
                if args.force or not (out_dir / f"{s}.json").exists()]
     skipped = len(candidates) - len(pending)
 
+    if args.all:
+        args.limit = None
     if args.order == "varied":
         # Walk the eligibility-length distribution so a small run spans trivial
         # one-liners through to the 9k-character monsters.
