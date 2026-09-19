@@ -15,11 +15,19 @@ there, so each scheme gets its own call with its full eligibility_text.
 
 Runs are capped at --limit (default 30) unless --all is passed; the run stops
 cleanly on a daily cap and the next run picks up where it left off.
+
+--add-boolean-fields is a migration pass for records extracted before the four
+true|null fields (BOOLEAN_FIELDS) existed: it asks for just those four, with
+the same provenance validation and retry-then-fail handling, and drops any
+residual condition they now capture. Other fields are left as they are.
 """
 import argparse
 import collections
 import json
 import logging
+import os
+import re
+import signal
 import statistics
 import sys
 import time
@@ -36,9 +44,19 @@ ROOT = lc.ROOT
 SCHEMES_DIR = ROOT / "data/interim/schemes"
 CONSTRAINTS_DIR = ROOT / "data/interim/constraints"
 REPORT_FILENAME = "extract_report.json"
+BOOLEAN_REPORT_FILENAME = "boolean_fields_report.json"
 
 MAX_ATTEMPTS_PER_SLUG = 2  # one extraction + one retry, then recorded as failed
 MAX_CONSECUTIVE_CALL_FAILURES = 6
+# Rewrite the report every N settled schemes, so a run killed outright
+# (SIGKILL, power loss) still leaves one that is at most N schemes stale.
+CHECKPOINT_EVERY = 50
+
+# The migration pass only deletes a residual when the source spans of the
+# fields said to replace it account for nearly all of its words. That catches
+# a residual attributed to the wrong field, and one that also states something
+# else ("... and a resident of Kerala"); either way it is kept, not dropped.
+RESIDUAL_COVERAGE_MIN = 0.85
 
 # ---------------------------------------------------------------------------
 # Schema
@@ -62,9 +80,16 @@ SCHEMA = {
     "residence": None,
     "marital_status": None,
     "family": {"requires_dependent", "notes"},
+    "citizen_of_india": None,
+    "bpl_household": None,
+    "requires_bocw_registration": None,
+    "not_availing_other_scheme": None,
     "residual_conditions": None,
 }
 TYPED_FIELDS = [f for f in SCHEMA if f != "residual_conditions"]
+# true when the text requires it, null otherwise -- never false (see prompt)
+BOOLEAN_FIELDS = ["citizen_of_india", "bpl_household",
+                  "requires_bocw_registration", "not_availing_other_scheme"]
 
 # "any" asserts that the scheme does NOT restrict on this axis. It constrains
 # nobody, so it needs no source clause and should not count toward fill rate --
@@ -83,8 +108,20 @@ EMPTY_CONSTRAINTS = {
     "residence": None,
     "marital_status": None,
     "family": {"requires_dependent": None, "notes": None},
+    "citizen_of_india": None,
+    "bpl_household": None,
+    "requires_bocw_registration": None,
+    "not_availing_other_scheme": None,
     "residual_conditions": [],
 }
+
+# Shared by the full prompt and the migration prompt so both apply one definition.
+BOOLEAN_FIELD_RULES = """The four fields citizen_of_india, bpl_household, requires_bocw_registration and not_availing_other_scheme are true or null -- never false. true means the text REQUIRES the condition of every eligible applicant. Everything else is null: not mentioned, only a preference or priority ("preference will be given to BPL families"), one alternative among several ("BPL families or income below Rs 1 lakh"), an exemption, or the opposite ("Indian nationals are not eligible").
+- citizen_of_india: must be a citizen or national of India. Residence ("resident of India", "domicile of the State") is not citizenship.
+- bpl_household: must belong to a Below Poverty Line (BPL) household or hold a BPL card. A requirement that names only another card (Antyodaya, yellow ration card) without saying BPL is null.
+- requires_bocw_registration: must be registered with a Building and Other Construction Workers (BOCW) welfare board. "Construction workers welfare board", "registered construction worker" and a state board's own name are the same condition. Working in construction without a registration requirement is null, and so is "registered or unregistered". Registration with "the Board" counts only when the text shows it is a construction workers board; boards for unorganised, domestic or other workers are not this condition.
+- not_availing_other_scheme: must not be receiving, or have received, benefits for the same purpose under another scheme, scholarship, pension or programme. A bar on claiming THIS scheme a second time is not this condition, and neither is being employed, drawing a salary, or drawing a service or family pension.
+A condition required of the family member through whom the applicant qualifies ("child of a registered construction worker", "the deceased must have been a citizen of India") still makes the field true: each field covers the applicant or that family member."""
 
 PROMPT_TEMPLATE = """You extract structured eligibility constraints from Indian government welfare scheme text.
 
@@ -105,6 +142,10 @@ Return ONLY a JSON object with exactly these three top-level keys: "constraints"
   "residence":    "rural"|"urban"|"any"|null,
   "marital_status": string|null,
   "family":       {"requires_dependent": bool|null, "notes": string|null},
+  "citizen_of_india":           true|null,
+  "bpl_household":              true|null,
+  "requires_bocw_registration": true|null,
+  "not_availing_other_scheme":  true|null,
   "residual_conditions": [string]
 }
 
@@ -116,6 +157,9 @@ Rules:
 - If the text states conditions for MULTIPLE distinct beneficiary types (for example a different income cap for SC than for General), set the typed field to the MOST INCLUSIVE value (the one admitting the most people), put the full disjunction in residual_conditions, and add "multi_branch_eligibility" to parse_flags.
 - "parse_flags" is a list, empty if nothing applies.
 
+<<<BOOLEAN_FIELD_RULES>>>
+A condition captured by one of these four does not also go in residual_conditions, unless the clause states more than the field can hold (another requirement, a time window, a minimum membership period, an exception) -- then the whole clause stays in residual_conditions too. "The applicant must be a citizen of India and a resident of West Bengal" sets citizen_of_india AND stays a residual.
+
 "provenance" maps each NON-NULL typed field name to the exact substring of the eligibility text that the value came from. Copy that substring character for character from the text -- do not paraphrase, reformat, fix spelling, or add ellipses. It must appear verbatim in the text. Include an entry for every typed field you set to a non-null value, and no entries for null fields or for residual_conditions.
 
 If the text says nothing about gender or residence, use null -- do not default to "any". Use "any" only when the text explicitly states the scheme is open to all of them. family.notes counts as a typed value too: if you fill it, it needs a span like any other field. Every provenance value is a plain string, even for the nested fields (age, income, land, education, family) -- give one span for the whole field, do not nest the provenance object.
@@ -126,11 +170,48 @@ Respond with JSON only. No markdown fences, no preamble, no commentary.
 
 Eligibility text:
 <<<ELIGIBILITY_TEXT>>>
-"""
+""".replace("<<<BOOLEAN_FIELD_RULES>>>", BOOLEAN_FIELD_RULES)
+
+BOOLEAN_PROMPT_TEMPLATE = """You extract four eligibility conditions from Indian government welfare scheme text.
+
+You do NOT decide whether anyone is eligible. You only record what is explicitly stated. Deterministic code does the comparisons later, so a wrong true is far worse than a null.
+
+Return ONLY a JSON object with exactly these three top-level keys: "constraints", "provenance", "remove_from_residuals".
+
+"constraints" must contain exactly these keys and no others:
+{
+  "citizen_of_india":           true|null,
+  "bpl_household":              true|null,
+  "requires_bocw_registration": true|null,
+  "not_availing_other_scheme":  true|null
+}
+
+<<<BOOLEAN_FIELD_RULES>>>
+
+"provenance" maps each field set to true to the exact substring of the eligibility text that states it. Give the whole clause or sentence, copied character for character from the text -- do not paraphrase, reformat, fix spelling, or add ellipses. If the condition is stated in several places, give a list of those clauses. No entries for null fields.
+
+"remove_from_residuals" lists the already-extracted residual conditions (given below) that a field you set to true now captures completely, so the condition is not kept twice:
+  [{"text": "<the residual, copied exactly from the list>", "fields": ["<field>", ...], "also_states": ["<phrase copied from that residual>", ...]}]
+"also_states" lists every phrase of that residual that states something the cited fields do not: another requirement (residence, age, education, occupation, employment, an illness, a category), a time window, a minimum membership period, an exception. For "The applicant must be a citizen of India and a resident of West Bengal" it is ["a resident of West Bengal"]. A residual is removed only when its also_states is empty, so list every such phrase; when in doubt, include it. Saying the condition applies to the family member the applicant qualifies through is not extra: the field already covers that. Empty list if no residual is captured.
+
+Respond with JSON only. No markdown fences, no preamble, no commentary.
+
+Eligibility text:
+<<<ELIGIBILITY_TEXT>>>
+
+Residual conditions already extracted (JSON list):
+<<<RESIDUALS>>>
+""".replace("<<<BOOLEAN_FIELD_RULES>>>", BOOLEAN_FIELD_RULES)
 
 
 def build_prompt(eligibility_text):
     return PROMPT_TEMPLATE.replace("<<<ELIGIBILITY_TEXT>>>", eligibility_text)
+
+
+def build_boolean_prompt(eligibility_text, residuals):
+    return (BOOLEAN_PROMPT_TEMPLATE
+            .replace("<<<RESIDUALS>>>", json.dumps(residuals, indent=1, ensure_ascii=False))
+            .replace("<<<ELIGIBILITY_TEXT>>>", eligibility_text))
 
 
 # ---------------------------------------------------------------------------
@@ -231,7 +312,20 @@ def validate_constraints(c):
     if fam.get("notes") is not None and not isinstance(fam["notes"], str):
         return "family.notes must be a string or null"
 
+    err = validate_boolean_fields(c)
+    if err:
+        return err
     return _str_list(c["residual_conditions"], "residual_conditions")
+
+
+def validate_boolean_fields(c):
+    # false is rejected, not coerced: the text either requires the condition
+    # or says nothing a filter could use, and "not required" would read as a
+    # claim the scheme never made.
+    for k in BOOLEAN_FIELDS:
+        if c.get(k) is not None and c[k] is not True:
+            return f"{k} must be true or null: {c[k]!r}"
+    return None
 
 
 def field_is_set(constraints, field):
@@ -271,12 +365,13 @@ def normalize_provenance(prov):
     return out
 
 
-def validate_provenance(prov, constraints, eligibility_text):
+def validate_provenance(prov, constraints, eligibility_text, fields=TYPED_FIELDS):
     """Every non-null typed field needs a span, and every span must appear
-    verbatim in the source text -- that is what makes a claim traceable."""
+    verbatim in the source text -- that is what makes a claim traceable.
+    `fields` narrows the check to the fields a pass actually asked for."""
     if not isinstance(prov, dict):
         return "provenance is not an object"
-    unknown = sorted(set(prov) - set(TYPED_FIELDS))
+    unknown = sorted(set(prov) - set(fields))
     if unknown:
         return f"unknown keys in provenance: {unknown}"
 
@@ -291,7 +386,7 @@ def validate_provenance(prov, constraints, eligibility_text):
                 return (f"provenance.{field} is not an exact substring of "
                         f"eligibility_text: {one[:80]!r}")
 
-    missing = [f for f in TYPED_FIELDS
+    missing = [f for f in fields
                if field_is_constraining(constraints, f) and f not in prov]
     if missing:
         return f"missing provenance for non-null fields: {missing}"
@@ -345,6 +440,74 @@ def parse_and_validate(raw_text, eligibility_text):
     return {"constraints": merged, "provenance": prov, "parse_flags": flags}, None
 
 
+def parse_and_validate_booleans(raw_text, eligibility_text, residuals):
+    """Migration-pass response: the four fields, their provenance (validated
+    exactly as a full extraction's), and residuals the model says they replace.
+    A residual named for removal must be one already in the record, word for
+    word, and every field it cites must have come back true."""
+    text = lc._strip_fences(raw_text)
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError as e:
+        return None, f"invalid_json: {e}"
+    if not isinstance(payload, dict):
+        return None, "response is not a JSON object"
+
+    unknown = sorted(set(payload) - {"constraints", "provenance", "remove_from_residuals"})
+    if unknown:
+        return None, f"unknown top-level keys: {unknown}"
+    c = payload.get("constraints")
+    if not isinstance(c, dict):
+        return None, "missing constraints"
+    unknown = sorted(set(c) - set(BOOLEAN_FIELDS))
+    if unknown:
+        return None, f"unknown keys in constraints: {unknown}"
+    err = validate_boolean_fields(c)
+    if err:
+        return None, err
+    fields = {f: c.get(f) for f in BOOLEAN_FIELDS}
+
+    prov = normalize_provenance(payload.get("provenance") or {})
+    err = validate_provenance(prov, fields, eligibility_text, BOOLEAN_FIELDS)
+    if err:
+        return None, err
+
+    removals = payload.get("remove_from_residuals") or []
+    if not isinstance(removals, list):
+        return None, "remove_from_residuals must be a list"
+    for item in removals:
+        if not (isinstance(item, dict) and set(item) == {"text", "fields", "also_states"}):
+            return None, "remove_from_residuals entries must be {text, fields, also_states}"
+        if not isinstance(item["also_states"], list):
+            return None, "remove_from_residuals.also_states must be a list"
+        if item["text"] not in residuals:
+            return None, f"remove_from_residuals names a residual not in the record: {str(item['text'])[:80]!r}"
+        cited = item["fields"]
+        if not isinstance(cited, list):
+            return None, "remove_from_residuals.fields must be a list"
+        # An entry citing no field claims nothing the new fields capture (the
+        # model tidying away non-conditions like "500 cities are covered").
+        # Not worth failing a valid response over: with no span to cover it,
+        # apply_boolean_fields keeps that residual.
+        not_true = [f for f in cited if fields.get(f) is not True]
+        if not_true:
+            return None, f"remove_from_residuals cites fields that are not true: {not_true}"
+
+    return {"constraints": fields, "provenance": prov, "remove": removals}, None
+
+
+def _words(text):
+    return re.findall(r"\w+", text.lower())
+
+
+def residual_covered(residual, spans):
+    """Share of the residual's words that appear in the cited fields' spans.
+    Both are copies of the same eligibility clause when the removal is right."""
+    words = _words(residual)
+    span_words = {w for s in spans for w in _words(s)}
+    return bool(words) and sum(w in span_words for w in words) / len(words) >= RESIDUAL_COVERAGE_MIN
+
+
 # ---------------------------------------------------------------------------
 # Extraction
 # ---------------------------------------------------------------------------
@@ -364,6 +527,78 @@ def extract_one(pool, record, delay, reasoning_effort=None):
     return parsed, None, "ok"
 
 
+def extract_booleans(pool, record, existing, delay, reasoning_effort=None):
+    """Migration pass for one scheme: same contract as extract_one."""
+    residuals = existing["constraints"]["residual_conditions"]
+    prompt = build_boolean_prompt(record["eligibility_text"], residuals)
+    res = lc.pool_generate(pool, prompt, delay,
+                           reasoning_effort if pool.name == "groq" else None)
+    if res["status"] != "ok":
+        return None, res["error"], res["status"]
+    parsed, err = parse_and_validate_booleans(res["text"], record["eligibility_text"], residuals)
+    if parsed is None:
+        return None, err, "invalid"
+    parsed["raw_response"] = res["text"]
+    return parsed, None, "ok"
+
+
+def _with_boolean_fields(constraints, values, residuals):
+    """Constraints with the four fields set, keeping residual_conditions last."""
+    out = {k: v for k, v in constraints.items() if k != "residual_conditions"}
+    out.update(values)
+    out["residual_conditions"] = residuals
+    return out
+
+
+def apply_boolean_fields(existing, parsed, pool, latency):
+    """Fold a validated migration result into an existing record. A residual
+    is dropped only if its words are covered by the spans of the fields it is
+    said to duplicate; otherwise it is kept and listed, never lost."""
+    removed, kept, states_more = [], [], []
+    for item in parsed["remove"]:
+        # Checked first: the model saying the residual carries another
+        # condition outranks its own request to remove it.
+        if item["also_states"]:
+            states_more.append(item["text"])
+            continue
+        spans = []
+        for f in item["fields"]:
+            span = parsed["provenance"][f]
+            spans += span if isinstance(span, list) else [span]
+        (removed if residual_covered(item["text"], spans) else kept).append(item["text"])
+
+    residuals = [r for r in existing["constraints"]["residual_conditions"] if r not in removed]
+    existing["constraints"] = _with_boolean_fields(existing["constraints"],
+                                                   parsed["constraints"], residuals)
+    existing["provenance"].update(parsed["provenance"])
+    existing["boolean_fields_pass"] = {
+        "provider": pool.name,
+        "model": pool.model,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "latency_seconds": round(latency, 3),
+        "residuals_removed": removed,
+        "residuals_kept_not_covered_by_span": kept,
+        "residuals_kept_states_more": states_more,
+        "raw_response": parsed["raw_response"],
+    }
+    return existing
+
+
+def mark_boolean_fields_failed(existing, error):
+    """The pass never validated: the four fields are null (nothing claimed)
+    and the residuals stay untouched, so the scheme reads exactly as before.
+    Having the keys means later runs skip it, like a failed extraction."""
+    c = existing["constraints"]
+    existing["constraints"] = _with_boolean_fields(c, {f: None for f in BOOLEAN_FIELDS},
+                                                   c["residual_conditions"])
+    existing["boolean_fields_pass"] = {
+        "failed": True,
+        "failure_reason": error,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+    return existing
+
+
 def build_record(slug, record, parsed, pool, latency):
     return {
         "slug": slug,
@@ -376,6 +611,29 @@ def build_record(slug, record, parsed, pool, latency):
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "latency_seconds": round(latency, 3),
         "raw_response": parsed["raw_response"],
+        "source_url": record.get("source_url"),
+    }
+
+
+def build_failed_record(slug, record, error):
+    """Stand-in for a scheme whose output never validated. Every typed field is
+    null, so downstream it has zero binding constraints and goes to manual
+    review like any other low-coverage scheme. The flag is what stops it being
+    read as a scheme that genuinely states no conditions -- its residuals are
+    unknown, not empty."""
+    return {
+        "slug": slug,
+        "extraction_failed": True,
+        "failure_reason": error,
+        "constraints": json.loads(json.dumps(EMPTY_CONSTRAINTS)),
+        "provenance": {},
+        "parse_flags": [],
+        "eligibility_text_chars": len(record["eligibility_text"]),
+        "provider": None,
+        "model": None,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "latency_seconds": None,
+        "raw_response": None,
         "source_url": record.get("source_url"),
     }
 
@@ -445,6 +703,8 @@ def print_report(rep):
     print(f"extracted this run     : {rep['extracted_this_run']}")
     print(f"total extracted on disk: {rep.get('total_on_disk', rep['extracted_this_run'])}")
     print(f"skipped (already done) : {rep['skipped_already_extracted']}")
+    print(f"marked failed on disk  : {len(rep.get('extraction_failed_on_disk', []))}"
+          "  (manual review; excluded from the stats below)")
     print(f"failed                 : {rep['failed']}")
     for slug in rep["failed_slugs"]:
         print(f"    {slug}: {rep['failure_reasons'][slug][:110]}")
@@ -469,6 +729,16 @@ def print_report(rep):
     else:
         print("  none")
     print()
+    bp = rep.get("boolean_fields_pass")
+    if bp:
+        print("boolean fields pass (all records on disk):")
+        print(f"  records migrated                    : {bp['records_migrated']}")
+        print(f"  records failed (fields left null)   : {len(bp['records_failed'])}")
+        print(f"  residuals removed (now typed)       : {bp['residuals_removed']}")
+        print(f"  removal refused (span doesn't cover): {bp['residuals_kept_not_covered_by_span']}")
+        print(f"  removal refused (states more)       : {bp['residuals_kept_states_more']}")
+        print(f"  records still without the fields    : {bp['records_still_without_fields']}")
+        print()
     print("10 schemes with the most residual_conditions:")
     for entry in rep["most_residual_conditions"]:
         print(f"  {entry['residuals']:3d}  {entry['slug']}")
@@ -479,6 +749,129 @@ def print_report(rep):
     print(f"total tokens           : {rep['total_tokens']}")
     print(f"tokens per scheme      : {rep['tokens_per_scheme']}")
     print("=" * 66)
+
+
+def write_json(path, obj):
+    """Write through a temp file: an interrupted run must never leave a
+    half-written record, least of all over a good one."""
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def load_on_disk(out_dir):
+    on_disk = []
+    for path in sorted(Path(out_dir).glob("*.json")):
+        try:
+            rec = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        # The directory also holds report files (extract_report.json,
+        # coverage_report.json), so identify records by shape, not filename.
+        if isinstance(rec, dict) and "constraints" in rec and "slug" in rec:
+            on_disk.append(rec)
+    return on_disk
+
+
+class Terminated(KeyboardInterrupt):
+    """SIGTERM/SIGHUP, raised so they take the same exit path as Ctrl-C."""
+
+
+def _raise_terminated(signum, frame):
+    raise Terminated(signal.Signals(signum).name)
+
+
+def run_queue(pools, pending, attempt, on_success, on_failure, out_dir, delay,
+              checkpoint=None):
+    """Work through `pending` on the provider chain, writing each scheme's
+    record as soon as it is settled.
+
+    attempt(pool, slug) returns (parsed, err, status) like extract_one;
+    on_success(slug, parsed, pool, elapsed) and on_failure(slug, err) return
+    the record to write. checkpoint(written, failures, still_queued) is called
+    every CHECKPOINT_EVERY settled schemes.
+    -> (records written, failures, stopped_reason, still_queued)
+    """
+    queue = deque(pending)
+    attempts = collections.Counter()
+    written = []
+    failures = {}
+    consecutive_call_failures = 0
+    stopped_reason = "completed"
+
+    try:
+        with tqdm(total=len(pending), desc="extracting", unit="scheme") as bar:
+            while queue:
+                pool = lc.select_pool(pools)
+                if pool is None:
+                    reasons = {k["reason"] for p in pools for k in p.exhausted_keys}
+                    stopped_reason = ("quota_exhausted"
+                                      if reasons and reasons <= {"daily_quota", "repeated_429"}
+                                      else "providers_unavailable")
+                    break
+                for p in pools:
+                    if p is not pool and p.cooldown:
+                        p.cooldown -= 1
+
+                slug = queue.popleft()
+                t0 = time.monotonic()
+                parsed, err, status = attempt(pool, slug)
+                elapsed = time.monotonic() - t0
+
+                if status == "exhausted":
+                    queue.appendleft(slug)
+                    tqdm.write(f"  [{pool.name}] out of quota; handing off")
+                    continue
+
+                if status in ("failed", "fatal"):
+                    # Provider's fault, not the scheme's: keep the scheme's
+                    # retry budget intact and bench the provider instead.
+                    queue.appendleft(slug)
+                    if status == "fatal":
+                        pool.disable("fatal_error")
+                        tqdm.write(f"  [{pool.name}] disabled for this run: {str(err)[:120]}")
+                    else:
+                        pool.cooldown = 2
+                        tqdm.write(f"  [{pool.name}] call failed ({str(err)[:100]}); benching")
+                    consecutive_call_failures += 1
+                    if consecutive_call_failures >= MAX_CONSECUTIVE_CALL_FAILURES:
+                        stopped_reason = "repeated_provider_failures"
+                        break
+                    continue
+                consecutive_call_failures = 0
+
+                if status == "invalid":
+                    attempts[slug] += 1
+                    if attempts[slug] >= MAX_ATTEMPTS_PER_SLUG:
+                        # Recorded, not retried on later runs, so one scheme
+                        # the model cannot get right never blocks the pipeline.
+                        failures[slug] = err
+                        write_json(out_dir / f"{slug}.json", on_failure(slug, err))
+                        bar.update(1)
+                        tqdm.write(f"  FAILED {slug} after {attempts[slug]} attempts: {str(err)[:110]}")
+                    else:
+                        # Retry on the other provider where possible: at
+                        # temperature 0 the same model would likely repeat itself.
+                        pool.cooldown = 1
+                        queue.append(slug)
+                        tqdm.write(f"  retrying {slug}: {str(err)[:100]}")
+                    continue
+
+                out = on_success(slug, parsed, pool, elapsed)
+                write_json(out_dir / f"{slug}.json", out)
+                written.append(out)
+                failures.pop(slug, None)
+                bar.update(1)
+                bar.set_postfix_str(" ".join(
+                    f"{p.name}={p.usage['total']/1000:.1f}k" for p in pools if p.usage["requests"]))
+                if checkpoint and bar.n % CHECKPOINT_EVERY == 0:
+                    checkpoint(written, failures, len(queue))
+                if queue:
+                    time.sleep(delay)
+    except KeyboardInterrupt as e:
+        stopped_reason = f"terminated_{e}" if isinstance(e, Terminated) else "interrupted"
+        print(f"\n  {stopped_reason} -- keeping everything extracted so far")
+    return written, failures, stopped_reason, len(queue)
 
 
 # ---------------------------------------------------------------------------
@@ -507,7 +900,18 @@ def main():
     ap.add_argument("--order", choices=["alpha", "varied"], default="alpha",
                      help="'varied' spreads the selection across the eligibility-length "
                           "distribution instead of taking the first N alphabetically")
+    ap.add_argument("--add-boolean-fields", action="store_true",
+                     help="migration pass: add the four true|null fields to existing records "
+                          "that lack them, instead of extracting new schemes")
     args = ap.parse_args()
+    if args.add_boolean_fields and (args.slug or args.force):
+        # --force would re-run on records whose residuals were already trimmed;
+        # a clean redo of a migrated record is a full --force extraction.
+        ap.error("--add-boolean-fields takes neither --slug nor --force")
+    # tqdm.write sends retry/quota/FAILED messages to stdout, which is block-
+    # buffered when a long run is logged to a file: they would appear late, or
+    # never if the run is killed, while the progress bar (stderr) looks live.
+    sys.stdout.reconfigure(line_buffering=True)
 
     load_dotenv(ROOT / ".env")
     logging.getLogger("google_genai.models").setLevel(logging.ERROR)
@@ -557,8 +961,18 @@ def main():
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    candidates = [s for s in sorted(records)
-                  if (records[s]["eligibility_text"] or "").strip()]
+    if args.add_boolean_fields:
+        existing = {r["slug"]: r for r in load_on_disk(out_dir)}
+        # Stand-ins for failed extractions are left as they are: there is no
+        # extraction to extend, and reopening one is a full --force re-run.
+        candidates = sorted(s for s, r in existing.items()
+                            if s in records and not r.get("extraction_failed"))
+        done = {s for s in candidates
+                if all(f in existing[s]["constraints"] for f in BOOLEAN_FIELDS)}
+    else:
+        candidates = [s for s in sorted(records)
+                      if (records[s]["eligibility_text"] or "").strip()]
+        done = {s for s in candidates if (out_dir / f"{s}.json").exists()}
     if args.slugs:
         wanted = [s.strip() for s in args.slugs.split(",") if s.strip()]
         missing = [s for s in wanted if s not in records]
@@ -566,8 +980,7 @@ def main():
             print(f"unknown slugs: {missing}", file=sys.stderr)
             sys.exit(1)
         candidates = [s for s in candidates if s in set(wanted)]
-    pending = [s for s in candidates
-               if args.force or not (out_dir / f"{s}.json").exists()]
+    pending = [s for s in candidates if args.force or s not in done]
     skipped = len(candidates) - len(pending)
 
     if args.all:
@@ -587,105 +1000,78 @@ def main():
     print(f"{len(candidates)} schemes with eligibility_text, {skipped} already extracted, "
           f"{len(pending)} queued this run (order={args.order}).")
 
-    queue = deque(pending)
-    attempts = collections.Counter()
-    extracted = []
-    failures = {}
-    consecutive_call_failures = 0
-    stopped_reason = "completed"
+    if args.add_boolean_fields:
+        def attempt(pool, slug):
+            return extract_booleans(pool, records[slug], existing[slug],
+                                    args.delay, args.groq_reasoning_effort)
 
-    try:
-        with tqdm(total=len(pending), desc="extracting", unit="scheme") as bar:
-            while queue:
-                pool = lc.select_pool(pools)
-                if pool is None:
-                    reasons = {k["reason"] for p in pools for k in p.exhausted_keys}
-                    stopped_reason = ("quota_exhausted"
-                                      if reasons and reasons <= {"daily_quota", "repeated_429"}
-                                      else "providers_unavailable")
-                    break
-                for p in pools:
-                    if p is not pool and p.cooldown:
-                        p.cooldown -= 1
+        def on_success(slug, parsed, pool, elapsed):
+            return apply_boolean_fields(existing[slug], parsed, pool, elapsed)
 
-                slug = queue.popleft()
-                t0 = time.monotonic()
-                parsed, err, status = extract_one(pool, records[slug], args.delay,
-                                                   args.groq_reasoning_effort)
-                elapsed = time.monotonic() - t0
+        def on_failure(slug, err):
+            return mark_boolean_fields_failed(existing[slug], err)
+    else:
+        def attempt(pool, slug):
+            return extract_one(pool, records[slug], args.delay, args.groq_reasoning_effort)
 
-                if status == "exhausted":
-                    queue.appendleft(slug)
-                    tqdm.write(f"  [{pool.name}] out of quota; handing off")
-                    continue
+        def on_success(slug, parsed, pool, elapsed):
+            return build_record(slug, records[slug], parsed, pool, elapsed)
 
-                if status in ("failed", "fatal"):
-                    # Provider's fault, not the scheme's: keep the scheme's
-                    # retry budget intact and bench the provider instead.
-                    queue.appendleft(slug)
-                    if status == "fatal":
-                        pool.disable("fatal_error")
-                        tqdm.write(f"  [{pool.name}] disabled for this run: {str(err)[:120]}")
-                    else:
-                        pool.cooldown = 2
-                        tqdm.write(f"  [{pool.name}] call failed ({str(err)[:100]}); benching")
-                    consecutive_call_failures += 1
-                    if consecutive_call_failures >= MAX_CONSECUTIVE_CALL_FAILURES:
-                        stopped_reason = "repeated_provider_failures"
-                        break
-                    continue
-                consecutive_call_failures = 0
+        def on_failure(slug, err):
+            return build_failed_record(slug, records[slug], err)
 
-                if status == "invalid":
-                    attempts[slug] += 1
-                    if attempts[slug] >= MAX_ATTEMPTS_PER_SLUG:
-                        failures[slug] = err
-                        bar.update(1)
-                        tqdm.write(f"  FAILED {slug} after {attempts[slug]} attempts: {str(err)[:110]}")
-                    else:
-                        # Retry on the other provider where possible: at
-                        # temperature 0 the same model would likely repeat itself.
-                        pool.cooldown = 1
-                        queue.append(slug)
-                        tqdm.write(f"  retrying {slug}: {str(err)[:100]}")
-                    continue
+    # Its own report file in this mode, so the last full extraction's survives.
+    report_path = out_dir / (BOOLEAN_REPORT_FILENAME if args.add_boolean_fields
+                             else REPORT_FILENAME)
 
-                out = build_record(slug, records[slug], parsed, pool, elapsed)
-                (out_dir / f"{slug}.json").write_text(
-                    json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
-                extracted.append(out)
-                failures.pop(slug, None)
-                bar.update(1)
-                bar.set_postfix_str(" ".join(
-                    f"{p.name}={p.usage['total']/1000:.1f}k" for p in pools if p.usage["requests"]))
-                if queue:
-                    time.sleep(args.delay)
-    except KeyboardInterrupt:
-        stopped_reason = "interrupted"
-        print("\n  interrupted -- keeping everything extracted so far")
+    def write_report(written, failures, stopped_reason, still_queued):
+        on_disk = load_on_disk(out_dir)
+        # Failed stand-ins are all-null by construction; counting them would read
+        # as schemes with no fields and no residuals, so stats cover real extractions.
+        report = build_report([r for r in on_disk if not r.get("extraction_failed")],
+                              len(pending), failures, pools, skipped)
+        report["extracted_this_run"] = len(written)
+        report["total_on_disk"] = len(on_disk)
+        report["extraction_failed_on_disk"] = sorted(
+            r["slug"] for r in on_disk if r.get("extraction_failed"))
+        report["stopped_reason"] = stopped_reason
+        report["still_queued"] = still_queued
+        if args.add_boolean_fields:
+            # Read back from every record, not just this run's, because the
+            # pass spans several sittings and each one rewrites this file.
+            passes = [r["boolean_fields_pass"] for r in on_disk if "boolean_fields_pass" in r]
+            ok = [bp for bp in passes if not bp.get("failed")]
+            report["boolean_fields_pass"] = {
+                "records_migrated": len(ok),
+                "records_failed": sorted(r["slug"] for r in on_disk
+                                         if r.get("boolean_fields_pass", {}).get("failed")),
+                "records_still_without_fields": sum(
+                    1 for r in on_disk if not r.get("extraction_failed")
+                    and not all(f in r["constraints"] for f in BOOLEAN_FIELDS)),
+                "residuals_removed": sum(len(bp["residuals_removed"]) for bp in ok),
+                "residuals_kept_not_covered_by_span": sum(
+                    len(bp["residuals_kept_not_covered_by_span"]) for bp in ok),
+                "residuals_kept_states_more": sum(
+                    len(bp.get("residuals_kept_states_more", [])) for bp in ok),
+            }
+        write_json(report_path, report)
+        return report
 
-    on_disk = []
-    for path in sorted(out_dir.glob("*.json")):
-        try:
-            rec = json.loads(path.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, OSError):
-            continue
-        # The directory also holds report files (extract_report.json,
-        # coverage_report.json), so identify records by shape, not filename.
-        if isinstance(rec, dict) and "constraints" in rec and "slug" in rec:
-            on_disk.append(rec)
-    report = build_report(on_disk, len(pending), failures, pools, skipped)
-    report["extracted_this_run"] = len(extracted)
-    report["total_on_disk"] = len(on_disk)
-    report["stopped_reason"] = stopped_reason
-    report["still_queued"] = len(queue)
-    (out_dir / REPORT_FILENAME).write_text(
-        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    # A kill from whatever launched the run (a closed terminal, a supervising
+    # session ending) must still reach the report below, as Ctrl-C does.
+    signal.signal(signal.SIGTERM, _raise_terminated)
+    signal.signal(signal.SIGHUP, _raise_terminated)
+    write_report([], {}, "running", len(pending))
+    written, failures, stopped_reason, still_queued = run_queue(
+        pools, pending, attempt, on_success, on_failure, out_dir, args.delay,
+        checkpoint=lambda w, f, q: write_report(w, f, "running", q))
+
+    report = write_report(written, failures, stopped_reason, still_queued)
     print_report(report)
     if stopped_reason != "completed":
-        print(f"stopped early: {stopped_reason} ({len(queue)} still queued)")
+        print(f"stopped early: {stopped_reason} ({still_queued} still queued)")
     print(f"Output: {out_dir}/<slug>.json")
-    print(f"Report: {out_dir / REPORT_FILENAME}")
+    print(f"Report: {report_path}")
 
 
 if __name__ == "__main__":

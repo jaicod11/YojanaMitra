@@ -121,15 +121,21 @@ def phrase_candidates(residual_sets):
               if len(slugs) >= MIN_SCHEMES_FOR_PHRASE and is_informative(gram)]
     scored.sort(key=lambda kv: (-kv[0], -len(kv[1])))
 
-    # Keep the longest phrasing of each recurring idea: drop a shorter n-gram
-    # if a longer one already kept covers nearly the same set of schemes.
+    # One recurring idea generates many overlapping n-grams ("be a permanent
+    # resident", "should be a permanent resident of", ...). Collapse them by
+    # content-word overlap so the list shows distinct candidates, not variants
+    # of one.
     kept = []
     for count, gram in scored:
-        if any(gram in longer and count <= kcount * 1.15 for kcount, longer in kept):
+        words = {w for w in gram.split() if w not in BOILERPLATE_WORDS}
+        if any(words and kwords and
+               len(words & kwords) / min(len(words), len(kwords)) >= 0.75
+               for _, _, kwords in kept):
             continue
-        kept.append((count, gram))
+        kept.append((count, gram, words))
         if len(kept) >= 25:
             break
+    kept = [(c, g) for c, g, _ in kept]
     return [{"phrase": g, "schemes": c,
              "pct_of_schemes": round(c / max(1, len(residual_sets)) * 100, 1)}
             for c, g in kept]
@@ -140,6 +146,9 @@ def main():
     ap.add_argument("--constraints-dir", type=Path, default=CONSTRAINTS_DIR)
     ap.add_argument("--predictions", type=Path, default=PREDICTIONS_PATH)
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--baseline", type=Path, default=None,
+                    help="constraints dir snapshotted before a pass; adds a before/after "
+                         "comparison, including schemes that moved from 0 binding fields to >=1")
     args = ap.parse_args()
 
     records = load_constraints(args.constraints_dir)
@@ -156,7 +165,7 @@ def main():
         collections.defaultdict(list), collections.Counter()
     residual_sets, residual_counts = {}, []
     exact_counter = collections.Counter()
-    zero_binding = []
+    zero_binding, failed = [], []
 
     for slug, rec in records.items():
         c = rec["constraints"]
@@ -175,6 +184,12 @@ def main():
         if level:
             by_level[level].append(n)
 
+        if rec.get("extraction_failed"):
+            # All-null, so it already counts above as zero binding (manual
+            # review). Its residuals are unknown rather than empty, so it stays
+            # out of the residual stats.
+            failed.append(slug)
+            continue
         residuals = [normalise(r) for r in c["residual_conditions"]]
         residuals = [r for r in residuals if r]
         residual_sets[slug] = residuals
@@ -182,6 +197,7 @@ def main():
         exact_counter.update(set(residuals))  # set(): once per scheme
 
     n = len(records)
+    n_residual = max(1, len(residual_sets))
     report = {
         "constraint_records_analysed": n,
         "note": ("'Binding' counts typed fields that actually narrow eligibility; "
@@ -196,12 +212,21 @@ def main():
             "count": len(zero_binding),
             "pct": round(len(zero_binding) / n * 100, 1),
             "examples": sorted(zero_binding)[:25],
+            "of_which_extraction_failed": len(failed),
+        },
+        "extraction_failed": {
+            "count": len(failed),
+            "slugs": sorted(failed),
+            "note": ("No validated extraction after all attempts: every typed field is null, "
+                     "so these count as zero binding (manual review) and are excluded "
+                     "from residual_conditions statistics."),
         },
         "residual_conditions": {
+            "schemes": len(residual_sets),
             "total": sum(residual_counts),
-            "mean_per_scheme": round(sum(residual_counts) / n, 2),
+            "mean_per_scheme": round(sum(residual_counts) / n_residual, 2),
             "top_20_exact_normalised": [
-                {"text": t, "schemes": c, "pct_of_schemes": round(c / n * 100, 1)}
+                {"text": t, "schemes": c, "pct_of_schemes": round(c / n_residual * 100, 1)}
                 for t, c in exact_counter.most_common(20)
             ],
             "exact_match_note": ("Residuals are long verbatim sentences, so exact matches "
@@ -212,6 +237,22 @@ def main():
                             f"{MIN_SCHEMES_FOR_PHRASE} distinct schemes, longest phrasing kept."),
         },
     }
+
+    if args.baseline:
+        base = load_constraints(args.baseline)
+        common = [s for s in records if s in base]
+        before = {s: binding_count(base[s]["constraints"]) for s in common}
+        after = {s: binding_count(records[s]["constraints"]) for s in common}
+        zero_to_some = sorted(s for s in common if before[s] == 0 and after[s] >= 1)
+        report["vs_baseline"] = {
+            "baseline_dir": str(args.baseline),
+            "schemes_compared": len(common),
+            "before": summarise(list(before.values())),
+            "after": summarise(list(after.values())),
+            "zero_to_at_least_1": len(zero_to_some),
+            "zero_to_at_least_1_slugs": zero_to_some,
+            "schemes_gaining_binding_fields": sum(1 for s in common if after[s] > before[s]),
+        }
 
     out_path = args.out or (Path(args.constraints_dir) / OUT_NAME)
     out_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -225,6 +266,8 @@ def main():
         print(f"  {k:>2s} fields : {o['distribution'][k]:5d}  ({o['distribution_pct'][k]:5.1f}%)")
     print(f"  >=1 binding: {o['at_least_1_pct']}%   >=2: {o['at_least_2_pct']}%   "
           f">=3: {o['at_least_3_pct']}%   mean: {o['mean_binding_fields']}")
+    if failed:
+        print(f"  (0 fields includes {len(failed)} extraction_failed -> manual review)")
     print()
     print("binding rate per field:")
     for f, pct in sorted(report["per_field_binding_pct"].items(), key=lambda kv: -kv[1]):
@@ -247,6 +290,16 @@ def main():
     print("recurring phrases -- candidates to promote from residual to typed:")
     for e in report["residual_conditions"]["recurring_phrases"]:
         print(f"  {e['schemes']:4d} ({e['pct_of_schemes']:4.1f}%)  {e['phrase']}")
+    vb = report.get("vs_baseline")
+    if vb:
+        print()
+        print(f"vs baseline {vb['baseline_dir']}  ({vb['schemes_compared']} schemes):")
+        for label in ("before", "after"):
+            s = vb[label]
+            print(f"  {label:6s}  0 fields: {s['distribution']['0']:5d}   >=1: {s['at_least_1_pct']}%   "
+                  f">=2: {s['at_least_2_pct']}%   >=3: {s['at_least_3_pct']}%   mean: {s['mean_binding_fields']}")
+        print(f"  moved from 0 fields to >=1: {vb['zero_to_at_least_1']}   "
+              f"gained any binding field: {vb['schemes_gaining_binding_fields']}")
     print("=" * 74)
     print(f"Written: {out_path}")
 
