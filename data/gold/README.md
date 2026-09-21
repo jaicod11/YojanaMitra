@@ -33,6 +33,7 @@ One JSON object per line:
 | `verification` | `positive` rows only: for each expected slug, whether the description meets the scheme's conditions (see below) |
 | `notes` | why the expectation holds, usually citing the scheme's own rule |
 | `skip_scoring` | present and `true` only on rows that must not be scored |
+| `split` | `dev`, `test`, or `none` for the `skip_scoring` rows (see below) |
 
 Slugs are filenames in `data/interim/schemes/` without `.json`. That
 directory is gitignored, so checking slugs needs the local corpus.
@@ -47,6 +48,27 @@ directory is gitignored, so checking slugs needs the local corpus.
 | `no_match` | 5 | say the named scheme can't be found, rather than describe it or map it to another scheme. All five name an invented scheme. |
 
 In total, the rows reference 40 distinct slugs.
+
+## Dev/test split
+
+**Tuning may only look at `dev`. `test` is run once, at the end.** Anything
+chosen by looking at results, such as prompts, retrieval settings,
+thresholds or fusion weights, must be chosen on `dev` alone. Once `test` has
+been scored, changing the system and scoring `test` again makes it a second
+dev set.
+
+| split | rows | positive | exclusion | clarify | no_match |
+|---|---:|---:|---:|---:|---:|
+| `dev` | 20 | 10 | 6 | 3 | 1 |
+| `test` | 82 | 43 | 23 | 12 | 4 |
+| `none` | 2 | 1 | 1 | 0 | 0 |
+
+The 102 scoreable rows are stratified by `test_type`. The 20 dev rows are
+allocated across types in proportion (largest remainder), then drawn with a
+fixed seed within each type. `scripts/split_gold.py` reproduces the split
+exactly. The two `skip_scoring` rows get `none`. Dev is 19 English rows and
+1 Hindi row, with no Telugu, because the split is stratified by type, not
+language.
 
 ## `verification`
 
