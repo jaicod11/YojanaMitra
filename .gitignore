@@ -1,4 +1,3 @@
-cat > .gitignore << 'EOF'
 data/external/
 data/interim/
 data/raw/
@@ -6,4 +5,3 @@ data/raw/
 __pycache__/
 .venv/
 .DS_Store
-EOF
