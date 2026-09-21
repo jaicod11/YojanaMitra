@@ -145,7 +145,8 @@ gold_037 (class 9) uses the second.
 
 ## Corrections
 
-All made on 2026-09-21, before any system output was scored against the set.
+All label changes were made on 2026-09-21, before any system output was
+scored against the set.
 
 | row | change | why |
 |---|---|---|
@@ -159,6 +160,6 @@ All made on 2026-09-21, before any system output was scored against the set.
 | gold_032 | `skip_scoring` added, `notes` extended | The source record contradicts itself (see above). |
 | gold_101–104 | added, `no_match` | `no_match` had only one row, too few to report a hallucination rate. Each asks about an invented scheme; gold_102 is in Telugu and gold_103 in Hindi. |
 
-The `notes` of gold_011, gold_059 and gold_090 still carry their original
-reasoning. Where they disagree with a row's expectations, this section and
-the `verification` field take precedence.
+The `notes` of gold_011, gold_059 and gold_090 keep their original reasoning
+and end with a line beginning "Corrected 2026-09-21:" that explains the
+current label. Those lines were added on 2026-09-22 and changed no labels.
