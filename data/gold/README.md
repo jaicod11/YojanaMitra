@@ -66,9 +66,15 @@ dev set.
 The 102 scoreable rows are stratified by `test_type`. The 20 dev rows are
 allocated across types in proportion (largest remainder), then drawn with a
 fixed seed within each type. `scripts/split_gold.py` reproduces the split
-exactly. The two `skip_scoring` rows get `none`. Dev is 19 English rows and
-1 Hindi row, with no Telugu, because the split is stratified by type, not
-language.
+exactly. The two `skip_scoring` rows get `none`.
+
+The stratified draw put no Telugu row in dev, so the script then makes one
+seeded swap for each language dev lacks: a test row in that language trades
+places with an English dev row of the same `test_type`, which leaves the
+per-type counts unchanged. On 2026-09-22 (before anything had read the
+split) this swapped **gold_102** (Telugu, `no_match`) into dev and
+**gold_089** (English, `no_match`) into test. Dev is now 18 English rows,
+1 Telugu row and 1 Hindi row.
 
 ## `verification`
 

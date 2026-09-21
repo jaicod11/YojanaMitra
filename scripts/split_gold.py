@@ -2,7 +2,10 @@
 
 Scoreable rows (no skip_scoring) get "dev" or "test": about DEV_SIZE rows go
 to dev, allocated across test_types in proportion (largest remainder) and
-drawn with a fixed seed within each type. skip_scoring rows get "none".
+drawn with a fixed seed within each type. Then, for each language with no dev
+row, one seeded swap exchanges a test row in that language for an English dev
+row of the same test_type, so dev covers every language and the per-type
+counts stay the same. skip_scoring rows get "none".
 Deterministic: rerunning reproduces the same split. Changes no other field.
 """
 import json
@@ -40,6 +43,18 @@ def main():
     for t in sorted(by_type):
         dev.update(rng.sample(sorted(by_type[t]), alloc[t]))
 
+    # Language coverage: swap one row into dev for each language dev lacks.
+    lang = {r["id"]: r["language"] for r in scoreable}
+    ttype = {r["id"]: r["test_type"] for r in scoreable}
+    swaps = []
+    for language in sorted(set(lang.values()) - {lang[i] for i in dev}):
+        candidates = sorted(i for i in lang if lang[i] == language and i not in dev
+                            and any(lang[d] == "en" and ttype[d] == ttype[i] for d in dev))
+        incoming = rng.choice(candidates)
+        outgoing = rng.choice(sorted(d for d in dev if lang[d] == "en" and ttype[d] == ttype[incoming]))
+        dev = (dev - {outgoing}) | {incoming}
+        swaps.append((language, incoming, outgoing, ttype[incoming]))
+
     for r in rows:
         r["split"] = "none" if r.get("skip_scoring") else ("dev" if r["id"] in dev else "test")
 
@@ -48,6 +63,9 @@ def main():
     for t in sorted(by_type):
         print(f"{t:10s} dev {table[(t, 'dev')]:2d}  test {table[(t, 'test')]:2d}  none {table[(t, 'none')]}")
     print("totals:", dict(Counter(r["split"] for r in rows)))
+    for language, incoming, outgoing, t in swaps:
+        print(f"language swap ({language}, {t}): {incoming} -> dev, {outgoing} -> test")
+    print("dev languages:", dict(Counter(lang[i] for i in dev)))
     print("dev ids:", sorted(dev))
 
 
