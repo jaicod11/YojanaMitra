@@ -10,8 +10,16 @@ Reads data/interim/schemes/*.json and writes data/processed/chunks.jsonl:
   subsection into eligibility_text) get section "exclusions", so retrieval
   can tell a disqualifying clause from a qualifying one.
 
-Every chunk carries chunk_id, slug, scheme_name, section, text, state, level
-and category (from data/interim/labels/predictions.json).
+Every chunk carries chunk_id, slug, scheme_name, section, text, raw_text,
+state, level and category (from data/interim/labels/predictions.json).
+
+`text` is what gets indexed (embedded and BM25). For clause chunks it is
+prefixed with the scheme context, "<scheme_name> — eligibility: <clause>" (or
+"— exclusions:"), so identical boilerplate clauses in different schemes are
+distinct and each clause says which scheme it belongs to. `raw_text` is the
+bare clause, for display and citation. Overview chunks already start with the
+scheme name, so their text is unprefixed and raw_text equals text. The
+MIN_CHARS/MAX_CHARS limits apply to the raw clause.
 """
 import json
 import re
@@ -162,11 +170,13 @@ def build(schemes, categories):
         overview = " ".join(x for x in (normalize(d["scheme_name"]) + ".",
                                         normalize(d.get("description")),
                                         normalize(d.get("benefits_text"))) if x)
-        chunks.append({"chunk_id": f"{slug}::overview", "section": "overview", "text": overview, **base})
+        chunks.append({"chunk_id": f"{slug}::overview", "section": "overview",
+                       "text": overview, "raw_text": overview, **base})
         for i, (section, clause) in enumerate(eligibility_clauses(d.get("eligibility_text"))):
-            chunks.append({"chunk_id": f"{slug}::{section}::{i:03d}", "section": section, "text": clause, **base})
-    return [{k: c[k] for k in ("chunk_id", "slug", "scheme_name", "section", "text", "state", "level", "category")}
-            for c in chunks]
+            chunks.append({"chunk_id": f"{slug}::{section}::{i:03d}", "section": section,
+                           "text": f"{base['scheme_name']} — {section}: {clause}", "raw_text": clause, **base})
+    fields = ("chunk_id", "slug", "scheme_name", "section", "text", "raw_text", "state", "level", "category")
+    return [{k: c[k] for k in fields} for c in chunks]
 
 
 def quantiles(xs):
@@ -191,22 +201,26 @@ def main():
 
     print(f"wrote {len(chunks)} chunks for {len(schemes)} schemes -> {OUT_PATH.relative_to(ROOT)}")
     print("\nchunks by section:", dict(Counter(c["section"] for c in chunks)))
-    print("\nlength in characters")
+    print("\nlength in characters of indexed text (clauses include the scheme prefix)")
     for section in ("overview", "eligibility", "exclusions"):
         print(f"  {section:12s} {quantiles([len(c['text']) for c in chunks if c['section'] == section])}")
-    clause_lens = [len(c["text"]) for c in chunks if c["section"] != "overview"]
+    print("raw clause length (raw_text)")
+    for section in ("eligibility", "exclusions"):
+        print(f"  {section:12s} {quantiles([len(c['raw_text']) for c in chunks if c['section'] == section])}")
+    clause_lens = [len(c["raw_text"]) for c in chunks if c["section"] != "overview"]
     print(f"  clauses over {MAX_CHARS + MIN_CHARS} chars (a short fragment merged into a capped clause): "
           f"{sum(n > MAX_CHARS + MIN_CHARS for n in clause_lens)}; under {MIN_CHARS}: {sum(n < MIN_CHARS for n in clause_lens)}")
     per = Counter(c["slug"] for c in chunks)
     print("\nchunks per scheme (overview included):", quantiles(list(per.values())))
     print("  schemes with no eligibility/exclusion chunks:", sum(n == 1 for n in per.values()))
     print("  schemes with an exclusions section:", len({c["slug"] for c in chunks if c["section"] == "exclusions"}))
-    dup = Counter(c["text"] for c in chunks if c["section"] != "overview")
-    shared = {t: n for t, n in dup.items() if n > 1}
-    print(f"\nclause texts shared by 2+ schemes: {len(shared)} distinct texts, "
-          f"{sum(shared.values())} chunks; most common:")
-    for t, n in dup.most_common(5):
-        print(f"  {n:4d} x {t[:90]}")
+    for field in ("raw_text", "text"):
+        dup = Counter(c[field] for c in chunks)
+        shared = {t: n for t, n in dup.items() if n > 1}
+        print(f"\nduplicate {field} values: {len(shared)} distinct texts repeated, "
+              f"{sum(shared.values())} chunks involved, {sum(shared.values()) - len(shared)} redundant copies")
+        for t, n in [(t, n) for t, n in dup.most_common(5) if n > 1]:
+            print(f"  {n:4d} x {t[:100]}")
 
 
 if __name__ == "__main__":

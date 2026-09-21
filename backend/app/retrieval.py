@@ -10,7 +10,8 @@ search(query, k, mode) returns schemes, not chunks:
             1 / (RRF_K + rank), summed per chunk.
 
 Chunk scores are aggregated to schemes by taking each slug's best chunk, and
-that chunk is returned as the evidence. Only the candidate chunks are
+that chunk's raw_text (the clause without its indexing prefix) is returned
+as the evidence. Only the candidate chunks are
 aggregated, so fewer than k schemes can come back when the candidates
 concentrate on a few schemes.
 """
@@ -155,7 +156,9 @@ class Retriever:
                 "state": c["state"],
                 "level": c["level"],
                 "category": c["category"],
-                "evidence": {"chunk_id": c["chunk_id"], "section": c["section"], "text": c["text"],
+                # raw_text: the bare clause for display and citation; the
+                # indexed text carries a "<scheme> — <section>:" prefix.
+                "evidence": {"chunk_id": c["chunk_id"], "section": c["section"], "text": c["raw_text"],
                              **{f"{name}_rank": r.get(pos) for name, r in ranks.items()}},
             })
         return results
