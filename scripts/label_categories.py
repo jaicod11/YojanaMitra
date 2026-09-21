@@ -51,6 +51,9 @@ SAMPLE_SLUGS_PATH = LABELS_DIR / "sample_slugs.json"
 TO_VERIFY_PATH = LABELS_DIR / "to_verify.csv"
 PREDICTIONS_PATH = LABELS_DIR / "predictions.json"
 LABEL_RUN_PATH = LABELS_DIR / "label_run.json"
+# The canonical predictions, kept as a fixed path: set_labels_dir() moves the
+# globals above, but --relabel-category still has to read the labels it selects on.
+CANONICAL_PREDICTIONS_PATH = PREDICTIONS_PATH
 
 
 def set_labels_dir(path):
@@ -152,11 +155,16 @@ Do not return anything outside this list.
 15. Women & Child
 
 Classification rules:
-- Classify by the NATURE OF THE BENEFIT first, and the TARGET BENEFICIARY
-  second.
-- Exception: if the scheme is explicitly constituted around women, children,
-  or both, prefer "Women & Child". If constituted around SC/ST/OBC/PwD or
-  other marginalised groups, prefer "Social Welfare & Empowerment".
+- Classify by the NATURE OF THE BENEFIT. Group identity (SC/ST/OBC/EWS/PwD/
+  transgender/minority) selects "Social Welfare & Empowerment" ONLY when the
+  benefit itself is social protection — pension, maintenance allowance,
+  welfare assistance, rehabilitation, or general empowerment support. If the
+  benefit is education (scholarship, tuition, coaching, hostel), business
+  capital (loan, subsidy, enterprise support), agricultural input, skills
+  training, housing, or medical treatment, classify by that benefit even when
+  the scheme is reserved exclusively for a marginalised group.
+- If the scheme is explicitly constituted around women, children, or both,
+  prefer "Women & Child"; that precedence is unchanged.
 - A scholarship or tuition benefit is "Education & Learning" even when the
   recipients are farmers' children or workers' dependents.
 - Vocational or skill training aimed at employment is "Skills & Employment",
@@ -180,11 +188,24 @@ Respond with ONLY a JSON object, no markdown fences, no preamble:
   "runner_up": "<second-most-likely category, or null if unambiguous>"
 }}
 """
-# The template above is the classification prompt from the spec, embedded
-# verbatim, with the trailing JSON schema's literal braces doubled so it
-# survives str.format() -- .format() is only ever called with scheme_name /
-# description / benefits_text, so the doubled braces render back to single
-# braces in the actual prompt sent to the model, unchanged from the spec.
+# The template above is the classification prompt from the spec, with the
+# trailing JSON schema's literal braces doubled so it survives str.format() --
+# .format() is only ever called with scheme_name / description /
+# benefits_text, so the doubled braces render back to single braces in the
+# actual prompt sent to the model.
+#
+# One deliberate departure from the spec, in the first two rules. The spec
+# said to classify by benefit "first" and beneficiary "second", then made an
+# exception preferring "Social Welfare & Empowerment" for marginalised groups
+# -- while a later rule sends scholarships to "Education & Learning". Nothing
+# said which wins, and round-2 verification showed the model resolving it
+# toward Social Welfare: 11 of 17 disagreements were schemes it labelled that
+# way, 9 of them group-identity overrides of an education, business or
+# agricultural benefit, and no disagreement ran the other way. The exception
+# is now an explicit precedence rule: group identity selects Social Welfare
+# only when the benefit itself is social protection. Women & Child keeps its
+# precedence. Labels produced before this change are not comparable to labels
+# produced after it for schemes where the two rules collided.
 
 # The taxonomy + classification rules, sliced straight out of the verbatim
 # template so the batch prompt and the single-scheme prompt always share
@@ -789,7 +810,17 @@ def main():
     ap.add_argument("--out-dir", type=Path, default=None,
                      help="write sample/predictions/run metadata to this directory instead of "
                           "data/interim/labels (for side-by-side config evaluation)")
+    ap.add_argument("--relabel-category", type=str, default=None, metavar="CATEGORY",
+                     help="re-label every scheme whose current label is CATEGORY, instead of "
+                          "using the stratified sample -- for re-running the corpus after a "
+                          "classification rule changes. Requires --out-dir.")
+    ap.add_argument("--predictions-in", type=Path, default=CANONICAL_PREDICTIONS_PATH,
+                     help=f"labels --relabel-category selects on (default: {CANONICAL_PREDICTIONS_PATH})")
     args = ap.parse_args()
+    if args.relabel_category and not args.out_dir:
+        # Re-labelling writes a different answer for slugs that already have one;
+        # it goes to its own directory so the diff can be reviewed first.
+        ap.error("--relabel-category requires --out-dir")
 
     if args.out_dir:
         set_labels_dir(args.out_dir)
@@ -862,11 +893,25 @@ def main():
     LABELS_DIR.mkdir(parents=True, exist_ok=True)
     records = load_records()
 
+    if args.relabel_category:
+        source = load_json(args.predictions_in, {})
+        if not source:
+            print(f"error: no labels in {args.predictions_in}", file=sys.stderr)
+            sys.exit(1)
+        slugs = sorted(s for s, v in source.items()
+                       if v.get("category") == args.relabel_category and s in records)
+        if not slugs:
+            print(f"error: nothing is labelled {args.relabel_category!r} in {args.predictions_in}",
+                  file=sys.stderr)
+            sys.exit(1)
+        sample_meta = {"seed": None}
+        print(f"Re-labelling {len(slugs)} schemes currently labelled "
+              f"{args.relabel_category!r} (from {args.predictions_in}) -> {PREDICTIONS_PATH}")
     # The sample and to_verify.csv are created once and then treated as
     # immutable, so a rerun never regenerates a different sample out from
     # under a human who has already started filling in to_verify.csv.
     # --force only affects whether already-predicted slugs get reclassified.
-    if SAMPLE_SLUGS_PATH.exists():
+    elif SAMPLE_SLUGS_PATH.exists():
         sample_meta = json.loads(SAMPLE_SLUGS_PATH.read_text(encoding="utf-8"))
         slugs = sample_meta["slugs"]
         print(f"Reusing existing sample from {SAMPLE_SLUGS_PATH} ({len(slugs)} slugs, "
@@ -886,7 +931,9 @@ def main():
         print(f"Drew a new stratified sample of {len(slugs)} slugs (seed={args.seed}) "
               f"-> {SAMPLE_SLUGS_PATH}")
 
-    if TO_VERIFY_PATH.exists():
+    if args.relabel_category:
+        pass  # no blind sheet: this is a re-run of existing labels, not a new sample
+    elif TO_VERIFY_PATH.exists():
         print(f"{TO_VERIFY_PATH} already exists -- leaving it untouched so any human "
               f"annotations are preserved.")
     else:
@@ -1055,6 +1102,8 @@ def main():
 
     run_meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "relabel_category": args.relabel_category,
+        "relabel_source": str(args.predictions_in) if args.relabel_category else None,
         "sample_size": len(slugs),
         "seed": sample_meta["seed"],
         "provider_config": {p.name: {"model": p.model, "mode": "brief" if p.brief else "full",
@@ -1107,9 +1156,16 @@ def main():
         if "combined_labels_per_day" in projection:
             print(f"  {'both':6s} {projection['combined_labels_per_day']:5d}")
     print("=" * 62)
-    print(f"Verification sheet: {TO_VERIFY_PATH}")
-    print(f"Run metadata:       {LABEL_RUN_PATH}")
-    print("Do NOT open predictions.json until human verification of to_verify.csv is complete.")
+    if args.relabel_category:
+        # No blind sheet here: these slugs already have labels, and the point
+        # of the run is to diff the new ones against them.
+        print(f"Re-labelled output: {PREDICTIONS_PATH}")
+        print(f"Run metadata:       {LABEL_RUN_PATH}")
+        print(f"Diff it against {args.predictions_in} before replacing anything.")
+    else:
+        print(f"Verification sheet: {TO_VERIFY_PATH}")
+        print(f"Run metadata:       {LABEL_RUN_PATH}")
+        print("Do NOT open predictions.json until human verification of to_verify.csv is complete.")
 
 
 if __name__ == "__main__":

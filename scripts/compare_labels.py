@@ -118,13 +118,18 @@ def interval(t):
     return f"[{pct(t[0])}, {pct(t[1])}]"
 
 
-def print_post_stratified(compared, predictions, design, path, exclude):
+def print_post_stratified(compared, predictions, design, path, exclude, strata=None):
+    """`strata` maps slug -> the label that defined the sampling design. It is
+    only different from `predictions` when re-labelled output is scored against
+    a sample drawn on the old labels: the weights belong to the old strata, so
+    the stratum stays fixed while agreement is measured against the new label."""
     weights = design.get("category_weights", design)
     pool_size = design.get("pool_size")
     counts = {}
     for row in compared:
         pred = predictions[row["slug"]]
-        c = counts.setdefault(pred["category"], [0, 0])
+        stratum = (strata or predictions)[row["slug"]]["category"]
+        c = counts.setdefault(stratum, [0, 0])
         c[0] += 1
         c[1] += row["human_category"].strip() == pred["category"]
 
@@ -147,7 +152,7 @@ def print_post_stratified(compared, predictions, design, path, exclude):
     print("=" * 70)
     if pool_size:
         print(f"pool the estimate covers : {pool_size} schemes in {len(counts)} strata "
-              f"(strata = the model's predicted category)")
+              f"(strata = the {'design\'s original' if strata else 'model\'s predicted'} category)")
     print(f"raw, stratified sample   : {agree}/{n} = {pct(agree / n)}   Wilson {interval(wilson(agree / n, n))}")
     print(f"corpus-wide estimate     : {pct(res['estimate'])}")
     print(f"   Kish n_eff={res['n_eff']:.1f}, Wilson  {interval(res['kish_wilson'])}   <- headline")
@@ -189,12 +194,17 @@ def main():
     ap.add_argument("--weights", type=Path, default=None,
                     help="sample_slugs.json holding category_weights; adds the corpus-wide "
                          "post-stratified estimate, which the raw sample rate is not")
+    ap.add_argument("--strata-from", type=Path, default=None,
+                    help="predictions file whose categories define the strata, when --predictions "
+                         "holds re-labelled output scored against a sample stratified on the old labels")
     ap.add_argument("--exclude-stratum", action="append", default=[], metavar="CATEGORY",
                     help="also report agreement with this predicted category dropped, to size "
                          "one suspected error source (repeatable)")
     args = ap.parse_args()
     if args.exclude_stratum and not args.weights:
         ap.error("--exclude-stratum needs --weights")
+    if args.strata_from and not args.weights:
+        ap.error("--strata-from needs --weights")
 
     if not args.to_verify.exists():
         print(f"error: {args.to_verify} not found. Run label_categories.py first.", file=sys.stderr)
@@ -302,9 +312,18 @@ def main():
         if not args.weights.exists():
             print(f"error: {args.weights} not found.", file=sys.stderr)
             sys.exit(1)
+        strata = None
+        if args.strata_from:
+            strata = json.loads(args.strata_from.read_text(encoding="utf-8"))
+            missing = [r["slug"] for r in compared if r["slug"] not in strata]
+            if missing:
+                sys.stdout.flush()
+                print(f"error: --strata-from has no entry for {len(missing)} compared slugs: "
+                      f"{missing[:5]}", file=sys.stderr)
+                sys.exit(1)
         print_post_stratified(compared, predictions,
                               json.loads(args.weights.read_text(encoding="utf-8")),
-                              args.weights, args.exclude_stratum)
+                              args.weights, args.exclude_stratum, strata)
 
 
 if __name__ == "__main__":
