@@ -1,0 +1,3918 @@
+{
+  "split": "dev",
+  "timestamp": "2026-09-22T14:35:37+05:30",
+  "understand_prompt_version": "understand-v3",
+  "top": 10,
+  "retrieval_mode": "hybrid",
+  "occupation_threshold": 0.85,
+  "gold_sha256": "9ebc22f014abd84b7020eb70204b3a38b8acaf70e9b84fa162f2ac8cfff22790",
+  "index": {
+    "chunks_sha256": "04b4c023a172825758c6963427189736917d0ae3b4ef16a231fdafb13ab46a53",
+    "chunk_count": 15825,
+    "build_date": "2026-09-22T07:10:43+00:00"
+  },
+  "metrics": {
+    "positive": {
+      "n": 10,
+      "status": {
+        "eligible": 5,
+        "needs_checking": 5,
+        "not_eligible": 0
+      },
+      "false_exclusion_rate": 0.0,
+      "retrieved_top": 6,
+      "end_to_end_rate": 0.6
+    },
+    "exclusion": {
+      "n": 6,
+      "correct_not_eligible": 0.3333,
+      "wrongly_included_eligible": 0.3333,
+      "not_ruled_out_needs_checking": 0.3333,
+      "retrieved_top": 4
+    },
+    "candidate_status": {
+      "not_eligible": 67,
+      "needs_checking": 113,
+      "eligible": 20
+    }
+  },
+  "profile_extraction": {
+    "fields": {
+      "occupation": {
+        "gold_non_null": 12,
+        "correct": 9,
+        "accuracy": 0.75,
+        "gold_null": 8,
+        "filled": 2,
+        "false_fill_rate": 0.25,
+        "approximate": true
+      },
+      "state": {
+        "gold_non_null": 11,
+        "correct": 11,
+        "accuracy": 1.0,
+        "gold_null": 9,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "age": {
+        "gold_non_null": 6,
+        "correct": 6,
+        "accuracy": 1.0,
+        "gold_null": 14,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "gender": {
+        "gold_non_null": 2,
+        "correct": 2,
+        "accuracy": 1.0,
+        "gold_null": 18,
+        "filled": 1,
+        "false_fill_rate": 0.0556,
+        "approximate": false
+      },
+      "annual_income_inr": {
+        "gold_non_null": 0,
+        "correct": 0,
+        "accuracy": null,
+        "gold_null": 20,
+        "filled": 1,
+        "false_fill_rate": 0.05,
+        "approximate": false
+      },
+      "land_acres": {
+        "gold_non_null": 2,
+        "correct": 2,
+        "accuracy": 1.0,
+        "gold_null": 18,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "caste_category": {
+        "gold_non_null": 0,
+        "correct": 0,
+        "accuracy": null,
+        "gold_null": 20,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      }
+    },
+    "overall": {
+      "accuracy": 0.9091,
+      "false_fill_rate": 0.0374,
+      "correct": 30,
+      "gold_non_null": 33,
+      "filled": 4,
+      "gold_null": 107
+    }
+  },
+  "new_field_fill": {
+    "education_class": {
+      "filled": 0,
+      "rows": 20,
+      "ids": []
+    },
+    "education_stage": {
+      "filled": 0,
+      "rows": 20,
+      "ids": []
+    },
+    "residence": {
+      "filled": 1,
+      "rows": 20,
+      "ids": [
+        "gold_077"
+      ]
+    },
+    "marital_status": {
+      "filled": 2,
+      "rows": 20,
+      "ids": [
+        "gold_039",
+        "gold_093"
+      ]
+    },
+    "disability_percent": {
+      "filled": 1,
+      "rows": 20,
+      "ids": [
+        "gold_053"
+      ]
+    },
+    "is_minority": {
+      "filled": 0,
+      "rows": 20,
+      "ids": []
+    },
+    "bpl_household": {
+      "filled": 2,
+      "rows": 20,
+      "ids": [
+        "gold_039",
+        "gold_053"
+      ]
+    },
+    "registered_construction_worker": {
+      "filled": 3,
+      "rows": 20,
+      "ids": [
+        "gold_083",
+        "gold_084",
+        "gold_086"
+      ]
+    },
+    "prior_benefit_schemes": {
+      "filled": 2,
+      "rows": 20,
+      "ids": [
+        "gold_056",
+        "gold_095"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "id": "gold_003",
+      "language": "en",
+      "test_type": "exclusion",
+      "notes": "PM-KISAN explicitly excludes farmer families where a member paid income tax in the last assessment year — a deliberate exclusion test.",
+      "query": "I own 10 acres of farmland in Punjab and I file income tax returns every year.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "farmer",
+        "state": "Punjab",
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": 10,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I file income tax returns every year"
+        ]
+      },
+      "confidence": {
+        "occupation": "medium",
+        "state": "high",
+        "land_acres": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "dysrhis",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "pmay-g",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "residence"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "ysrkn",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 4,
+          "slug": "pm-kisan",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 5,
+          "slug": "zbnf",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "sgiavowwst",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "awvsssi",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "brfsy",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "ysrvm",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 10,
+          "slug": "pfts",
+          "status": "eligible",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": {
+        "field": "caste_category",
+        "score": 0.6667,
+        "blocks": [
+          "pmay-g",
+          "sgiavowwst"
+        ],
+        "scores": {
+          "caste_category": 0.6667,
+          "annual_income_inr": 0.5,
+          "residence": 0.5
+        }
+      },
+      "targets": [
+        {
+          "slug": "pm-kisan",
+          "retrieved_rank": 4,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": "Punjab",
+              "confidence": "high",
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "All landholding farmers' families, which have cultivable land holding in their names are eligible to get benefit under the scheme.",
+            "All Institutional Land holders.",
+            "Former and present holders of constitutional posts",
+            "Former and present Ministers/ State Ministers and former/present Members of LokSabha/ RajyaSabha/ State Legislative Assemblies/ State Legislative Councils,former and present Mayors of Municipal Corporations, former and present Chairpersons of District Panchayats.",
+            "All serving or retired officers and employees of Central/ State Government Ministries /Offices/Departments and its field units Central or State PSEs and Attached offices /Autonomous Institutions under Government as well as regular employees of the Local Bodies (Excluding Multi Tasking Staff /Class IV/Group D employees)",
+            "All superannuated/retired pensioners whose monthly pension is Rs.10,000/-or more (Excluding Multi Tasking Staff / Class IV/Group D employees) of above category",
+            "All Persons who paid Income Tax in last assessment year",
+            "Professionals like Doctors, Engineers, Lawyers, Chartered Accountants, and Architects registered with Professional bodies and carrying out profession by undertaking practices."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_007",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Telangana's farmer life insurance scheme; premium subsidy differs for loanee vs non-loanee farmers.",
+      "query": "I am a farmer in Telangana, 45 years old, and I want life insurance in case something happens to me.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "farmer",
+        "state": "Telangana",
+        "age": 45,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "age": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "farmer-insurance",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "rythu-bima",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "jjais",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 4,
+          "slug": "cpis",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 5,
+          "slug": "pmjjby",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 6,
+          "slug": "dysrhis",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "cmgcpsi",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "slesvkspy",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "sjpfsgc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "education_stage",
+            "gender"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "dcaltasg",
+          "status": "needs_checking",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": {
+        "field": "caste_category",
+        "score": 0.1111,
+        "blocks": [
+          "sjpfsgc"
+        ],
+        "scores": {
+          "caste_category": 0.1111,
+          "education_stage": 0.1111,
+          "gender": 0.1111
+        }
+      },
+      "targets": [
+        {
+          "slug": "rythu-bima",
+          "retrieved_rank": 2,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "pass",
+              "decisive": true,
+              "constraint": {
+                "min": 18,
+                "max": 60
+              },
+              "profile_value": 45,
+              "confidence": "high",
+              "source_span": "The scheme covers all farmers between the ages of 18 and 60 years, including tenant farmers",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "Telangana",
+              "profile_value": "Telangana",
+              "confidence": "high",
+              "source_span": "Farmers in the state of Telangana are eligible to apply for the Rythu Bima Scheme.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "occupation",
+              "result": "pass",
+              "decisive": true,
+              "constraint": [
+                "farmer"
+              ],
+              "profile_value": "farmer",
+              "confidence": "high",
+              "source_span": "The scheme is only applicable to farmers.",
+              "note": "matches 'farmer' (1.000)",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The main objective of the Farmers Group Life Insurance Scheme (Rythu Bima), is to provide financial relief and social security to the family members/ dependents, in case of the loss of a farmer's life due to any reason.",
+            "The scheme covers all farmers between the ages of 18 and 60 years, including tenant farmers",
+            "The farmers must be from Telangana state.",
+            "The scheme is only applicable to farmers.",
+            "To prove their residence, the farmer must possess a Domicile certificate of the state under his name.",
+            "The farmers must belong to the age group of 18-59 years to avail of the scheme as of July 1st of the current financial year.",
+            "The age of the applicant will be verified as the age described on his/her Aadhar Card.",
+            "The applicant can apply for a single policy only.",
+            "The applicant must own some piece of agricultural land under his/her name.",
+            "The farmer should have a bank account in their name and it should be linked to their Aadhaar card.",
+            "The farmer should pay the required premium amount to register for the scheme.",
+            "The scheme does not cover death or disability due to suicide by the farmer.",
+            "The scheme does not cover death or disability due to drug abuse by the farmer.",
+            "The scheme does not cover death or disability due to war, terrorism, or any other act of aggression.",
+            "The scheme does not cover death or disability due to the farmer's involvement in any criminal activity.",
+            "The scheme does not cover death or disability due to natural causes like old age or any disease.",
+            "The scheme does not cover death or disability due to any pre-existing medical conditions."
+          ],
+          "to_confirm": [
+            "resident of Telangana (any domicile rule in the scheme text)"
+          ],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_014",
+      "language": "en",
+      "test_type": "exclusion",
+      "notes": "PM-KISAN excludes superannuated pensioners whose monthly pension is ₹10,000 or more — a deliberate exclusion test.",
+      "query": "I retired as a government schoolteacher and now get a pension of 12,000 rupees a month. I also own 4 acres of ancestral farmland in Karnataka.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "government schoolteacher",
+        "state": "Karnataka",
+        "age": null,
+        "gender": null,
+        "annual_income_inr": 144000,
+        "land_acres": 4,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I retired as a government schoolteacher",
+          "own 4 acres of ancestral farmland"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "annual_income_inr": "high",
+        "land_acres": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "sssps",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "ysrpk",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "ignwpstn",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "bpl_household"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "tps-hgv",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 5,
+          "slug": "cmat-ap",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "dwps",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "marital_status"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "ptupiwoa50yaa",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "gender",
+            "marital_status"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "piso",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "ignvpyr",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "bpl_household"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "gwpss",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "caste_category",
+        "score": 1.0,
+        "blocks": [
+          "sssps"
+        ],
+        "scores": {
+          "caste_category": 1.0
+        }
+      },
+      "targets": [
+        {
+          "slug": "pm-kisan",
+          "retrieved_rank": null,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": "Karnataka",
+              "confidence": "high",
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "All landholding farmers' families, which have cultivable land holding in their names are eligible to get benefit under the scheme.",
+            "All Institutional Land holders.",
+            "Former and present holders of constitutional posts",
+            "Former and present Ministers/ State Ministers and former/present Members of LokSabha/ RajyaSabha/ State Legislative Assemblies/ State Legislative Councils,former and present Mayors of Municipal Corporations, former and present Chairpersons of District Panchayats.",
+            "All serving or retired officers and employees of Central/ State Government Ministries /Offices/Departments and its field units Central or State PSEs and Attached offices /Autonomous Institutions under Government as well as regular employees of the Local Bodies (Excluding Multi Tasking Staff /Class IV/Group D employees)",
+            "All superannuated/retired pensioners whose monthly pension is Rs.10,000/-or more (Excluding Multi Tasking Staff / Class IV/Group D employees) of above category",
+            "All Persons who paid Income Tax in last assessment year",
+            "Professionals like Doctors, Engineers, Lawyers, Chartered Accountants, and Architects registered with Professional bodies and carrying out profession by undertaking practices."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_039",
+      "language": "en",
+      "test_type": "exclusion",
+      "notes": "Just under the IGNWPS age threshold of 40 — a deliberate near-miss.",
+      "query": "I am a 38-year-old widow in Karnataka, BPL family.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": null,
+        "state": "Karnataka",
+        "age": 38,
+        "gender": "female",
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": "widowed",
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": true,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {
+        "state": "high",
+        "age": "high",
+        "gender": "high",
+        "marital_status": "high",
+        "bpl_household": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "ignwpsmp",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "ignwps-sikkim",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "ignoaps-sikkim",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "iscwr",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "uwps",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "ignwps",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 7,
+          "slug": "fapnw",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 8,
+          "slug": "oap",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "ignvpyrr",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 10,
+          "slug": "suwps",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "caste_category",
+        "score": 0.25,
+        "blocks": [
+          "iscwr"
+        ],
+        "scores": {
+          "caste_category": 0.25
+        }
+      },
+      "targets": [
+        {
+          "slug": "ignwps",
+          "retrieved_rank": 6,
+          "status": "not_eligible",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "fail",
+              "decisive": true,
+              "constraint": {
+                "min": 40,
+                "max": 79
+              },
+              "profile_value": 38,
+              "confidence": "high",
+              "source_span": "The applicant must be a widow in the age group of 40-79 years.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "gender",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "female",
+              "profile_value": "female",
+              "confidence": "high",
+              "source_span": "The applicant must be a widow in the age group of 40-79 years.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "marital_status",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "widow",
+              "profile_value": "widowed",
+              "confidence": "high",
+              "source_span": "The applicant must be a widow in the age group of 40-79 years.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": "Karnataka",
+              "confidence": "high",
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            },
+            {
+              "field": "bpl_household",
+              "result": "pass",
+              "decisive": true,
+              "constraint": true,
+              "profile_value": true,
+              "confidence": "high",
+              "source_span": "The applicant should belong to a household living below the poverty line according to the criteria prescribed by the Govt. of India",
+              "note": null,
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "Pension will be discontinuedIn case of remarriage of widow",
+            "Once the widow moves above poverty line"
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_053",
+      "language": "hi",
+      "test_type": "positive",
+      "notes": "Hindi entry: 50 years old, 82% disability, BPL family — meets all IGNDPS criteria.",
+      "query": "I live in Bihar, my age is 50 years and I have 82% disability. My family is below the poverty line.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": null,
+        "state": "Bihar",
+        "age": 50,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": 82,
+        "is_minority": null,
+        "bpl_household": true,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {
+        "state": "high",
+        "age": "high",
+        "disability_percent": "high",
+        "bpl_household": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "igndps-sikkim",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "nfbs",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "lbsspy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender",
+            "marital_status"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "rgssspf-2012",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "sspmphmrp",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "disabled-pension",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "cmdps-sikkim",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 8,
+          "slug": "igndps",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "oah",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "nsap-ignoaps",
+          "status": "not_eligible",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": {
+        "field": "annual_income_inr",
+        "score": 0.4444,
+        "blocks": [
+          "lbsspy",
+          "oah"
+        ],
+        "scores": {
+          "annual_income_inr": 0.4444,
+          "gender": 0.3333,
+          "marital_status": 0.3333
+        }
+      },
+      "targets": [
+        {
+          "slug": "igndps",
+          "retrieved_rank": 8,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "pass",
+              "decisive": true,
+              "constraint": {
+                "min": 18,
+                "max": 79
+              },
+              "profile_value": 50,
+              "confidence": "high",
+              "source_span": "The age of the applicant should range between 18-79 years.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "category",
+              "decisive": true,
+              "constraint": [
+                "PwD"
+              ],
+              "profile_value": {
+                "disability_percent": 82
+              },
+              "confidence": null,
+              "source_span": "The applicant should be a physically or mentally disabled person.",
+              "missing_field": null,
+              "result": "pass",
+              "note": null
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": "Bihar",
+              "confidence": "high",
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            },
+            {
+              "field": "bpl_household",
+              "result": "pass",
+              "decisive": true,
+              "constraint": true,
+              "profile_value": true,
+              "confidence": "high",
+              "source_span": "The applicant should belong to Below Poverty Line.",
+              "note": null,
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The applicant should be a resident of India.",
+            "The applicant's disability should be more than 80%.",
+            "Dwarfs are also eligible for this scheme."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_056",
+      "language": "en",
+      "test_type": "exclusion",
+      "notes": "PM Vishwakarma excludes applicants who availed a similar self-employment loan (PMEGP/PM SVANidhi/Mudra) within the past 5 years — a deliberate exclusion test.",
+      "query": "I am a blacksmith and I took a Mudra loan two years ago for my workshop.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "blacksmith",
+        "state": null,
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": [
+          "Mudra loan"
+        ],
+        "other_facts": [
+          "took a Mudra loan two years ago for my workshop"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "prior_benefit_schemes": "high"
+      },
+      "fallback_question": "Could you please tell me which state you live in and if you are looking for further financial assistance or other types of support?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "nhdpccwms",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "pmmy",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "dysrhis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "modrob",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 5,
+          "slug": "mssy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "cpis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "atwsfww",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "education_class",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "jt",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "els",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "lpwtcw",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "registered_construction_worker",
+            "state"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 0.9012,
+        "blocks": [
+          "dysrhis",
+          "mssy",
+          "atwsfww",
+          "jt",
+          "lpwtcw"
+        ],
+        "scores": {
+          "state": 0.9012,
+          "age": 0.7345,
+          "annual_income_inr": 0.7123,
+          "land_acres": 0.3333,
+          "education_class": 0.1429,
+          "gender": 0.1429,
+          "caste_category": 0.1111,
+          "registered_construction_worker": 0.1
+        }
+      },
+      "targets": [
+        {
+          "slug": "pmv",
+          "retrieved_rank": null,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": {
+                "min": 18,
+                "max": null
+              },
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "On the date of registration for the scheme, the minimum age of the applicant should be 18 years.",
+              "note": "not stated",
+              "missing_field": "age"
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            },
+            {
+              "field": "occupation",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": [
+                "artisan or craftsperson working with hands and tools",
+                "engaged in an unorganized sector on a self-employment basis",
+                "engaged in one of the 18 family-based traditional trades mentioned in the scheme"
+              ],
+              "profile_value": "blacksmith",
+              "confidence": "high",
+              "source_span": "The applicant should be an artisan or craftsperson working with hands and tools.The applicant should be engaged in an unorganized sector on a self-employment basis.The applicant should be engaged in one of the 18 family-based traditional trades mentioned in the scheme.",
+              "note": "closest is 'artisan or craftsperson working with hands and tools' (0.416), below 0.85",
+              "missing_field": null
+            },
+            {
+              "field": "not_availing_other_scheme",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": true,
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "The applicant should not have availed loans under similar credit-based schemes of the Central Government or State Government for self-employment/ business development, e.g. PMEGP, PM SVANidhi, Mudra, in the past 5 years.",
+              "note": "prior benefit stated (named scheme: Mudra loan; took a Mudra loan two years ago for my workshop); check it is not for the same purpose",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The registration and benefits under the Scheme shall be restricted to one member of the family.",
+            "The applicant should be engaged in the concerned trade on the date of registration.",
+            "The applicant should not have availed loans under similar credit-based schemes of the Central Government or State Government for self-employment/ business development, e.g. PMEGP, PM SVANidhi, Mudra, in the past 5 years.",
+            "A person in government service and their family members shall not be eligible."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [
+            "age"
+          ],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_062",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Not a family-based traditional trade, and no PMEGP-style manufacturing/service unit named, so a Mudra loan is the closer fit given relevant experience and a clean credit record.",
+      "query": "I want to start a tailoring business and need a loan of about 3 lakh rupees. I have some tailoring experience and no defaults on any past loans.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "tailor",
+        "state": null,
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I have some tailoring experience",
+          "no defaults on any past loans"
+        ]
+      },
+      "confidence": {
+        "occupation": "high"
+      },
+      "fallback_question": "Could you please tell me which state or union territory you reside in?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "sanfsosms",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "dlbe",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "sei",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "education_class",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "us",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "mmuy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "education_class",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "ssboscbpbs",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "sl",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "education_stage"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "nbcfdc-gls",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "ttscandbc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "caste_category",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "cccsaw",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 2.1611,
+        "blocks": [
+          "sanfsosms",
+          "sei",
+          "us",
+          "mmuy",
+          "ssboscbpbs",
+          "ttscandbc",
+          "cccsaw"
+        ],
+        "scores": {
+          "state": 2.1611,
+          "age": 1.8944,
+          "annual_income_inr": 1.4861,
+          "gender": 0.5611,
+          "education_class": 0.5333,
+          "caste_category": 0.4028,
+          "education_stage": 0.1429
+        }
+      },
+      "targets": [
+        {
+          "slug": "pmmy",
+          "retrieved_rank": null,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "Eligible borrowersIndividualsProprietary concern.Partnership Firm.Private Ltd. Company.Public Company.Any other legal forms.",
+            "Note 01:The applicant should not be a defaulter to any bank or financial institution and should have a satisfactory credit track record.",
+            "Note 02: The individual borrowers may be required to possess the necessary skills/experience/ knowledge to undertake the proposed activity.",
+            "Note 03: The need for educational qualification, if any, is assessed based on the nature of the proposed activity and its requirement."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_064",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "PMJDY covers both — the child (over 10) can hold an account with guardian support.",
+      "query": "I don't have a bank account. I am an adult and want to open one, and my 11-year-old also wants one.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": null,
+        "state": null,
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "one_child_aged_11",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I don't have a bank account"
+        ]
+      },
+      "confidence": {
+        "family": "high"
+      },
+      "fallback_question": "To help you find the right bank account schemes, could you please tell me which state you live in?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "safaew-bcew",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "occupation"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "pomis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "mvpy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "education_class",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "ngy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "vtvscsgit",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "sfgcs",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "education_stage",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "ssy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "gender"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "cmgcpsi",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "mnssy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "education_class",
+            "gender",
+            "marital_status",
+            "registered_construction_worker",
+            "state"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "awvsssi",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "occupation",
+            "state"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "annual_income_inr",
+        "score": 1.8083,
+        "blocks": [
+          "safaew-bcew",
+          "mvpy",
+          "ngy",
+          "cmgcpsi",
+          "awvsssi"
+        ],
+        "scores": {
+          "annual_income_inr": 1.8083,
+          "state": 1.2861,
+          "occupation": 1.1,
+          "caste_category": 0.8,
+          "gender": 0.7956,
+          "age": 0.754,
+          "education_class": 0.4444,
+          "education_stage": 0.1667,
+          "marital_status": 0.1111,
+          "registered_construction_worker": 0.1111
+        }
+      },
+      "targets": [
+        {
+          "slug": "pmjdy",
+          "retrieved_rank": null,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "the scheme requires a dependent (see the scheme text)",
+            "If minors above ten years apply, they will require support from their legal guardians for administering their PMJDY account."
+          ],
+          "to_confirm": [
+            "citizen of India"
+          ],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_065",
+      "language": "te",
+      "test_type": "positive",
+      "notes": "Telugu entry: 33-year-old goldsmith in AP, family trade, no prior similar loan — goldsmith is one of the 18 listed trades.",
+      "query": "I am a 33-year-old goldsmith (I make gold jewelry) in Andhra Pradesh. This is our family profession, and I have never taken any loan before.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "goldsmith",
+        "state": "Andhra Pradesh",
+        "age": 33,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "family_profession",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I have never taken any loan before"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "age": "high",
+        "family": "medium"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "swlhps",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "atnmasfogi",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "ags",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "education_class",
+            "gender"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "cmgcpsi",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "jt",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "dysrhis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "dls-punjab",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "bpl_household",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "ysrkn",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "nbcfdc-gls",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "maddapp-i",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "disability_percent"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "annual_income_inr",
+        "score": 0.4778,
+        "blocks": [
+          "jt",
+          "dysrhis",
+          "nbcfdc-gls"
+        ],
+        "scores": {
+          "annual_income_inr": 0.4778,
+          "land_acres": 0.1667,
+          "caste_category": 0.1111
+        }
+      },
+      "targets": [
+        {
+          "slug": "pmv",
+          "retrieved_rank": null,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "pass",
+              "decisive": true,
+              "constraint": {
+                "min": 18,
+                "max": null
+              },
+              "profile_value": 33,
+              "confidence": "high",
+              "source_span": "On the date of registration for the scheme, the minimum age of the applicant should be 18 years.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": "Andhra Pradesh",
+              "confidence": "high",
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            },
+            {
+              "field": "occupation",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": [
+                "artisan or craftsperson working with hands and tools",
+                "engaged in an unorganized sector on a self-employment basis",
+                "engaged in one of the 18 family-based traditional trades mentioned in the scheme"
+              ],
+              "profile_value": "goldsmith",
+              "confidence": "high",
+              "source_span": "The applicant should be an artisan or craftsperson working with hands and tools.The applicant should be engaged in an unorganized sector on a self-employment basis.The applicant should be engaged in one of the 18 family-based traditional trades mentioned in the scheme.",
+              "note": "closest is 'artisan or craftsperson working with hands and tools' (0.365), below 0.85",
+              "missing_field": null
+            },
+            {
+              "field": "not_availing_other_scheme",
+              "result": "unknown",
+              "decisive": false,
+              "constraint": true,
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "The applicant should not have availed loans under similar credit-based schemes of the Central Government or State Government for self-employment/ business development, e.g. PMEGP, PM SVANidhi, Mudra, in the past 5 years.",
+              "note": "no prior benefit stated",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The registration and benefits under the Scheme shall be restricted to one member of the family.",
+            "The applicant should be engaged in the concerned trade on the date of registration.",
+            "The applicant should not have availed loans under similar credit-based schemes of the Central Government or State Government for self-employment/ business development, e.g. PMEGP, PM SVANidhi, Mudra, in the past 5 years.",
+            "A person in government service and their family members shall not be eligible."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_067",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Meets PMMVY's core condition directly: pregnant, employed, and experiencing wage loss due to pregnancy.",
+      "query": "I am pregnant with my first child, I have a job, and I am losing wages because of the pregnancy.",
+      "understand_status": "ok",
+      "understand_notes": [
+        "clarifying_question dropped: clarifying_question is only for a nearly empty profile; this one has 2 substantive fields"
+      ],
+      "profile": {
+        "occupation": "employee",
+        "state": null,
+        "age": null,
+        "gender": "female",
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "pregnant_with_first_child",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I have a job",
+          "I am losing wages because of the pregnancy"
+        ]
+      },
+      "confidence": {
+        "occupation": "medium",
+        "gender": "high",
+        "family": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "arogya-lakshmi",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "mamata",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "mbs-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "registered_construction_worker",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "gfapscplw",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "pmmvy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "dysrhis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "mbmbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "registered_construction_worker",
+            "state"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "sfgcs",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "education_stage",
+            "state"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "mb-gbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "registered_construction_worker",
+            "state"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "famcw",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "registered_construction_worker",
+            "state"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 2.729,
+        "blocks": [
+          "arogya-lakshmi",
+          "mamata",
+          "mbs-hbocwwb",
+          "gfapscplw",
+          "dysrhis",
+          "mbmbocwwb",
+          "sfgcs",
+          "mb-gbocwwb",
+          "famcw"
+        ],
+        "scores": {
+          "state": 2.729,
+          "age": 1.9111,
+          "registered_construction_worker": 0.6873,
+          "annual_income_inr": 0.6167,
+          "caste_category": 0.575,
+          "land_acres": 0.1667,
+          "education_stage": 0.125
+        }
+      },
+      "targets": [
+        {
+          "slug": "pmmvy",
+          "retrieved_rank": 5,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": {
+                "min": 19,
+                "max": null
+              },
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "The applicant should be of at least 19 years old and a pregnant women.",
+              "note": "not stated",
+              "missing_field": "age"
+            },
+            {
+              "field": "income",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": {
+                "max_annual_inr": 800000,
+                "basis": "family"
+              },
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "Women whose net family income is less than Rs. 8 Lakh per annum",
+              "note": "not stated",
+              "missing_field": "annual_income_inr"
+            },
+            {
+              "field": "gender",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": "female",
+              "profile_value": "female",
+              "confidence": "high",
+              "source_span": "The applicant should be of at least 19 years old and a pregnant women.",
+              "note": "the person is asking on behalf of a family member; their own value does not decide this",
+              "missing_field": null
+            },
+            {
+              "field": "category",
+              "decisive": true,
+              "constraint": [
+                "SC",
+                "ST",
+                "PwD"
+              ],
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "Women belonging to scheduled castes and scheduled tribesWomen who are partially (40%) or fully disabled (Divyang Jan)",
+              "missing_field": "caste_category",
+              "result": "unknown",
+              "note": "not determined: ['caste_category', 'disability_percent']"
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            },
+            {
+              "field": "occupation",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": [
+                "employed"
+              ],
+              "profile_value": "employee",
+              "confidence": "medium",
+              "source_span": "The applicant should be employed and experiencing wage-loss due to the pregnancy.",
+              "note": "closest is 'employed' (0.802), below 0.85",
+              "missing_field": null
+            },
+            {
+              "field": "not_availing_other_scheme",
+              "result": "unknown",
+              "decisive": false,
+              "constraint": true,
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "All pregnant women and lactating mothers in regular employment with the Central Government or State Government or Public Sector Undertaking or those who are in receipt of similar benefits under any law for the time being in force shall not be entitled to benefits under PMMVY.",
+              "note": "no prior benefit stated",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The scheme is applicable only for the first live birth.",
+            "Eligible beneficiary can apply for the benefit under PMMVY scheme within 270 days from the child birth.",
+            "If a beneficiary delivers twins/ triplets/ quadruplets in her second pregnancy, with one or more children being girl, she will receive incentive for second girl child as per the PMMVY 2.0 norms.",
+            "Women holder of BPL Ration Card",
+            "Women Beneficiaries under Pradhan Mantri Jan Aarogya Yojana (PMJAY) under Ayushman Bharat.",
+            "Women holding e-Shram card",
+            "Women farmers who are beneficiaries under Kisan Samman Nidhi",
+            "Women holding MGNREGA Job Card",
+            "Pregnant and Lactating AWWs/ AWHs/ ASHAs",
+            "Women holding Ration Card under NFSA Act 2013.",
+            "Any other category as may be prescribed by the Central Government",
+            "The beneficiary's husband's Aadhaar is not mandatory for availing the benefits under the Scheme.",
+            "All pregnant women and lactating mothers in regular employment with the Central Government or State Government or Public Sector Undertaking or those who are in receipt of similar benefits under any law for the time being in force shall not be entitled to benefits under PMMVY."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "caste_category"
+          ],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_072",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Well within the under-10 age limit for opening a Sukanya Samriddhi account.",
+      "query": "I just had a baby girl and want to start saving for her future.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": null,
+        "state": null,
+        "age": null,
+        "gender": "female",
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "newborn_baby_girl",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {
+        "gender": "high",
+        "family": "high"
+      },
+      "fallback_question": "To help you find the right savings schemes for your daughter, could you please tell me which state you live in and if you have a specific budget in mind for your savings?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "cmgcpsi",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "bys",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "bpl_household",
+            "education_class",
+            "state"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "lly",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "lbs",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "mesy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "occupation",
+            "registered_construction_worker",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "mmy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "ngy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "mvp",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "occupation",
+            "state"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "mssc",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 10,
+          "slug": "sjpfsgc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "caste_category",
+            "education_stage",
+            "occupation"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 2.7179,
+        "blocks": [
+          "cmgcpsi",
+          "bys",
+          "lly",
+          "lbs",
+          "mesy",
+          "mmy",
+          "ngy",
+          "mvp"
+        ],
+        "scores": {
+          "state": 2.7179,
+          "annual_income_inr": 1.3929,
+          "bpl_household": 0.5,
+          "education_class": 0.5,
+          "age": 0.4667,
+          "occupation": 0.425,
+          "registered_construction_worker": 0.2,
+          "caste_category": 0.1,
+          "education_stage": 0.1
+        }
+      },
+      "targets": [
+        {
+          "slug": "ssy",
+          "retrieved_rank": null,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": {
+                "min": null,
+                "max": 10
+              },
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "the name of a girl child, who has not attained the age of ten years as of the date of opening of the account.",
+              "note": "not stated",
+              "missing_field": "age"
+            },
+            {
+              "field": "gender",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": "female",
+              "profile_value": "female",
+              "confidence": "high",
+              "source_span": "the name of a girl child",
+              "note": "the person is asking on behalf of a family member; their own value does not decide this",
+              "missing_field": null
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "An account under this Scheme may be opened for a maximum of two girl children in one family: Provided that more than two accounts may be opened in a family if such children are born in the first or in the second order of birth or in both, on submission of an affidavit by the guardian supported with birth certificates of the twins/triplets regarding the birth of such multiple girl children in the first two orders of birth in a family. Provided further that the above proviso shall not apply to the girl child of the second order of birth if the first order of birth in the family results in two or more surviving girl children.",
+            "The account may be opened by one of the guardians in the name of a girl child",
+            "Every account holder shall have a single account under this Scheme."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [
+            "age"
+          ],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_077",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Destitute/houseless households are an automatic-inclusion category under PMAY-Gramin.",
+      "query": "I live in a kutcha house in rural Madhya Pradesh with no shelter of my own, essentially living on alms.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "beggar",
+        "state": "Madhya Pradesh",
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": "rural",
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I live in a kutcha house",
+          "no shelter of my own",
+          "essentially living on alms"
+        ]
+      },
+      "confidence": {
+        "occupation": "medium",
+        "state": "high",
+        "residence": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "bpgy",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "aos",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "gender"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "pmay-g",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "land_acres"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "gssy",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "education_stage"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "hs",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "pi",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "bpl_household"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "maps",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "gender",
+            "marital_status"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "mabay",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "land_acres"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "aks",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "education_class"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "clssmig",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "annual_income_inr",
+        "score": 0.5444,
+        "blocks": [
+          "pmay-g",
+          "aks",
+          "clssmig"
+        ],
+        "scores": {
+          "annual_income_inr": 0.5444,
+          "land_acres": 0.4583,
+          "caste_category": 0.4444,
+          "age": 0.1429,
+          "gender": 0.1429,
+          "marital_status": 0.1429,
+          "education_class": 0.1111
+        }
+      },
+      "targets": [
+        {
+          "slug": "pmay-g",
+          "retrieved_rank": 3,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "income",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": {
+                "max_annual_inr": 120000,
+                "basis": "individual"
+              },
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "Any member of the family earning more than Rs.10,000 per month",
+              "note": "not stated",
+              "missing_field": "annual_income_inr"
+            },
+            {
+              "field": "land",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": {
+                "min_acres": null,
+                "max_acres": 7.5
+              },
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "Owning at least 7.5 acres of land or more with at least one irrigation equipment",
+              "note": "not stated",
+              "missing_field": "land_acres"
+            },
+            {
+              "field": "category",
+              "decisive": true,
+              "constraint": [
+                "SC",
+                "ST",
+                "Minority"
+              ],
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "Priority will first be assigned on the basis of parameters reflecting housing deprivation in each category viz., SC/ST, Minorities, and Others.",
+              "missing_field": "caste_category",
+              "result": "unknown",
+              "note": "not determined: ['caste_category', 'is_minority']"
+            },
+            {
+              "field": "residence",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "rural",
+              "profile_value": "rural",
+              "confidence": "high",
+              "source_span": "The allocation of targets for Minorities among the States/UTs will be on the basis of the proportionate rural population of Minorities in the respective State/UT as per Census 2011 data.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": "Madhya Pradesh",
+              "confidence": "high",
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The universe of eligible beneficiaries under PMAY-G will include all the houseless households living in zero, one, or two-room houses with kutcha walls and kutcha roofs",
+            "Households without shelter",
+            "Destitute/ living on alms",
+            "Manual scavengers",
+            "Primitive Tribal Groups",
+            "Legally released bonded laborer",
+            "All households living in houses with pucca roofs and/or pucca walls and households living in houses with more than 2 rooms are filtered out.",
+            "Motorised two/three/four wheeler/ fishing boat",
+            "Mechanised three/four-wheeler agricultural equipment",
+            "Kisan Credit Card with a credit limit of Rs.50,000 or above",
+            "Household with any member as a Government employee",
+            "Households with non-agricultural enterprises registered with the Government",
+            "Paying income tax",
+            "Paying professional tax",
+            "Own a refrigerator",
+            "Own a landline phone",
+            "Own 2.5 acres or more of irrigated land with at least one irrigation equipment",
+            "5 acres or more of irrigated land for two or more crop seasons"
+          ],
+          "to_confirm": [],
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "land_acres"
+          ],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_082",
+      "language": "en",
+      "test_type": "clarify",
+      "notes": "Rural vs. urban, income, family structure and prior housing benefits are all missing and directly decide eligibility.",
+      "query": "I need a house, can you help me?",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": null,
+        "state": null,
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {},
+      "fallback_question": "To help you find the right housing scheme, could you please tell me which state you live in and whether you live in a rural or urban area?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "ghcsscp",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "thrgrr-sw",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "hs",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "bpgy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "dfhsscoebc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "cmhap",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "aos",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "gcrsp-p2",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "faimcescstc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "state"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "pomis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 2.704,
+        "blocks": [
+          "ghcsscp",
+          "thrgrr-sw",
+          "hs",
+          "bpgy",
+          "dfhsscoebc",
+          "cmhap",
+          "aos",
+          "faimcescstc"
+        ],
+        "scores": {
+          "state": 2.704,
+          "annual_income_inr": 1.7873,
+          "caste_category": 1.5833,
+          "age": 0.6095,
+          "gender": 0.1429
+        }
+      },
+      "targets": [],
+      "clarifying_question": "Could you please tell me which state you currently reside in?"
+    },
+    {
+      "id": "gold_083",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Haryana's construction workers' welfare board scheme requires at least one year of registered membership — two years comfortably qualifies.",
+      "query": "I am a construction worker in Haryana, registered with the welfare board for two years now. My daughter is getting married.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "construction worker",
+        "state": "Haryana",
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "daughter_getting_married",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": true,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "registered with the welfare board for two years now"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "family": "high",
+        "registered_construction_worker": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "famc-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "fadc-hbocwwb",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "faecrw-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "education_class",
+            "education_stage"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "mbs-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "darwhbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 6,
+          "slug": "pbs-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "famtw",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "maabocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "ma-pbaocwwb",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "darw-hbocwwb",
+          "status": "eligible",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": {
+        "field": "gender",
+        "score": 0.4167,
+        "blocks": [
+          "mbs-hbocwwb",
+          "pbs-hbocwwb"
+        ],
+        "scores": {
+          "gender": 0.4167,
+          "education_class": 0.3333,
+          "education_stage": 0.3333
+        }
+      },
+      "targets": [
+        {
+          "slug": "famc-hbocwwb",
+          "retrieved_rank": 1,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "Haryana",
+              "profile_value": "Haryana",
+              "confidence": "high",
+              "source_span": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB).",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "registered_construction_worker",
+              "result": "pass",
+              "decisive": true,
+              "constraint": true,
+              "profile_value": true,
+              "confidence": "high",
+              "source_span": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB).",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "occupation",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": [
+                "worker registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)"
+              ],
+              "profile_value": "construction worker",
+              "confidence": "high",
+              "source_span": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB).",
+              "note": "closest is 'worker registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)' (0.660), below 0.85",
+              "missing_field": null
+            },
+            {
+              "field": "not_availing_other_scheme",
+              "result": "unknown",
+              "decisive": false,
+              "constraint": true,
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "The worker shall submit an undertaking/self- declaration that he/she has not received this assistance from any other Government Department/Board/Corporation and will not do so.",
+              "note": "no prior benefit stated",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The financial assistance shall be payable up to the marriage of two children but extendable up to the marriage of three daughters.",
+            "the scheme requires a dependent (see the scheme text)",
+            "The registered worker should have a minimum of one-year regular membership.",
+            "The worker should have the attested marriage card of his/her son/daughter.",
+            "The worker will write in writing that he/she will submit the certificate of marriage in the office of the concerned Assistant Director within a period of six months otherwise he/she will not be eligible for any benefit under any welfare scheme in the future.",
+            "The marriage card should be attested by any one of these authorities i.e. State Government Gazetted Officer/Assistant Labour Commissioner/Labour Inspector/Secretary Gram Panchayat/Panchayat Adhikari/ BDPO/ DDPO/ Naib Tehsildar/ Tehsildar/Canongo/Patwari/Assistant Director, Industrial Safety & Health/SDO and Government Department or Board or Municipal Committee/ Junior Engineer of Municipal Corporation / Municipal Council and Head of Government School (Principal / Head Master / Administrators)"
+          ],
+          "to_confirm": [
+            "resident of Haryana (any domicile rule in the scheme text)"
+          ],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_084",
+      "language": "en",
+      "test_type": "exclusion",
+      "notes": "Haryana's scheme requires a minimum of one year of registered membership — three months is a deliberate near-miss.",
+      "query": "I started working as a construction laborer in Haryana three months ago and just registered with the welfare board. My son is getting married next month.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "construction laborer",
+        "state": "Haryana",
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "son_getting_married",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": true,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "started working as a construction laborer in Haryana three months ago",
+          "just registered with the welfare board",
+          "My son is getting married next month"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "family": "high",
+        "registered_construction_worker": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "famc-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "fadc-hbocwwb",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "faecrw-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "education_class",
+            "education_stage"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "darwhbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 5,
+          "slug": "pbs-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "mbs-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "dprw-hbocwwb",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 8,
+          "slug": "darw-hbocwwb",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "famtw",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "age"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "gpt-hbocwwb",
+          "status": "eligible",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": {
+        "field": "gender",
+        "score": 0.3667,
+        "blocks": [
+          "pbs-hbocwwb",
+          "mbs-hbocwwb"
+        ],
+        "scores": {
+          "gender": 0.3667,
+          "education_class": 0.3333,
+          "education_stage": 0.3333
+        }
+      },
+      "targets": [
+        {
+          "slug": "famc-hbocwwb",
+          "retrieved_rank": 1,
+          "status": "needs_checking",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "Haryana",
+              "profile_value": "Haryana",
+              "confidence": "high",
+              "source_span": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB).",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "registered_construction_worker",
+              "result": "pass",
+              "decisive": true,
+              "constraint": true,
+              "profile_value": true,
+              "confidence": "high",
+              "source_span": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB).",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "occupation",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": [
+                "worker registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)"
+              ],
+              "profile_value": "construction laborer",
+              "confidence": "high",
+              "source_span": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB).",
+              "note": "closest is 'worker registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)' (0.646), below 0.85",
+              "missing_field": null
+            },
+            {
+              "field": "not_availing_other_scheme",
+              "result": "unknown",
+              "decisive": false,
+              "constraint": true,
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "The worker shall submit an undertaking/self- declaration that he/she has not received this assistance from any other Government Department/Board/Corporation and will not do so.",
+              "note": "no prior benefit stated",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "The financial assistance shall be payable up to the marriage of two children but extendable up to the marriage of three daughters.",
+            "the scheme requires a dependent (see the scheme text)",
+            "The registered worker should have a minimum of one-year regular membership.",
+            "The worker should have the attested marriage card of his/her son/daughter.",
+            "The worker will write in writing that he/she will submit the certificate of marriage in the office of the concerned Assistant Director within a period of six months otherwise he/she will not be eligible for any benefit under any welfare scheme in the future.",
+            "The marriage card should be attested by any one of these authorities i.e. State Government Gazetted Officer/Assistant Labour Commissioner/Labour Inspector/Secretary Gram Panchayat/Panchayat Adhikari/ BDPO/ DDPO/ Naib Tehsildar/ Tehsildar/Canongo/Patwari/Assistant Director, Industrial Safety & Health/SDO and Government Department or Board or Municipal Committee/ Junior Engineer of Municipal Corporation / Municipal Council and Head of Government School (Principal / Head Master / Administrators)"
+          ],
+          "to_confirm": [
+            "resident of Haryana (any domicile rule in the scheme text)"
+          ],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_086",
+      "language": "en",
+      "test_type": "clarify",
+      "notes": "Welfare board registration is the threshold requirement for these schemes — being unregistered rules this out until the worker registers.",
+      "query": "I do construction work in Haryana but I've never registered with any welfare board.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "construction worker",
+        "state": "Haryana",
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": false,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "I've never registered with any welfare board"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "registered_construction_worker": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "fadc-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "darwhbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "dprw-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 4,
+          "slug": "darw-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 5,
+          "slug": "faecrw-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "education_class",
+            "education_stage"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "bs-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 7,
+          "slug": "famc-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 8,
+          "slug": "pbs-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "mbs-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "gpt-hbocwwb",
+          "status": "not_eligible",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": null,
+      "targets": []
+    },
+    {
+      "id": "gold_089",
+      "language": "en",
+      "test_type": "no_match",
+      "notes": "This scheme name does not correspond to any real scheme — the system should not invent or guess a matching scheme.",
+      "query": "I heard about something called 'Universal Farmer Bonus Yojana', can I apply for it?",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "farmer",
+        "state": null,
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {
+        "occupation": "medium"
+      },
+      "fallback_question": "To help you check your eligibility, could you please tell me which state you live in and if you own any agricultural land?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "rgkny",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "pm-kusum",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 3,
+          "slug": "slesvkspy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "cmsguy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "spytis-i",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "education_class",
+            "education_stage",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "vtvscsgit",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "ssyc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "scsssetul",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "spk",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "land_acres",
+            "state"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "pmfby",
+          "status": "needs_checking",
+          "blocking_fields": []
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 2.204,
+        "blocks": [
+          "rgkny",
+          "slesvkspy",
+          "cmsguy",
+          "spytis-i",
+          "vtvscsgit",
+          "ssyc",
+          "spk"
+        ],
+        "scores": {
+          "state": 2.204,
+          "age": 1.3333,
+          "education_class": 0.2,
+          "education_stage": 0.2,
+          "caste_category": 0.1667,
+          "land_acres": 0.1111
+        }
+      },
+      "targets": []
+    },
+    {
+      "id": "gold_093",
+      "language": "en",
+      "test_type": "exclusion",
+      "notes": "Sukanya Samriddhi is only for a girl child under 10 opened by a guardian — this applicant is an adult opening an account for themself, so it doesn't apply; ask what kind of savings goal they have in mind.",
+      "query": "I am 25, unmarried, and want to open a small savings scheme for myself.",
+      "understand_status": "ok",
+      "understand_notes": [
+        "clarifying_question dropped: clarifying_question is only for a nearly empty profile; this one has 2 substantive fields"
+      ],
+      "profile": {
+        "occupation": null,
+        "state": null,
+        "age": 25,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": "unmarried",
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": []
+      },
+      "confidence": {
+        "age": "high",
+        "marital_status": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "nscs",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "suwps",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "bpl_household",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "25-ciss",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "occupation",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "dysrhis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "ssy",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "gender"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "pmsswwcpfp",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "education_class",
+            "education_stage"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "prerana",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "msps",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "pomis",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 10,
+          "slug": "mpps",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "occupation",
+            "state"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 0.8512,
+        "blocks": [
+          "25-ciss",
+          "dysrhis",
+          "prerana",
+          "msps"
+        ],
+        "scores": {
+          "state": 0.8512,
+          "annual_income_inr": 0.3929,
+          "occupation": 0.3333,
+          "land_acres": 0.25,
+          "education_class": 0.1667,
+          "education_stage": 0.1667,
+          "caste_category": 0.1429
+        }
+      },
+      "targets": [
+        {
+          "slug": "ssy",
+          "retrieved_rank": 5,
+          "status": "not_eligible",
+          "conditions": [
+            {
+              "field": "age",
+              "result": "fail",
+              "decisive": true,
+              "constraint": {
+                "min": null,
+                "max": 10
+              },
+              "profile_value": 25,
+              "confidence": "high",
+              "source_span": "the name of a girl child, who has not attained the age of ten years as of the date of opening of the account.",
+              "note": null,
+              "missing_field": null
+            },
+            {
+              "field": "gender",
+              "result": "unknown",
+              "decisive": true,
+              "constraint": "female",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": "the name of a girl child",
+              "note": "not stated",
+              "missing_field": "gender"
+            },
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "An account under this Scheme may be opened for a maximum of two girl children in one family: Provided that more than two accounts may be opened in a family if such children are born in the first or in the second order of birth or in both, on submission of an affidavit by the guardian supported with birth certificates of the twins/triplets regarding the birth of such multiple girl children in the first two orders of birth in a family. Provided further that the above proviso shall not apply to the girl child of the second order of birth if the first order of birth in the family results in two or more surviving girl children.",
+            "The account may be opened by one of the guardians in the name of a girl child",
+            "Every account holder shall have a single account under this Scheme."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [
+            "gender"
+          ],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_095",
+      "language": "en",
+      "test_type": "positive",
+      "notes": "Receiving PM-KISAN doesn't disqualify PM Vishwakarma by itself, but the applicant needs to actually be engaged in one of the 18 listed artisan trades — that hasn't been stated, so don't add pmv without confirming the trade.",
+      "query": "I want a Vishwakarma loan, but I am the only earning member and I'm also the sole registered farmer in the family already getting PM-KISAN.",
+      "understand_status": "ok",
+      "understand_notes": [],
+      "profile": {
+        "occupation": "farmer",
+        "state": null,
+        "age": null,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": "only_earning_member",
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": [
+          "PM-KISAN"
+        ],
+        "other_facts": [
+          "I am the only earning member",
+          "I'm also the sole registered farmer in the family"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "family": "high",
+        "prior_benefit_schemes": "high"
+      },
+      "fallback_question": "The PM Vishwakarma scheme is for artisans and craftspeople. Do you practice any traditional craft or trade (such as carpentry, blacksmithing, pottery, etc.) in addition to farming?",
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "pmv",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age"
+          ]
+        },
+        {
+          "rank": 2,
+          "slug": "mkky",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "state"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "nsklvrpbkpy",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "registered_construction_worker",
+            "state"
+          ]
+        },
+        {
+          "rank": 4,
+          "slug": "maddapp-i",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "annual_income_inr",
+            "disability_percent",
+            "state"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "dysrhis",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres",
+            "state"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "sse25rbusc",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "caste_category",
+            "state"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "pmyasasvipmsobcebcdnts",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "caste_category",
+            "education_class"
+          ]
+        },
+        {
+          "rank": 8,
+          "slug": "pm-kisan",
+          "status": "eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 9,
+          "slug": "cmgcpsi",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender",
+            "state"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "yuvasree",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "age",
+            "education_class",
+            "state"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "state",
+        "score": 1.6611,
+        "blocks": [
+          "mkky",
+          "nsklvrpbkpy",
+          "maddapp-i",
+          "dysrhis",
+          "sse25rbusc",
+          "cmgcpsi",
+          "yuvasree"
+        ],
+        "scores": {
+          "state": 1.6611,
+          "age": 1.5167,
+          "annual_income_inr": 0.704,
+          "registered_construction_worker": 0.3333,
+          "caste_category": 0.3095,
+          "disability_percent": 0.25,
+          "education_class": 0.2429,
+          "land_acres": 0.2,
+          "gender": 0.1111
+        }
+      },
+      "targets": [
+        {
+          "slug": "pm-kisan",
+          "retrieved_rank": 8,
+          "status": "eligible",
+          "conditions": [
+            {
+              "field": "state",
+              "result": "pass",
+              "decisive": true,
+              "constraint": "central scheme",
+              "profile_value": null,
+              "confidence": null,
+              "source_span": null,
+              "note": "central scheme",
+              "missing_field": null
+            }
+          ],
+          "unverified_conditions": [
+            "All landholding farmers' families, which have cultivable land holding in their names are eligible to get benefit under the scheme.",
+            "All Institutional Land holders.",
+            "Former and present holders of constitutional posts",
+            "Former and present Ministers/ State Ministers and former/present Members of LokSabha/ RajyaSabha/ State Legislative Assemblies/ State Legislative Councils,former and present Mayors of Municipal Corporations, former and present Chairpersons of District Panchayats.",
+            "All serving or retired officers and employees of Central/ State Government Ministries /Offices/Departments and its field units Central or State PSEs and Attached offices /Autonomous Institutions under Government as well as regular employees of the Local Bodies (Excluding Multi Tasking Staff /Class IV/Group D employees)",
+            "All superannuated/retired pensioners whose monthly pension is Rs.10,000/-or more (Excluding Multi Tasking Staff / Class IV/Group D employees) of above category",
+            "All Persons who paid Income Tax in last assessment year",
+            "Professionals like Doctors, Engineers, Lawyers, Chartered Accountants, and Architects registered with Professional bodies and carrying out profession by undertaking practices."
+          ],
+          "to_confirm": [],
+          "blocking_fields": [],
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "gold_099",
+      "language": "en",
+      "test_type": "clarify",
+      "notes": "Handloom weaving as a standalone craft doesn't clearly match any of PM Vishwakarma's 18 named trades — ask for the exact craft/tools used before matching, rather than assuming it fits.",
+      "query": "I am a weaver in Odisha, this is our traditional family craft, and I'm 40 years old.",
+      "understand_status": "ok",
+      "understand_notes": [
+        "clarifying_question dropped: clarifying_question is only for a nearly empty profile; this one has 3 substantive fields"
+      ],
+      "profile": {
+        "occupation": "weaver",
+        "state": "Odisha",
+        "age": 40,
+        "gender": null,
+        "annual_income_inr": null,
+        "land_acres": null,
+        "caste_category": null,
+        "family": null,
+        "education_class": null,
+        "education_stage": null,
+        "residence": null,
+        "marital_status": null,
+        "disability_percent": null,
+        "is_minority": null,
+        "bpl_household": null,
+        "registered_construction_worker": null,
+        "prior_benefit_schemes": null,
+        "other_facts": [
+          "this is our traditional family craft"
+        ]
+      },
+      "confidence": {
+        "occupation": "high",
+        "state": "high",
+        "age": "high"
+      },
+      "fallback_question": null,
+      "candidates": [
+        {
+          "rank": 1,
+          "slug": "mtc",
+          "status": "needs_checking",
+          "blocking_fields": []
+        },
+        {
+          "rank": 2,
+          "slug": "mgtocpp",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 3,
+          "slug": "doh",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 4,
+          "slug": "ysrnn",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "bpl_household"
+          ]
+        },
+        {
+          "rank": 5,
+          "slug": "bbsy",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr"
+          ]
+        },
+        {
+          "rank": 6,
+          "slug": "cmgcpsi",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "gender"
+          ]
+        },
+        {
+          "rank": 7,
+          "slug": "naari",
+          "status": "not_eligible",
+          "blocking_fields": []
+        },
+        {
+          "rank": 8,
+          "slug": "dysrhis",
+          "status": "not_eligible",
+          "blocking_fields": [
+            "annual_income_inr",
+            "land_acres"
+          ]
+        },
+        {
+          "rank": 9,
+          "slug": "dsctar",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "land_acres"
+          ]
+        },
+        {
+          "rank": 10,
+          "slug": "mgbby-odisha",
+          "status": "needs_checking",
+          "blocking_fields": [
+            "is_minority"
+          ]
+        }
+      ],
+      "clarifying_selection": {
+        "field": "land_acres",
+        "score": 0.1111,
+        "blocks": [
+          "dsctar"
+        ],
+        "scores": {
+          "land_acres": 0.1111,
+          "is_minority": 0.1
+        }
+      },
+      "targets": [],
+      "clarifying_question": "Could you please state the total amount of land you own in acres?"
+    }
+  ]
+}
