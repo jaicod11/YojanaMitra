@@ -1,0 +1,34 @@
+# Runtime dependencies of the API (backend/app), pinned to the versions this
+# was built and evaluated with on Python 3.13.
+#
+#     pip install -r backend/requirements.txt
+#     uvicorn app.main:app --app-dir backend --port 8000
+#
+# The API also needs the data the repo does not ship (data/interim/schemes,
+# data/processed/chunks.jsonl and the FAISS index in data/index), and
+# GEMINI_API_KEY / GROQ_API_KEY in .env for understand() and explain(). Without
+# a working key the API still answers, from the code-written templates.
+
+# --- HTTP API ---
+fastapi==0.141.1
+uvicorn==0.52.1
+httptools==0.8.0          # uvicorn's HTTP parser; without it uvicorn uses its slower Python one
+pydantic==2.13.4          # FastAPI dependency, imported directly by app/main.py
+
+# --- retrieval: bge-m3 embeddings, FAISS, BM25 ---
+sentence-transformers==6.1.0
+transformers==5.17.0
+torch==2.14.0
+faiss-cpu==1.15.1
+rank_bm25==0.2.2
+numpy==2.5.1
+
+# --- LLM providers (understand, generate), through scripts/label_categories.py ---
+google-genai==2.22.0
+groq==1.7.0
+httpx==0.28.1
+python-dotenv==1.2.2
+
+# --- corpus preparation (scripts/): PDF text and mojibake repair ---
+pymupdf==1.28.2
+ftfy==6.3.1
