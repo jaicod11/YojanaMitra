@@ -1,10 +1,12 @@
-"""Deterministic eligibility check of candidate schemes against a profile.
+"""Deterministic eligibility check of candidate schemes against a profile (matcher v2).
 
 match(profile, other_facts, candidates) evaluates each candidate's typed
 constraints (data/interim/constraints/<slug>.json) against the profile from
-backend/app/understand.py. Pure code, no LLM. Every condition comes back as
-pass / fail / unknown with the constraint, the profile value, its confidence
-and the source_span that stated the rule.
+backend/app/understand.py. Pure code, no LLM; bge-m3 embeddings are used for
+the two fuzzy comparisons (occupation, and other_facts against residual
+conditions). Every condition comes back as pass / fail / unknown with the
+constraint, the profile value, its confidence and the source_span that stated
+the rule.
 
 A condition can only fail when the profile value is present, has high or
 medium confidence, and is unambiguous:
@@ -22,25 +24,48 @@ medium confidence, and is unambiguous:
   state, not the free-text constraint) fail when the profile's state differs.
 - occupation and education stage are fuzzy: they pass or stay unknown, never
   fail. Occupation passes when bge-m3 similarity to a constraint occupation is
-  at least OCCUPATION_THRESHOLD.
+  at least OCCUPATION_THRESHOLD, or (rule bocw_occupation) when the scheme
+  requires construction-board registration and the person says they are
+  registered.
 - The person's own age, gender, marital status and disability cannot decide
-  a scheme when they are asking on behalf of someone else (a child, spouse or
-  parent in the profile) or the scheme requires a dependent: those
-  conditions stay unknown.
+  a scheme when profile.applying_for says they are asking for someone else
+  (rule applying_for), or the scheme requires a dependent.
 - not_availing_other_scheme stays unknown and non-decisive unless
   prior_benefit_schemes or other_facts show a prior benefit; then it is a
   decisive unknown (needs_checking), never a fail.
 - citizenship and residence in the scheme's state are listed under
   to_confirm and never change the status.
 
-Status: not_eligible if any typed condition fails; needs_checking if none
-fails and a decisive condition is unknown; eligible if every decisive
-condition passes. Schemes with no usable constraint record (extraction
-failed, or no eligibility text) are always needs_checking. residual
-conditions and family notes are always returned as unverified_conditions.
+Rules added in v2, each can be switched off through `rules` (used only to
+attribute changed verdicts in evaluation; all are on by default):
 
-select_clarifying_field(results) picks the unknown profile field that blocks
-the most of the top candidates not marked not_eligible, weighted by rank.
+- applying_for: whether the person is asking for someone else comes from
+  profile.applying_for (off: v1's guess from family/other_facts wording)
+- priority: category/occupation conditions whose source span is priority,
+  preference, reservation or "first be assigned" language are not conditions;
+  they are returned as preferences
+- multi_branch: records flagged multi_branch_eligibility cannot fail on
+  category (occupation never fails anyway)
+- bocw_occupation: see above
+- person_level_pass: eligible needs at least one passed condition about the
+  person (anything but state); otherwise needs_checking, "nothing about you
+  could be checked automatically"
+- residual_touch: an other_fact whose similarity to one of the scheme's
+  residual conditions is at least RESIDUAL_TOUCH_THRESHOLD is attached to the
+  result and turns eligible into needs_checking. It never produces
+  not_eligible.
+
+Status: not_eligible if any typed condition fails; needs_checking if none
+fails and a decisive condition is unknown (or a v2 rule above downgrades an
+eligible); eligible otherwise. Schemes with no usable constraint record are
+always needs_checking. Residual conditions and family notes are always
+returned as unverified_conditions.
+
+select_clarifying_field(results) picks the profile field that blocks the
+most top candidates not marked not_eligible, weighted 1/rank: fields that are
+missing, and fields that are filled but could not be used (an occupation no
+scheme wording reaches, an income whose basis is unclear). Below
+MIN_CLARIFY_SCORE it asks nothing.
 """
 import json
 import re
@@ -48,9 +73,13 @@ from collections import defaultdict
 from functools import lru_cache
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[2]
 CONSTRAINTS_DIR = ROOT / "data" / "interim" / "constraints"
 SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
+
+RULES = ("applying_for", "priority", "multi_branch", "bocw_occupation", "person_level_pass", "residual_touch")
 
 # Calibrated on the corpus's 781 distinct constraint occupation strings
 # (2026-09-22): exact synonyms score 0.85+ ("farmer engaged in agriculture"
@@ -58,13 +87,29 @@ SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
 # below it ("unemployed" vs "employed" 0.764, "school teacher" vs "School
 # students" 0.769, "construction worker" vs a bare "Worker" 0.849).
 OCCUPATION_THRESHOLD = 0.85
+# Chosen from the 977 (other_fact, residual) pairs of the dev split's top-10
+# and target schemes (understand-v4, 2026-09-22). Genuine touches scored
+# 0.442-0.776 and unrelated pairs reach 0.499, so similarity cannot separate
+# them below about 0.50. 0.48 is the lowest value that still discriminates
+# (it touches 72% of candidates that have other_facts, against 96% at 0.40)
+# and sits just under the lowest reachable genuine touch: three months of
+# work vs a one-year membership rule (0.493). A lower value costs little,
+# because the only effect is eligible -> needs_checking.
+RESIDUAL_TOUCH_THRESHOLD = 0.48
+# A field must block at least the weight of the second-ranked candidate
+# (1/2) before it is worth a question.
+MIN_CLARIFY_SCORE = 0.5
 BENCHMARK_DISABILITY = 40            # RPwD Act benchmark disability, for the PwD category
 CONFIDENT = ("high", "medium")
 CASTE_CATEGORIES = ("SC", "ST", "OBC", "EWS", "General")
-PERSON_FIELDS = ("age", "gender", "marital_status", "disability_percent")
+ON_BEHALF = ("child", "spouse", "parent", "other")
+NOTHING_ABOUT_YOU = "nothing about you could be checked automatically"
 
-_DEPENDENT = re.compile(r"\b(?:child|children|kids?|sons?|daughters?|baby|infant|newborn|girl|boy|mother|father|"
-                        r"parents?|husband|wife|spouse|dependents?|grandchild(?:ren)?)\b", re.I)
+_PRIORITY = re.compile(r"\bprior(?:ity|ities|itis\w*|itiz\w*)\b|\bprefer(?:ence|ences|ential|red)\b|\breservation\b|"
+                       r"first be assigned", re.I)
+# v1's guess at "asking for someone else", kept only for rule attribution.
+_LEGACY_DEPENDENT = re.compile(r"\b(?:child|children|kids?|sons?|daughters?|baby|infant|newborn|girl|boy|mother|father|"
+                               r"parents?|husband|wife|spouse|dependents?|grandchild(?:ren)?)\b", re.I)
 _FAMILY_BASIS = re.compile(r"family|household|parents?|father|mother|husband|wife|\bwe\b|\bour\b|together|"
                            r"परिवार|घर की|కుటుంబ|పరివార|পরিবার|குடும்ப", re.I)
 _INDIVIDUAL_BASIS = re.compile(r"\bI (?:earn|make|get)\b|\bmy (?:salary|income|earnings?|wages?|pension)\b|"
@@ -95,7 +140,6 @@ _MARITAL_WORDS = {"widow": "widowed", "widows": "widowed", "widowed": "widowed",
                   "divorcees": "divorced", "separated": "separated", "abandoned": "abandoned", "deserted": "abandoned"}
 _MARITAL_FILLER = {"women", "woman", "including", "persons", "person", "girls", "girl", "men"}
 _MARITAL_ANY = {"any", "for all", "all"}
-# Profile field to ask about when a condition is unknown because it is missing.
 _CATEGORY_FIELD = {**{c: "caste_category" for c in CASTE_CATEGORIES}, "Minority": "is_minority", "PwD": "disability_percent"}
 
 
@@ -111,19 +155,32 @@ def scheme_meta(slug):
     return {"scheme_name": d.get("scheme_name"), "level": d.get("level"), "state": d.get("state")}
 
 
-@lru_cache(maxsize=4096)
-def _embedding(text):
-    from app.retrieval import default_retriever
-    return default_retriever().embed([text])[0]
+_EMBEDDINGS = {}
+
+
+def embed_many(texts):
+    """Normalized bge-m3 vectors for texts, computed once per distinct text."""
+    missing = sorted({t for t in texts if t not in _EMBEDDINGS})
+    if missing:
+        from app.retrieval import default_retriever
+        for t, v in zip(missing, default_retriever().embed(missing)):
+            _EMBEDDINGS[t] = v
+    return np.stack([_EMBEDDINGS[t] for t in texts]) if texts else np.zeros((0, 1024), dtype="float32")
 
 
 def _similarity(a, b):
-    return float(_embedding(a.strip().lower()) @ _embedding(b.strip().lower()))
+    va, vb = embed_many([a.strip().lower(), b.strip().lower()])
+    return float(va @ vb)
 
 
 def _span(evidence, key):
     v = (evidence or {}).get(key)
     return " ".join(v) if isinstance(v, list) else (v or "")
+
+
+def fact_text(fact):
+    """The English text of an other_facts entry (v4 objects or v1-v3 strings)."""
+    return fact["en"] if isinstance(fact, dict) else fact
 
 
 def income_basis(evidence_text):
@@ -170,22 +227,24 @@ def marital_admitted(text):
     return admitted or None
 
 
-def prior_benefit(profile, other_facts):
-    """The statements showing the person already receives or received a benefit."""
-    shown = [f"named scheme: {s}" for s in (profile.get("prior_benefit_schemes") or [])]
-    shown += [f for f in (other_facts or []) if _PRIOR_BENEFIT.search(f) and not _NEGATED.search(f)]
-    return shown
+def is_priority_span(span):
+    return bool(span and _PRIORITY.search(span))
 
 
 class _Context:
-    def __init__(self, profile, other_facts, confidence, evidence):
+    def __init__(self, profile, other_facts, confidence, evidence, rules):
         self.profile = profile
-        self.other_facts = other_facts or []
+        self.facts = [fact_text(f) for f in (other_facts or []) if fact_text(f)]
         self.confidence = confidence
         self.evidence = evidence or {}
-        cues = " ".join([(profile.get("family") or "").replace("_", " ")] + list(self.other_facts))
-        self.on_behalf = bool(_DEPENDENT.search(cues))
-        self.prior_benefit = prior_benefit(profile, self.other_facts)
+        self.rules = rules
+        if "applying_for" in rules:
+            self.on_behalf = profile.get("applying_for") in ON_BEHALF
+        else:
+            cues = " ".join([(profile.get("family") or "").replace("_", " ")] + self.facts)
+            self.on_behalf = bool(_LEGACY_DEPENDENT.search(cues))
+        self.prior_benefit = [f"named scheme: {s}" for s in (profile.get("prior_benefit_schemes") or [])]
+        self.prior_benefit += [f for f in self.facts if _PRIOR_BENEFIT.search(f) and not _NEGATED.search(f)]
 
     def value(self, key):
         return self.profile.get(key)
@@ -199,24 +258,25 @@ class _Context:
         return self.value(key) is not None and self.conf(key) in CONFIDENT
 
 
-def _condition(field, result, constraint, ctx=None, key=None, span=None, note=None, decisive=True, missing=None):
+def _condition(field, result, constraint, ctx=None, key=None, span=None, note=None, decisive=True,
+               ask=None, ask_kind=None):
+    """ask/ask_kind: the profile field a question could settle, and whether it
+    is "missing" (not stated or low confidence) or "refine" (stated but too
+    vague or ambiguous to use)."""
     return {"field": field, "result": result, "decisive": decisive, "constraint": constraint,
             "profile_value": ctx.value(key) if ctx and key else None,
             "confidence": ctx.conf(key) if ctx and key else None,
-            "source_span": span, "note": note, "missing_field": missing}
+            "source_span": span, "note": note, "ask_field": ask, "ask_kind": ask_kind if ask else None}
 
 
-def _unknown_for(ctx, key):
-    """(note, missing_field) for a value that cannot be used."""
-    if ctx.value(key) is None:
-        return "not stated", key
-    return f"{ctx.conf(key)} confidence", key
+def _unusable(field, key, ctx, span, constraint):
+    note = "not stated" if ctx.value(key) is None else f"{ctx.conf(key)} confidence"
+    return _condition(field, "unknown", constraint, ctx, key, span, note, ask=key, ask_kind="missing")
 
 
 def _check_range(field, key, lo, hi, ctx, span, constraint, ambiguous=None):
     if not ctx.usable(key):
-        note, missing = _unknown_for(ctx, key)
-        return _condition(field, "unknown", constraint, ctx, key, span, note, missing=missing)
+        return _unusable(field, key, ctx, span, constraint)
     if ambiguous:
         return _condition(field, "unknown", constraint, ctx, key, span, ambiguous)
     v = ctx.value(key)
@@ -229,21 +289,21 @@ def _check_income(c, ctx, span):
     constraint = {"max_annual_inr": cap, "basis": scheme_basis}
     key = "annual_income_inr"
     if not ctx.usable(key):
-        note, missing = _unknown_for(ctx, key)
-        return _condition("income", "unknown", constraint, ctx, key, span, note, missing=missing)
+        return _unusable("income", key, ctx, span, constraint)
     v, basis = ctx.value(key), income_basis(_span(ctx.evidence, key))
+    ask = key if basis is None else None
     if v <= cap:
         # Family income bounds individual income, so a family figure under the cap passes any basis.
         if basis == "family" or basis == scheme_basis:
             return _condition("income", "pass", constraint, ctx, key, span, f"profile income is {basis} income")
         return _condition("income", "unknown", constraint, ctx, key, span,
                           f"under the cap, but the profile's income basis ({basis}) may not match the scheme's "
-                          f"({scheme_basis})", missing=key if basis is None else None)
+                          f"({scheme_basis})", ask=ask, ask_kind="refine")
     if scheme_basis and basis and (basis == scheme_basis or (basis == "individual" and scheme_basis == "family")):
         return _condition("income", "fail", constraint, ctx, key, span, f"profile income is {basis} income")
     return _condition("income", "unknown", constraint, ctx, key, span,
                       f"over the cap, but the bases are ambiguous (profile {basis}, scheme {scheme_basis})",
-                      missing=key if basis is None else None)
+                      ask=ask, ask_kind="refine")
 
 
 def _check_land(c, ctx, span):
@@ -251,8 +311,7 @@ def _check_land(c, ctx, span):
     constraint = {"min_acres": lo, "max_acres": hi}
     key = "land_acres"
     if not ctx.usable(key):
-        note, missing = _unknown_for(ctx, key)
-        return _condition("land", "unknown", constraint, ctx, key, span, note, missing=missing)
+        return _unusable("land", key, ctx, span, constraint)
     v, basis = ctx.value(key), land_basis(_span(ctx.evidence, key))
     inside = (lo is None or v >= lo) and (hi is None or v <= hi)
     if inside and basis != "leased":
@@ -260,11 +319,11 @@ def _check_land(c, ctx, span):
     if not inside and basis == "owned":
         return _condition("land", "fail", constraint, ctx, key, span, "land stated as owned")
     return _condition("land", "unknown", constraint, ctx, key, span,
-                      f"land basis is {basis or 'not stated'}; scheme limits usually mean owned land")
+                      f"land basis is {basis or 'not stated'}; scheme limits usually mean owned land",
+                      ask=key, ask_kind="refine")
 
 
-def _check_category(c, ctx, span):
-    listed = c["category"]
+def _check_category(listed, ctx, span, can_fail):
     known, undetermined = [], []
     for cat in listed:
         field = _CATEGORY_FIELD[cat]
@@ -285,40 +344,42 @@ def _check_category(c, ctx, span):
                 undetermined.append(field)
     shown = {k: ctx.value(k) for k in ("caste_category", "is_minority", "disability_percent") if ctx.value(k) is not None}
     base = {"field": "category", "decisive": True, "constraint": listed, "profile_value": shown or None,
-            "confidence": None, "source_span": span, "missing_field": None}
+            "confidence": None, "source_span": span, "ask_field": None, "ask_kind": None}
     if any(known):
         return {**base, "result": "pass", "note": None}
     if undetermined:
         return {**base, "result": "unknown", "note": f"not determined: {sorted(set(undetermined))}",
-                "missing_field": undetermined[0]}
+                "ask_field": undetermined[0], "ask_kind": "missing"}
+    if not can_fail:
+        return {**base, "result": "unknown",
+                "note": "every listed category is ruled out, but the record has several eligible groups "
+                        "(multi_branch_eligibility), so category cannot fail"}
     return {**base, "result": "fail", "note": "every listed category is ruled out"}
 
 
 def _check_value(field, key, allowed, ctx, span, constraint, ambiguous=None):
     """Categorical check: pass when the profile value is in allowed."""
     if not ctx.usable(key):
-        note, missing = _unknown_for(ctx, key)
-        return _condition(field, "unknown", constraint, ctx, key, span, note, missing=missing)
+        return _unusable(field, key, ctx, span, constraint)
     if ambiguous:
         return _condition(field, "unknown", constraint, ctx, key, span, ambiguous)
     return _condition(field, "pass" if ctx.value(key) in allowed else "fail", constraint, ctx, key, span)
 
 
-def _check_occupation(listed, ctx, span):
+def _check_occupation(listed, ctx, span, bocw_registered):
     key = "occupation"
-    if ctx.value(key) is None:
-        return _condition("occupation", "unknown", listed, ctx, key, span, "not stated", missing=key)
-    if ctx.conf(key) not in CONFIDENT:
-        return _condition("occupation", "unknown", listed, ctx, key, span, f"{ctx.conf(key)} confidence", missing=key)
-    best, best_sim = None, -1.0
-    for o in listed:
-        sim = _similarity(ctx.value(key), o)
-        if sim > best_sim:
-            best, best_sim = o, sim
+    if bocw_registered:
+        return _condition("occupation", "pass", listed, ctx, key, span,
+                          "the scheme requires construction-board registration and the person says they are registered")
+    if not ctx.usable(key):
+        return _unusable("occupation", key, ctx, span, listed)
+    sims = [(o, _similarity(ctx.value(key), o)) for o in listed]
+    best, best_sim = max(sims, key=lambda x: x[1])
     if best_sim >= OCCUPATION_THRESHOLD:
         return _condition("occupation", "pass", listed, ctx, key, span, f"matches {best!r} ({best_sim:.3f})")
     return _condition("occupation", "unknown", listed, ctx, key, span,
-                      f"closest is {best!r} ({best_sim:.3f}), below {OCCUPATION_THRESHOLD}")
+                      f"closest is {best!r} ({best_sim:.3f}), below {OCCUPATION_THRESHOLD}",
+                      ask=key, ask_kind="refine")
 
 
 def _check_stage(stage_text, ctx, span):
@@ -329,32 +390,53 @@ def _check_stage(stage_text, ctx, span):
     base = {"field": "education_stage", "decisive": True, "constraint": stage_text, "profile_value": stage,
             "confidence": ctx.conf("education_stage") or ctx.conf("education_class"), "source_span": span}
     if admitted is None:
-        return {**base, "result": "unknown", "note": "the stage text does not map to profile stages", "missing_field": None}
+        return {**base, "result": "unknown", "note": "the stage text does not map to profile stages",
+                "ask_field": None, "ask_kind": None}
     if stage is None:
-        return {**base, "result": "unknown", "note": "not stated", "missing_field": "education_stage"}
+        return {**base, "result": "unknown", "note": "not stated", "ask_field": "education_stage", "ask_kind": "missing"}
     if stage in admitted:
-        return {**base, "result": "pass", "note": None, "missing_field": None}
+        return {**base, "result": "pass", "note": None, "ask_field": None, "ask_kind": None}
     return {**base, "result": "unknown", "note": f"{stage} is not among {sorted(admitted)}; stage is fuzzy, so no fail",
-            "missing_field": None}
+            "ask_field": "education_stage", "ask_kind": "refine"}
+
+
+def _residual_touches(residuals, ctx):
+    """(other_fact, residual, similarity) pairs at or above RESIDUAL_TOUCH_THRESHOLD."""
+    if not ctx.facts or not residuals:
+        return []
+    if RESIDUAL_TOUCH_THRESHOLD is None:
+        raise RuntimeError("RESIDUAL_TOUCH_THRESHOLD is not set")
+    sims = embed_many(ctx.facts) @ embed_many(list(residuals)).T
+    return [{"other_fact": f, "residual": r, "similarity": round(float(sims[i, j]), 4)}
+            for i, f in enumerate(ctx.facts) for j, r in enumerate(residuals)
+            if sims[i, j] >= RESIDUAL_TOUCH_THRESHOLD]
 
 
 def evaluate_scheme(slug, ctx):
+    rules = ctx.rules
     meta = scheme_meta(slug)
-    out = {"slug": slug, **meta, "status": None, "conditions": [], "unverified_conditions": [],
-           "to_confirm": [], "blocking_fields": [], "note": None}
+    out = {"slug": slug, **meta, "status": None, "reason": None, "conditions": [], "preferences": [],
+           "unverified_conditions": [], "to_confirm": [], "residual_touches": [], "blocking_fields": {}, "note": None}
     rec = load_record(slug)
     if rec is None or rec.get("extraction_failed"):
         out["status"] = "needs_checking"
-        out["note"] = ("no constraint record (no eligibility text)" if rec is None
-                       else f"constraint extraction failed: {rec.get('failure_reason', '')[:120]}")
+        out["reason"] = out["note"] = ("no constraint record (no eligibility text)" if rec is None
+                                       else f"constraint extraction failed: {rec.get('failure_reason', '')[:120]}")
         return out
     c, prov = rec["constraints"], rec.get("provenance") or {}
     span = lambda f: (" | ".join(prov[f]) if isinstance(prov.get(f), list) else prov.get(f))
+    multi_branch = "multi_branch_eligibility" in (rec.get("parse_flags") or [])
     requires_dependent = (c.get("family") or {}).get("requires_dependent") is True
-    on_behalf = ("the person is asking on behalf of a family member; their own value does not decide this"
+    on_behalf = ("the person is asking on behalf of someone else; their own value does not decide this"
                  if ctx.on_behalf else
                  "the scheme requires a dependent, so this may be the dependent's attribute" if requires_dependent else None)
     conds = out["conditions"]
+
+    def list_field_is_preference(field, value):
+        if "priority" in rules and is_priority_span(span(field)):
+            out["preferences"].append({"field": field, "value": value, "source_span": span(field)})
+            return True
+        return False
 
     if c["age"]["min"] is not None or c["age"]["max"] is not None:
         conds.append(_check_range("age", "age", c["age"]["min"], c["age"]["max"], ctx, span("age"), c["age"], on_behalf))
@@ -370,8 +452,9 @@ def evaluate_scheme(slug, ctx):
         conds.append(_check_stage(edu["stage"], ctx, span("education")))
     if c["gender"] not in (None, "any"):
         conds.append(_check_value("gender", "gender", {c["gender"]}, ctx, span("gender"), c["gender"], on_behalf))
-    if c["category"]:
-        conds.append(_check_category(c, ctx, span("category")))
+    if c["category"] and not list_field_is_preference("category", c["category"]):
+        conds.append(_check_category(c["category"], ctx, span("category"),
+                                     can_fail=not (multi_branch and "multi_branch" in rules)))
     if c["residence"] not in (None, "any"):
         conds.append(_check_value("residence", "residence", {c["residence"]}, ctx, span("residence"), c["residence"]))
     if c["marital_status"]:
@@ -390,11 +473,14 @@ def evaluate_scheme(slug, ctx):
         out["to_confirm"].append(f"resident of {meta['state']} (any domicile rule in the scheme text)")
     if c["bpl_household"] is True:
         conds.append(_check_value("bpl_household", "bpl_household", {True}, ctx, span("bpl_household"), True))
-    if c["requires_bocw_registration"] is True:
+    bocw = c["requires_bocw_registration"] is True
+    if bocw:
         conds.append(_check_value("registered_construction_worker", "registered_construction_worker", {True}, ctx,
                                   span("requires_bocw_registration"), True))
-    if c["occupation"]:
-        conds.append(_check_occupation(c["occupation"], ctx, span("occupation")))
+    if c["occupation"] and not list_field_is_preference("occupation", c["occupation"]):
+        bocw_registered = ("bocw_occupation" in rules and bocw and ctx.usable("registered_construction_worker")
+                           and ctx.value("registered_construction_worker") is True)
+        conds.append(_check_occupation(c["occupation"], ctx, span("occupation"), bocw_registered))
     if c["not_availing_other_scheme"] is True:
         if ctx.prior_benefit:
             conds.append(_condition("not_availing_other_scheme", "unknown", True, span=span("not_availing_other_scheme"),
@@ -411,29 +497,47 @@ def evaluate_scheme(slug, ctx):
         out["unverified_conditions"].append(fam["notes"])
     if requires_dependent:
         out["unverified_conditions"].append("the scheme requires a dependent (see the scheme text)")
-    out["unverified_conditions"] += list(c.get("residual_conditions") or [])
+    residuals = list(c.get("residual_conditions") or [])
+    out["unverified_conditions"] += residuals
 
     decisive = [x for x in conds if x["decisive"]]
     if any(x["result"] == "fail" for x in decisive):
-        out["status"] = "not_eligible"
+        out["status"], out["reason"] = "not_eligible", "a condition fails: " + ", ".join(
+            x["field"] for x in decisive if x["result"] == "fail")
     elif any(x["result"] == "unknown" for x in decisive):
-        out["status"] = "needs_checking"
+        out["status"], out["reason"] = "needs_checking", "could not check: " + ", ".join(
+            x["field"] for x in decisive if x["result"] == "unknown")
     else:
-        out["status"] = "eligible"
-    out["blocking_fields"] = sorted({x["missing_field"] for x in decisive
-                                     if x["result"] == "unknown" and x["missing_field"]})
+        out["status"], out["reason"] = "eligible", "every checked condition passes"
+        if "person_level_pass" in rules and not any(x["result"] == "pass" and x["field"] != "state" for x in decisive):
+            out["status"], out["reason"] = "needs_checking", NOTHING_ABOUT_YOU
+    if "residual_touch" in rules:
+        out["residual_touches"] = _residual_touches(residuals, ctx)
+        if out["residual_touches"] and out["status"] == "eligible":
+            out["status"] = "needs_checking"
+            out["reason"] = "something you said may bear on a condition that is not checked automatically"
+    blocking = {}
+    for x in decisive:
+        if x["result"] == "unknown" and x["ask_field"]:
+            blocking.setdefault(x["ask_field"], x["ask_kind"])
+    out["blocking_fields"] = blocking
     out["typed_condition_count"] = len(decisive)
     return out
 
 
-def match(profile, other_facts, candidates, confidence=None, evidence=None):
+def match(profile, other_facts, candidates, confidence=None, evidence=None, rules=RULES):
     """Evaluate candidate schemes (slugs, or retrieval results with a "slug")
     against a profile, in candidate order.
 
-    confidence and evidence are understand()'s dicts; without confidence,
-    every stated field counts as medium confidence. Evidence is needed to
-    read the income and land basis; without it those can only pass."""
-    ctx = _Context(profile, other_facts, confidence, evidence)
+    other_facts: understand-v4 {"original", "en"} objects (the English text
+    is used) or plain strings. confidence and evidence are understand()'s
+    dicts; without confidence, every stated field counts as medium
+    confidence. Evidence is needed to read the income and land basis.
+    rules: the v2 rules to apply (all by default)."""
+    unknown_rules = set(rules) - set(RULES)
+    if unknown_rules:
+        raise ValueError(f"unknown rules: {sorted(unknown_rules)}")
+    ctx = _Context(profile, other_facts, confidence, evidence, frozenset(rules))
     results = []
     for rank, cand in enumerate(candidates, 1):
         slug = cand["slug"] if isinstance(cand, dict) else cand
@@ -441,18 +545,24 @@ def match(profile, other_facts, candidates, confidence=None, evidence=None):
     return results
 
 
-def select_clarifying_field(results, top=10):
-    """The unknown profile field blocking the most of the top candidates not
-    marked not_eligible, each weighted 1/rank. None if nothing askable blocks."""
-    scores, blocks = defaultdict(float), defaultdict(list)
+def select_clarifying_field(results, top=10, min_score=MIN_CLARIFY_SCORE):
+    """The profile field that blocks the most of the top candidates not
+    marked not_eligible, each weighted 1/rank. Blocking fields are missing
+    ones and filled-but-unusable ones ("refine"). None below min_score."""
+    scores, blocks, kinds = defaultdict(float), defaultdict(list), {}
     for r in results[:top]:
         if r["status"] == "not_eligible":
             continue
-        for field in r["blocking_fields"]:
+        for field, kind in r["blocking_fields"].items():
             scores[field] += 1.0 / r["rank"]
             blocks[field].append(r["slug"])
+            kinds[field] = "refine" if "refine" in (kinds.get(field), kind) else kind
     if not scores:
         return None
     field = max(sorted(scores), key=lambda f: scores[f])
-    return {"field": field, "score": round(scores[field], 4), "blocks": blocks[field],
-            "scores": {f: round(s, 4) for f, s in sorted(scores.items(), key=lambda kv: -kv[1])}}
+    ranked = {f: round(s, 4) for f, s in sorted(scores.items(), key=lambda kv: -kv[1])}
+    if scores[field] < min_score:
+        return {"field": None, "below_min_score": {"field": field, "score": round(scores[field], 4)},
+                "min_score": min_score, "scores": ranked}
+    return {"field": field, "kind": kinds[field], "score": round(scores[field], 4), "blocks": blocks[field],
+            "min_score": min_score, "scores": ranked}
