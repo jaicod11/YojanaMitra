@@ -1,7 +1,8 @@
 """Evaluate scheme retrieval against the gold set.
 
     python scripts/evaluate.py                                # dev, raw descriptions
-    python scripts/evaluate.py --query-source rewritten       # dev, understand() rewrites
+    python scripts/evaluate.py --query-source rewritten       # dev, current understand() version
+    python scripts/evaluate.py --query-source rewritten --understand-version v1   # a retired version, from cache
     python scripts/evaluate.py --split test --final           # once, at the end
 
 Reads data/gold/gold_set.jsonl, drops skip_scoring rows, keeps the requested
@@ -28,9 +29,13 @@ scores profile extraction against expected_profile: per-field accuracy over
 rows whose gold value is non-null, and the false-fill rate over rows whose
 gold value is null (the model filled a field the gold leaves empty).
 State, gender and caste must match exactly; age exactly; income within 1%;
-land within 0.05 acre or 2%. Occupation and family are free text in the gold,
-so they match on word overlap (one word set contains the other, or Jaccard
->= 0.5) and their accuracy is approximate.
+land within 0.05 acre or 2%. Occupation is free text in the gold, so it
+matches on word overlap (one word set contains the other, or Jaccard >= 0.5)
+and its accuracy is approximate. family is not scored: the gold's family
+strings are idiosyncratic summaries, so predicted and gold family (and v2's
+other_facts) are printed per row for review instead.
+--understand-version picks the prompt version (default: the current one);
+retired versions are served from the cache only.
 
 Every metric is also broken down by language. Results, including each row's
 query and top 10 with evidence, go to data/eval/<split>_<timestamp>.json.
@@ -84,8 +89,9 @@ def summarize(rows, mode):
     }
 
 
-PROFILE_KEYS = ("occupation", "state", "age", "gender", "annual_income_inr", "land_acres", "caste_category", "family")
-FREE_TEXT_FIELDS = ("occupation", "family")
+# family is compared by eye, not scored (see the module docstring).
+SCORED_KEYS = ("occupation", "state", "age", "gender", "annual_income_inr", "land_acres", "caste_category")
+FREE_TEXT_FIELDS = ("occupation",)
 _FILLER = {"a", "an", "the", "of", "and", "in", "to", "with", "for", "is", "has"}
 
 
@@ -109,7 +115,7 @@ def field_matches(key, pred, gold):
 def score_profiles(pairs):
     """pairs: [(predicted_profile, gold_profile)] -> per-field and overall scores."""
     per_field, totals = {}, {"correct": 0, "gold_non_null": 0, "filled": 0, "gold_null": 0}
-    for key in PROFILE_KEYS:
+    for key in SCORED_KEYS:
         c = n = f = m = 0
         for pred, gold in pairs:
             if gold[key] is not None:
@@ -139,6 +145,8 @@ def main():
     ap.add_argument("--final", action="store_true", help="required to run the test split")
     ap.add_argument("--query-source", choices=["raw", "rewritten"], default="raw",
                     help="retrieve with the raw description or understand()'s search_query_en")
+    ap.add_argument("--understand-version", default=None, metavar="VERSION",
+                    help="understand() prompt version, e.g. understand-v1 or v1 (default: the current one)")
     args = ap.parse_args()
     if args.split == "test" and not args.final:
         ap.error("the test split is run once, at the end (see data/gold/README.md); pass --final to run it")
@@ -157,10 +165,12 @@ def main():
     understood, fallbacks, prompt_version = {}, [], None
     if args.query_source == "rewritten":
         from app.understand import PROMPT_VERSION, UnderstandError, understand
-        prompt_version = PROMPT_VERSION
+        prompt_version = args.understand_version or PROMPT_VERSION
+        if not prompt_version.startswith("understand-"):
+            prompt_version = f"understand-{prompt_version}"
         for i, r in enumerate(rows, 1):
             try:
-                u = understand(r["description"], r["language"])
+                u = understand(r["description"], r["language"], version=prompt_version)
             except UnderstandError as e:
                 sys.exit(f"error: understand() failed on {r['id']}: {e}\n"
                          f"{i - 1} rows are already cached; rerun to continue")
@@ -184,7 +194,8 @@ def main():
                  "query": queries[r["id"]], "modes": {}}
         if r["id"] in understood:
             u = understood[r["id"]]
-            entry["understand"] = {k: u[k] for k in ("status", "search_query_en", "clarifying_question", "profile",
+            entry["understand"] = {k: u.get(k) for k in ("status", "search_query_en", "clarifying_question",
+                                                         "clarifying_field", "profile",
                                                      "confidence", "evidence", "errors")}
             entry["understand"]["provider"] = u["_meta"]["provider"]
         for mode in EVAL_MODES:
@@ -244,7 +255,8 @@ def main():
             lang: score_profiles([(understood[i]["profile"], gold_by_id[i]["expected_profile"])
                                   for i in understood if gold_by_id[i]["language"] == lang])["overall"]
             for lang in languages}
-        print(f"\nprofile extraction ({len(pairs)} rows; occupation and family matched by word overlap, approximate)")
+        print(f"\nprofile extraction, {prompt_version} ({len(pairs)} rows; occupation matched by word overlap, "
+              f"approximate; family not scored)")
         print(f"  {'field':18s} {'accuracy':>9s} {'(n gold non-null)':>18s} {'false-fill':>11s} {'(n gold null)':>14s}")
         for key, f in profile_scores["fields"].items():
             print(f"  {key + (' ~' if f['approximate'] else ''):18s} {fmt(f['accuracy']):>9s} {f['gold_non_null']:>18d} "
@@ -255,6 +267,14 @@ def main():
         for lang, o in profile_scores["by_language"].items():
             print(f"  {lang:18s} {fmt(o['accuracy']):>9s} {o['gold_non_null']:>18d} "
                   f"{fmt(o['false_fill_rate']):>11s} {o['gold_null']:>14d}")
+
+        print(f"\nfamily (gold vs predicted) and other_facts, {prompt_version}")
+        for i in understood:
+            prof = understood[i]["profile"]
+            print(f"  {i} [{gold_by_id[i]['language']}] family gold={gold_by_id[i]['expected_profile']['family']!r} "
+                  f"predicted={prof.get('family')!r}")
+            if "other_facts" in prof:
+                print(f"           other_facts={prof['other_facts']}")
 
     manifest = retriever.manifest
     out = {

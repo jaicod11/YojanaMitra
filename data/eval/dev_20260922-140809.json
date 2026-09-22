@@ -1,0 +1,4469 @@
+{
+  "split": "dev",
+  "query_source": "raw",
+  "understand_prompt_version": null,
+  "rewrite_fallbacks": [],
+  "timestamp": "2026-09-22T14:08:09+05:30",
+  "gold_sha256": "9ebc22f014abd84b7020eb70204b3a38b8acaf70e9b84fa162f2ac8cfff22790",
+  "index": {
+    "chunks_sha256": "04b4c023a172825758c6963427189736917d0ae3b4ef16a231fdafb13ab46a53",
+    "chunk_count": 15825,
+    "dense": {
+      "model": "BAAI/bge-m3",
+      "dims": 1024,
+      "max_seq_length": 1024,
+      "dtype": "float16",
+      "normalized": true,
+      "faiss_index": "IndexFlatIP",
+      "device": "mps"
+    },
+    "build_date": "2026-09-22T07:10:43+00:00"
+  },
+  "retrieval": {
+    "top_k": 10,
+    "candidates_per_list": 50,
+    "rrf_k": 60
+  },
+  "counts": {
+    "rows": 20,
+    "exclusion": 6,
+    "positive": 10,
+    "clarify": 3,
+    "no_match": 1,
+    "not_scored": 4
+  },
+  "metrics": {
+    "bm25": {
+      "positive": {
+        "n": 10,
+        "recall@5": 0.1,
+        "recall@10": 0.3,
+        "mrr@10": 0.0587
+      },
+      "exclusion": {
+        "n": 6,
+        "false_inclusion_rate": 0.1667,
+        "inclusions_via_exclusions_chunk": 0
+      },
+      "by_language": {
+        "en": {
+          "positive": {
+            "n": 8,
+            "recall@5": 0.125,
+            "recall@10": 0.375,
+            "mrr@10": 0.0734
+          },
+          "exclusion": {
+            "n": 6,
+            "false_inclusion_rate": 0.1667,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "hi": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "te": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        }
+      },
+      "median_latency_s": 0.061
+    },
+    "dense": {
+      "positive": {
+        "n": 10,
+        "recall@5": 0.4,
+        "recall@10": 0.6,
+        "mrr@10": 0.2667
+      },
+      "exclusion": {
+        "n": 6,
+        "false_inclusion_rate": 0.6667,
+        "inclusions_via_exclusions_chunk": 0
+      },
+      "by_language": {
+        "en": {
+          "positive": {
+            "n": 8,
+            "recall@5": 0.5,
+            "recall@10": 0.75,
+            "mrr@10": 0.3333
+          },
+          "exclusion": {
+            "n": 6,
+            "false_inclusion_rate": 0.6667,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "hi": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "te": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        }
+      },
+      "median_latency_s": 0.078
+    },
+    "hybrid": {
+      "positive": {
+        "n": 10,
+        "recall@5": 0.4,
+        "recall@10": 0.5,
+        "mrr@10": 0.2158
+      },
+      "exclusion": {
+        "n": 6,
+        "false_inclusion_rate": 0.6667,
+        "inclusions_via_exclusions_chunk": 0
+      },
+      "by_language": {
+        "en": {
+          "positive": {
+            "n": 8,
+            "recall@5": 0.5,
+            "recall@10": 0.625,
+            "mrr@10": 0.2698
+          },
+          "exclusion": {
+            "n": 6,
+            "false_inclusion_rate": 0.6667,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "hi": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "te": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        }
+      },
+      "median_latency_s": 0.128
+    }
+  },
+  "profile_extraction": null,
+  "rows": [
+    {
+      "id": "gold_003",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "pm-kisan"
+      ],
+      "query": "I own 10 acres of farmland in Punjab and I file income tax returns every year.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 26.39917,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::002"
+            },
+            {
+              "slug": "sgiavowwst",
+              "score": 17.5658,
+              "section": "eligibility",
+              "chunk_id": "sgiavowwst::eligibility::007"
+            },
+            {
+              "slug": "awvsssi",
+              "score": 17.2073,
+              "section": "eligibility",
+              "chunk_id": "awvsssi::eligibility::001"
+            },
+            {
+              "slug": "ysrvm",
+              "score": 16.35616,
+              "section": "eligibility",
+              "chunk_id": "ysrvm::eligibility::012"
+            },
+            {
+              "slug": "lssas",
+              "score": 16.30741,
+              "section": "exclusions",
+              "chunk_id": "lssas::exclusions::007"
+            },
+            {
+              "slug": "jt",
+              "score": 15.99098,
+              "section": "eligibility",
+              "chunk_id": "jt::eligibility::003"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 15.75661,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::007"
+            },
+            {
+              "slug": "pahal-dbtl",
+              "score": 15.47759,
+              "section": "eligibility",
+              "chunk_id": "pahal-dbtl::eligibility::000"
+            },
+            {
+              "slug": "ysrc",
+              "score": 15.41787,
+              "section": "eligibility",
+              "chunk_id": "ysrc::eligibility::002"
+            },
+            {
+              "slug": "ysrebcn",
+              "score": 15.30823,
+              "section": "eligibility",
+              "chunk_id": "ysrebcn::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pm-kisan",
+              "score": 0.57098,
+              "section": "overview",
+              "chunk_id": "pm-kisan::overview"
+            },
+            {
+              "slug": "zbnf",
+              "score": 0.56468,
+              "section": "eligibility",
+              "chunk_id": "zbnf::eligibility::001"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.56078,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::002"
+            },
+            {
+              "slug": "brfsy",
+              "score": 0.5475,
+              "section": "eligibility",
+              "chunk_id": "brfsy::eligibility::000"
+            },
+            {
+              "slug": "pfts",
+              "score": 0.54693,
+              "section": "overview",
+              "chunk_id": "pfts::overview"
+            },
+            {
+              "slug": "afag",
+              "score": 0.54116,
+              "section": "eligibility",
+              "chunk_id": "afag::eligibility::002"
+            },
+            {
+              "slug": "mvp",
+              "score": 0.53952,
+              "section": "overview",
+              "chunk_id": "mvp::overview"
+            },
+            {
+              "slug": "nfbks",
+              "score": 0.53791,
+              "section": "eligibility",
+              "chunk_id": "nfbks::eligibility::001"
+            },
+            {
+              "slug": "faspalscf",
+              "score": 0.53764,
+              "section": "eligibility",
+              "chunk_id": "faspalscf::eligibility::003"
+            },
+            {
+              "slug": "ysrrb",
+              "score": 0.53084,
+              "section": "eligibility",
+              "chunk_id": "ysrrb::eligibility::001"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pm-kisan",
+              "rank": 1,
+              "section": "overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 0.03227,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::002"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 0.0274,
+              "section": "exclusions",
+              "chunk_id": "pmay-g::exclusions::044"
+            },
+            {
+              "slug": "ysrkn",
+              "score": 0.02408,
+              "section": "eligibility",
+              "chunk_id": "ysrkn::eligibility::002"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "pm-kisan::overview"
+            },
+            {
+              "slug": "zbnf",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "zbnf::eligibility::001"
+            },
+            {
+              "slug": "sgiavowwst",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "sgiavowwst::eligibility::007"
+            },
+            {
+              "slug": "awvsssi",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "awvsssi::eligibility::001"
+            },
+            {
+              "slug": "brfsy",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "brfsy::eligibility::000"
+            },
+            {
+              "slug": "ysrvm",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "ysrvm::eligibility::012"
+            },
+            {
+              "slug": "pfts",
+              "score": 0.01538,
+              "section": "overview",
+              "chunk_id": "pfts::overview"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pm-kisan",
+              "rank": 4,
+              "section": "overview"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_007",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "rythu-bima"
+      ],
+      "excluded_schemes": [],
+      "query": "I am a farmer in Telangana, 45 years old, and I want life insurance in case something happens to me.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 24.13786,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "farmer-insurance",
+              "score": 21.71771,
+              "section": "overview",
+              "chunk_id": "farmer-insurance::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 19.6484,
+              "section": "eligibility",
+              "chunk_id": "rythu-bima::eligibility::008"
+            },
+            {
+              "slug": "cpis",
+              "score": 17.09554,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::006"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 16.45073,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::002"
+            },
+            {
+              "slug": "jjais",
+              "score": 15.99851,
+              "section": "overview",
+              "chunk_id": "jjais::overview"
+            },
+            {
+              "slug": "sjpfsgc",
+              "score": 15.10286,
+              "section": "eligibility",
+              "chunk_id": "sjpfsgc::eligibility::004"
+            },
+            {
+              "slug": "dcaltasg",
+              "score": 15.04948,
+              "section": "eligibility",
+              "chunk_id": "dcaltasg::eligibility::030"
+            },
+            {
+              "slug": "pmsswsutpp",
+              "score": 14.97887,
+              "section": "eligibility",
+              "chunk_id": "pmsswsutpp::eligibility::017"
+            },
+            {
+              "slug": "svsgcfrss",
+              "score": 14.77381,
+              "section": "eligibility",
+              "chunk_id": "svsgcfrss::eligibility::005"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.3333333333333333,
+          "first_hit_rank": 3
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "farmer-insurance",
+              "score": 0.74955,
+              "section": "overview",
+              "chunk_id": "farmer-insurance::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 0.61564,
+              "section": "overview",
+              "chunk_id": "rythu-bima::overview"
+            },
+            {
+              "slug": "jjais",
+              "score": 0.58124,
+              "section": "overview",
+              "chunk_id": "jjais::overview"
+            },
+            {
+              "slug": "slesvkspy",
+              "score": 0.57224,
+              "section": "eligibility",
+              "chunk_id": "slesvkspy::eligibility::001"
+            },
+            {
+              "slug": "oapsucmupt",
+              "score": 0.56504,
+              "section": "eligibility",
+              "chunk_id": "oapsucmupt::eligibility::001"
+            },
+            {
+              "slug": "haritha-haram",
+              "score": 0.55962,
+              "section": "overview",
+              "chunk_id": "haritha-haram::overview"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.55729,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::002"
+            },
+            {
+              "slug": "tjhis",
+              "score": 0.55645,
+              "section": "overview",
+              "chunk_id": "tjhis::overview"
+            },
+            {
+              "slug": "rgkssy",
+              "score": 0.55523,
+              "section": "overview",
+              "chunk_id": "rgkssy::overview"
+            },
+            {
+              "slug": "pmjjby",
+              "score": 0.55319,
+              "section": "overview",
+              "chunk_id": "pmjjby::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.5,
+          "first_hit_rank": 2
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "farmer-insurance",
+              "score": 0.03252,
+              "section": "overview",
+              "chunk_id": "farmer-insurance::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 0.03102,
+              "section": "overview",
+              "chunk_id": "rythu-bima::overview"
+            },
+            {
+              "slug": "jjais",
+              "score": 0.03012,
+              "section": "overview",
+              "chunk_id": "jjais::overview"
+            },
+            {
+              "slug": "cpis",
+              "score": 0.02272,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::007"
+            },
+            {
+              "slug": "pmjjby",
+              "score": 0.02265,
+              "section": "overview",
+              "chunk_id": "pmjjby::overview"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 0.01471,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::002"
+            },
+            {
+              "slug": "slesvkspy",
+              "score": 0.01429,
+              "section": "eligibility",
+              "chunk_id": "slesvkspy::eligibility::001"
+            },
+            {
+              "slug": "sjpfsgc",
+              "score": 0.01408,
+              "section": "eligibility",
+              "chunk_id": "sjpfsgc::eligibility::004"
+            },
+            {
+              "slug": "dcaltasg",
+              "score": 0.01389,
+              "section": "eligibility",
+              "chunk_id": "dcaltasg::eligibility::030"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.5,
+          "first_hit_rank": 2
+        }
+      }
+    },
+    {
+      "id": "gold_014",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "pm-kisan"
+      ],
+      "query": "I retired as a government schoolteacher and now get a pension of 12,000 rupees a month. I also own 4 acres of ancestral farmland in Karnataka.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "gwpss",
+              "score": 22.44221,
+              "section": "eligibility",
+              "chunk_id": "gwpss::eligibility::001"
+            },
+            {
+              "slug": "sssps",
+              "score": 22.35837,
+              "section": "overview",
+              "chunk_id": "sssps::overview"
+            },
+            {
+              "slug": "ssddap",
+              "score": 19.24984,
+              "section": "overview",
+              "chunk_id": "ssddap::overview"
+            },
+            {
+              "slug": "airavata",
+              "score": 18.91575,
+              "section": "overview",
+              "chunk_id": "airavata::overview"
+            },
+            {
+              "slug": "sfava",
+              "score": 18.70809,
+              "section": "eligibility",
+              "chunk_id": "sfava::eligibility::002"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 16.72712,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::006"
+            },
+            {
+              "slug": "vtvscsgit",
+              "score": 16.70359,
+              "section": "overview",
+              "chunk_id": "vtvscsgit::overview"
+            },
+            {
+              "slug": "piso",
+              "score": 16.53994,
+              "section": "eligibility",
+              "chunk_id": "piso::eligibility::002"
+            },
+            {
+              "slug": "maddapp-i",
+              "score": 15.7541,
+              "section": "eligibility",
+              "chunk_id": "maddapp-i::eligibility::003"
+            },
+            {
+              "slug": "tps-hgv",
+              "score": 15.14679,
+              "section": "overview",
+              "chunk_id": "tps-hgv::overview"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "ignvpyr",
+              "score": 0.57981,
+              "section": "overview",
+              "chunk_id": "ignvpyr::overview"
+            },
+            {
+              "slug": "oapsucmupt",
+              "score": 0.56704,
+              "section": "overview",
+              "chunk_id": "oapsucmupt::overview"
+            },
+            {
+              "slug": "vps",
+              "score": 0.56189,
+              "section": "overview",
+              "chunk_id": "vps::overview"
+            },
+            {
+              "slug": "cmenspy",
+              "score": 0.56144,
+              "section": "overview",
+              "chunk_id": "cmenspy::overview"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 0.55779,
+              "section": "overview",
+              "chunk_id": "ignoaps-sikkim::overview"
+            },
+            {
+              "slug": "sssps",
+              "score": 0.55273,
+              "section": "overview",
+              "chunk_id": "sssps::overview"
+            },
+            {
+              "slug": "igndpstn",
+              "score": 0.54436,
+              "section": "eligibility",
+              "chunk_id": "igndpstn::eligibility::001"
+            },
+            {
+              "slug": "ignwpstn",
+              "score": 0.54342,
+              "section": "overview",
+              "chunk_id": "ignwpstn::overview"
+            },
+            {
+              "slug": "wdenp",
+              "score": 0.54302,
+              "section": "overview",
+              "chunk_id": "wdenp::overview"
+            },
+            {
+              "slug": "ignoapstn",
+              "score": 0.54206,
+              "section": "overview",
+              "chunk_id": "ignoapstn::overview"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "sssps",
+              "score": 0.03128,
+              "section": "overview",
+              "chunk_id": "sssps::overview"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 0.0275,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::006"
+            },
+            {
+              "slug": "ignwpstn",
+              "score": 0.02546,
+              "section": "overview",
+              "chunk_id": "ignwpstn::overview"
+            },
+            {
+              "slug": "tps-hgv",
+              "score": 0.0242,
+              "section": "overview",
+              "chunk_id": "tps-hgv::overview"
+            },
+            {
+              "slug": "cmat-ap",
+              "score": 0.02334,
+              "section": "overview",
+              "chunk_id": "cmat-ap::overview"
+            },
+            {
+              "slug": "dwps",
+              "score": 0.02327,
+              "section": "overview",
+              "chunk_id": "dwps::overview"
+            },
+            {
+              "slug": "ptupiwoa50yaa",
+              "score": 0.02218,
+              "section": "overview",
+              "chunk_id": "ptupiwoa50yaa::overview"
+            },
+            {
+              "slug": "piso",
+              "score": 0.01951,
+              "section": "overview",
+              "chunk_id": "piso::overview"
+            },
+            {
+              "slug": "ignvpyr",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "ignvpyr::overview"
+            },
+            {
+              "slug": "gwpss",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "gwpss::eligibility::001"
+            }
+          ],
+          "excluded_in_top10": []
+        }
+      }
+    },
+    {
+      "id": "gold_039",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "ignwps"
+      ],
+      "query": "I am a 38-year-old widow in Karnataka, BPL family.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "ignwps-sikkim",
+              "score": 16.01512,
+              "section": "eligibility",
+              "chunk_id": "ignwps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "ignwpsmp",
+              "score": 15.77157,
+              "section": "eligibility",
+              "chunk_id": "ignwpsmp::eligibility::001"
+            },
+            {
+              "slug": "iscwr",
+              "score": 15.65916,
+              "section": "eligibility",
+              "chunk_id": "iscwr::eligibility::000"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 15.46403,
+              "section": "eligibility",
+              "chunk_id": "ignoaps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "oap",
+              "score": 15.23239,
+              "section": "eligibility",
+              "chunk_id": "oap::eligibility::002"
+            },
+            {
+              "slug": "uwps",
+              "score": 14.27758,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 14.17478,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "oapwb",
+              "score": 13.30577,
+              "section": "exclusions",
+              "chunk_id": "oapwb::exclusions::011"
+            },
+            {
+              "slug": "ddanwrasi",
+              "score": 12.3859,
+              "section": "eligibility",
+              "chunk_id": "ddanwrasi::eligibility::000"
+            },
+            {
+              "slug": "fapnw",
+              "score": 12.22942,
+              "section": "eligibility",
+              "chunk_id": "fapnw::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "ignwpsmp",
+              "score": 0.59939,
+              "section": "eligibility",
+              "chunk_id": "ignwpsmp::eligibility::001"
+            },
+            {
+              "slug": "ignwps-sikkim",
+              "score": 0.59661,
+              "section": "eligibility",
+              "chunk_id": "ignwps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "sspmphmrp",
+              "score": 0.59249,
+              "section": "overview",
+              "chunk_id": "sspmphmrp::overview"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 0.57794,
+              "section": "eligibility",
+              "chunk_id": "ignoaps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "lbsspy",
+              "score": 0.57169,
+              "section": "eligibility",
+              "chunk_id": "lbsspy::eligibility::000"
+            },
+            {
+              "slug": "iscwr",
+              "score": 0.56615,
+              "section": "eligibility",
+              "chunk_id": "iscwr::eligibility::000"
+            },
+            {
+              "slug": "ignwps",
+              "score": 0.56345,
+              "section": "overview",
+              "chunk_id": "ignwps::overview"
+            },
+            {
+              "slug": "uwps",
+              "score": 0.56199,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "ignvpyrr",
+              "score": 0.56179,
+              "section": "eligibility",
+              "chunk_id": "ignvpyrr::eligibility::001"
+            },
+            {
+              "slug": "fapnw",
+              "score": 0.55942,
+              "section": "eligibility",
+              "chunk_id": "fapnw::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ignwps",
+              "rank": 7,
+              "section": "overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "ignwpsmp",
+              "score": 0.03252,
+              "section": "eligibility",
+              "chunk_id": "ignwpsmp::eligibility::001"
+            },
+            {
+              "slug": "ignwps-sikkim",
+              "score": 0.03252,
+              "section": "eligibility",
+              "chunk_id": "ignwps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 0.03125,
+              "section": "eligibility",
+              "chunk_id": "ignoaps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "iscwr",
+              "score": 0.03102,
+              "section": "eligibility",
+              "chunk_id": "iscwr::eligibility::000"
+            },
+            {
+              "slug": "uwps",
+              "score": 0.02963,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "ignwps",
+              "score": 0.02862,
+              "section": "overview",
+              "chunk_id": "ignwps::overview"
+            },
+            {
+              "slug": "fapnw",
+              "score": 0.02837,
+              "section": "eligibility",
+              "chunk_id": "fapnw::eligibility::002"
+            },
+            {
+              "slug": "oap",
+              "score": 0.02477,
+              "section": "eligibility",
+              "chunk_id": "oap::eligibility::004"
+            },
+            {
+              "slug": "ignvpyrr",
+              "score": 0.0247,
+              "section": "eligibility",
+              "chunk_id": "ignvpyrr::eligibility::001"
+            },
+            {
+              "slug": "suwps",
+              "score": 0.02442,
+              "section": "eligibility",
+              "chunk_id": "suwps::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ignwps",
+              "rank": 6,
+              "section": "overview"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_053",
+      "language": "hi",
+      "test_type": "positive",
+      "expected_schemes": [
+        "igndps"
+      ],
+      "excluded_schemes": [],
+      "query": "मैं बिहार में रहता हूँ, मेरी उम्र 50 साल है और मुझे 82% विकलांगता है। मेरा परिवार गरीबी रेखा से नीचे है।",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "cmegp",
+              "score": 57.10111,
+              "section": "overview",
+              "chunk_id": "cmegp::overview"
+            },
+            {
+              "slug": "l50ss",
+              "score": 5.58657,
+              "section": "eligibility",
+              "chunk_id": "l50ss::eligibility::002"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 5.53011,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::020"
+            },
+            {
+              "slug": "fasuofug",
+              "score": 5.38748,
+              "section": "overview",
+              "chunk_id": "fasuofug::overview"
+            },
+            {
+              "slug": "ptupiwoa50yaa",
+              "score": 5.16473,
+              "section": "eligibility",
+              "chunk_id": "ptupiwoa50yaa::eligibility::001"
+            },
+            {
+              "slug": "els",
+              "score": 4.97683,
+              "section": "eligibility",
+              "chunk_id": "els::eligibility::002"
+            },
+            {
+              "slug": "gspv",
+              "score": 4.97178,
+              "section": "overview",
+              "chunk_id": "gspv::overview"
+            },
+            {
+              "slug": "kmys2016",
+              "score": 4.91171,
+              "section": "overview",
+              "chunk_id": "kmys2016::overview"
+            },
+            {
+              "slug": "rctpm",
+              "score": 4.80813,
+              "section": "overview",
+              "chunk_id": "rctpm::overview"
+            },
+            {
+              "slug": "kuy-movcdner",
+              "score": 4.7961,
+              "section": "eligibility",
+              "chunk_id": "kuy-movcdner::eligibility::020"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "nfbs",
+              "score": 0.57774,
+              "section": "eligibility",
+              "chunk_id": "nfbs::eligibility::001"
+            },
+            {
+              "slug": "backward-classes",
+              "score": 0.57343,
+              "section": "eligibility",
+              "chunk_id": "backward-classes::eligibility::000"
+            },
+            {
+              "slug": "sspmphmrp",
+              "score": 0.57324,
+              "section": "eligibility",
+              "chunk_id": "sspmphmrp::eligibility::001"
+            },
+            {
+              "slug": "gfadap",
+              "score": 0.57199,
+              "section": "overview",
+              "chunk_id": "gfadap::overview"
+            },
+            {
+              "slug": "alaes",
+              "score": 0.56921,
+              "section": "eligibility",
+              "chunk_id": "alaes::eligibility::006"
+            },
+            {
+              "slug": "rgssspf-2012",
+              "score": 0.56881,
+              "section": "overview",
+              "chunk_id": "rgssspf-2012::overview"
+            },
+            {
+              "slug": "oah",
+              "score": 0.56751,
+              "section": "eligibility",
+              "chunk_id": "oah::eligibility::000"
+            },
+            {
+              "slug": "da-60ada",
+              "score": 0.56466,
+              "section": "eligibility",
+              "chunk_id": "da-60ada::eligibility::004"
+            },
+            {
+              "slug": "l50ss",
+              "score": 0.55919,
+              "section": "eligibility",
+              "chunk_id": "l50ss::eligibility::004"
+            },
+            {
+              "slug": "sapwdpfaa",
+              "score": 0.5561,
+              "section": "eligibility",
+              "chunk_id": "sapwdpfaa::eligibility::001"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "ms",
+              "score": 0.02759,
+              "section": "eligibility",
+              "chunk_id": "ms::eligibility::000"
+            },
+            {
+              "slug": "nfbs",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "nfbs::eligibility::001"
+            },
+            {
+              "slug": "cmegp",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "cmegp::overview"
+            },
+            {
+              "slug": "backward-classes",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "backward-classes::eligibility::000"
+            },
+            {
+              "slug": "l50ss",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "l50ss::eligibility::002"
+            },
+            {
+              "slug": "sspmphmrp",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "sspmphmrp::eligibility::001"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::020"
+            },
+            {
+              "slug": "gfadap",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "gfadap::overview"
+            },
+            {
+              "slug": "fasuofug",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "fasuofug::overview"
+            },
+            {
+              "slug": "alaes",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "alaes::eligibility::006"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      }
+    },
+    {
+      "id": "gold_056",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "pmv"
+      ],
+      "query": "I am a blacksmith and I took a Mudra loan two years ago for my workshop.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 18.57954,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "nhdpccwms",
+              "score": 15.99349,
+              "section": "eligibility",
+              "chunk_id": "nhdpccwms::eligibility::003"
+            },
+            {
+              "slug": "modrob",
+              "score": 15.92204,
+              "section": "eligibility",
+              "chunk_id": "modrob::eligibility::004"
+            },
+            {
+              "slug": "cpis",
+              "score": 14.09598,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::006"
+            },
+            {
+              "slug": "atwsfww",
+              "score": 13.75164,
+              "section": "exclusions",
+              "chunk_id": "atwsfww::exclusions::012"
+            },
+            {
+              "slug": "els",
+              "score": 13.6124,
+              "section": "eligibility",
+              "chunk_id": "els::eligibility::004"
+            },
+            {
+              "slug": "pmegp",
+              "score": 13.43787,
+              "section": "eligibility",
+              "chunk_id": "pmegp::eligibility::006"
+            },
+            {
+              "slug": "pmsvs-maharashtra",
+              "score": 13.33339,
+              "section": "eligibility",
+              "chunk_id": "pmsvs-maharashtra::eligibility::007"
+            },
+            {
+              "slug": "maddapp-i",
+              "score": 12.93984,
+              "section": "eligibility",
+              "chunk_id": "maddapp-i::eligibility::004"
+            },
+            {
+              "slug": "sfgcs",
+              "score": 12.87068,
+              "section": "eligibility",
+              "chunk_id": "sfgcs::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "nhdpccwms",
+              "score": 0.61679,
+              "section": "eligibility",
+              "chunk_id": "nhdpccwms::eligibility::003"
+            },
+            {
+              "slug": "mssy",
+              "score": 0.55306,
+              "section": "overview",
+              "chunk_id": "mssy::overview"
+            },
+            {
+              "slug": "jt",
+              "score": 0.54971,
+              "section": "overview",
+              "chunk_id": "jt::overview"
+            },
+            {
+              "slug": "lpwtcw",
+              "score": 0.54954,
+              "section": "overview",
+              "chunk_id": "lpwtcw::overview"
+            },
+            {
+              "slug": "ttr",
+              "score": 0.54531,
+              "section": "overview",
+              "chunk_id": "ttr::overview"
+            },
+            {
+              "slug": "ltmbocwwb",
+              "score": 0.5414,
+              "section": "overview",
+              "chunk_id": "ltmbocwwb::overview"
+            },
+            {
+              "slug": "lpt-gbocwwb",
+              "score": 0.5354,
+              "section": "overview",
+              "chunk_id": "lpt-gbocwwb::overview"
+            },
+            {
+              "slug": "mupsese",
+              "score": 0.53464,
+              "section": "overview",
+              "chunk_id": "mupsese::overview"
+            },
+            {
+              "slug": "pmmy",
+              "score": 0.53428,
+              "section": "overview",
+              "chunk_id": "pmmy::overview"
+            },
+            {
+              "slug": "myuy",
+              "score": 0.53332,
+              "section": "overview",
+              "chunk_id": "myuy::overview"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "nhdpccwms",
+              "score": 0.03252,
+              "section": "eligibility",
+              "chunk_id": "nhdpccwms::eligibility::003"
+            },
+            {
+              "slug": "pmmy",
+              "score": 0.01942,
+              "section": "eligibility",
+              "chunk_id": "pmmy::eligibility::000"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "modrob",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "modrob::eligibility::004"
+            },
+            {
+              "slug": "mssy",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "mssy::overview"
+            },
+            {
+              "slug": "cpis",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::006"
+            },
+            {
+              "slug": "atwsfww",
+              "score": 0.01538,
+              "section": "exclusions",
+              "chunk_id": "atwsfww::exclusions::012"
+            },
+            {
+              "slug": "jt",
+              "score": 0.01515,
+              "section": "overview",
+              "chunk_id": "jt::overview"
+            },
+            {
+              "slug": "els",
+              "score": 0.01515,
+              "section": "eligibility",
+              "chunk_id": "els::eligibility::004"
+            },
+            {
+              "slug": "lpwtcw",
+              "score": 0.01493,
+              "section": "overview",
+              "chunk_id": "lpwtcw::overview"
+            }
+          ],
+          "excluded_in_top10": []
+        }
+      }
+    },
+    {
+      "id": "gold_062",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmmy"
+      ],
+      "excluded_schemes": [],
+      "query": "I want to start a tailoring business and need a loan of about 3 lakh rupees. I have some tailoring experience and no defaults on any past loans.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "mmuy",
+              "score": 21.80205,
+              "section": "overview",
+              "chunk_id": "mmuy::overview"
+            },
+            {
+              "slug": "rgsfsae",
+              "score": 21.1599,
+              "section": "overview",
+              "chunk_id": "rgsfsae::overview"
+            },
+            {
+              "slug": "otci-citabtct",
+              "score": 20.29572,
+              "section": "eligibility",
+              "chunk_id": "otci-citabtct::eligibility::004"
+            },
+            {
+              "slug": "bll",
+              "score": 18.76983,
+              "section": "overview",
+              "chunk_id": "bll::overview"
+            },
+            {
+              "slug": "srs",
+              "score": 18.69567,
+              "section": "exclusions",
+              "chunk_id": "srs::exclusions::004"
+            },
+            {
+              "slug": "sanfsosms",
+              "score": 18.42481,
+              "section": "eligibility",
+              "chunk_id": "sanfsosms::eligibility::002"
+            },
+            {
+              "slug": "dlbe",
+              "score": 17.68338,
+              "section": "overview",
+              "chunk_id": "dlbe::overview"
+            },
+            {
+              "slug": "ttscandbc",
+              "score": 17.58424,
+              "section": "eligibility",
+              "chunk_id": "ttscandbc::eligibility::000"
+            },
+            {
+              "slug": "nbcfdc-gls",
+              "score": 16.62102,
+              "section": "overview",
+              "chunk_id": "nbcfdc-gls::overview"
+            },
+            {
+              "slug": "prism-c1-pcpm",
+              "score": 16.60401,
+              "section": "eligibility",
+              "chunk_id": "prism-c1-pcpm::eligibility::002"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "sanfsosms",
+              "score": 0.6009,
+              "section": "eligibility",
+              "chunk_id": "sanfsosms::eligibility::002"
+            },
+            {
+              "slug": "cccsaw",
+              "score": 0.59864,
+              "section": "overview",
+              "chunk_id": "cccsaw::overview"
+            },
+            {
+              "slug": "sl",
+              "score": 0.58745,
+              "section": "eligibility",
+              "chunk_id": "sl::eligibility::001"
+            },
+            {
+              "slug": "dlbe",
+              "score": 0.58405,
+              "section": "overview",
+              "chunk_id": "dlbe::overview"
+            },
+            {
+              "slug": "bns",
+              "score": 0.58359,
+              "section": "eligibility",
+              "chunk_id": "bns::eligibility::005"
+            },
+            {
+              "slug": "sei",
+              "score": 0.58317,
+              "section": "overview",
+              "chunk_id": "sei::overview"
+            },
+            {
+              "slug": "dls-punjab",
+              "score": 0.57509,
+              "section": "eligibility",
+              "chunk_id": "dls-punjab::eligibility::004"
+            },
+            {
+              "slug": "us",
+              "score": 0.57271,
+              "section": "eligibility",
+              "chunk_id": "us::eligibility::004"
+            },
+            {
+              "slug": "slswe",
+              "score": 0.57114,
+              "section": "overview",
+              "chunk_id": "slswe::overview"
+            },
+            {
+              "slug": "ssboscbpbs",
+              "score": 0.56601,
+              "section": "eligibility",
+              "chunk_id": "ssboscbpbs::eligibility::002"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "sanfsosms",
+              "score": 0.03154,
+              "section": "eligibility",
+              "chunk_id": "sanfsosms::eligibility::002"
+            },
+            {
+              "slug": "dlbe",
+              "score": 0.03055,
+              "section": "overview",
+              "chunk_id": "dlbe::overview"
+            },
+            {
+              "slug": "sei",
+              "score": 0.02808,
+              "section": "overview",
+              "chunk_id": "sei::overview"
+            },
+            {
+              "slug": "us",
+              "score": 0.02798,
+              "section": "eligibility",
+              "chunk_id": "us::eligibility::004"
+            },
+            {
+              "slug": "mmuy",
+              "score": 0.0267,
+              "section": "overview",
+              "chunk_id": "mmuy::overview"
+            },
+            {
+              "slug": "ssboscbpbs",
+              "score": 0.02623,
+              "section": "eligibility",
+              "chunk_id": "ssboscbpbs::eligibility::002"
+            },
+            {
+              "slug": "sl",
+              "score": 0.02608,
+              "section": "eligibility",
+              "chunk_id": "sl::eligibility::001"
+            },
+            {
+              "slug": "nbcfdc-gls",
+              "score": 0.02507,
+              "section": "overview",
+              "chunk_id": "nbcfdc-gls::overview"
+            },
+            {
+              "slug": "ttscandbc",
+              "score": 0.02289,
+              "section": "eligibility",
+              "chunk_id": "ttscandbc::eligibility::002"
+            },
+            {
+              "slug": "cccsaw",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "cccsaw::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      }
+    },
+    {
+      "id": "gold_064",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmjdy"
+      ],
+      "excluded_schemes": [],
+      "query": "I don't have a bank account. I am an adult and want to open one, and my 11-year-old also wants one.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "vtvscsgit",
+              "score": 24.02367,
+              "section": "overview",
+              "chunk_id": "vtvscsgit::overview"
+            },
+            {
+              "slug": "sfgcs",
+              "score": 21.24893,
+              "section": "eligibility",
+              "chunk_id": "sfgcs::eligibility::002"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 20.28674,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::002"
+            },
+            {
+              "slug": "awvsssi",
+              "score": 19.70364,
+              "section": "eligibility",
+              "chunk_id": "awvsssi::eligibility::001"
+            },
+            {
+              "slug": "pgssgategpatqsaicte",
+              "score": 19.53163,
+              "section": "eligibility",
+              "chunk_id": "pgssgategpatqsaicte::eligibility::002"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 18.57954,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "mabcstss",
+              "score": 18.38199,
+              "section": "overview",
+              "chunk_id": "mabcstss::overview"
+            },
+            {
+              "slug": "dsctar",
+              "score": 18.1813,
+              "section": "eligibility",
+              "chunk_id": "dsctar::eligibility::003"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 17.32835,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::013"
+            },
+            {
+              "slug": "e-m",
+              "score": 17.14679,
+              "section": "overview",
+              "chunk_id": "e-m::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pomis",
+              "score": 0.60588,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.57236,
+              "section": "eligibility",
+              "chunk_id": "ssy::eligibility::000"
+            },
+            {
+              "slug": "mnssy",
+              "score": 0.56459,
+              "section": "eligibility",
+              "chunk_id": "mnssy::eligibility::005"
+            },
+            {
+              "slug": "mssc",
+              "score": 0.55112,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::012"
+            },
+            {
+              "slug": "mvpy",
+              "score": 0.54852,
+              "section": "eligibility",
+              "chunk_id": "mvpy::eligibility::007"
+            },
+            {
+              "slug": "mupssee",
+              "score": 0.53746,
+              "section": "eligibility",
+              "chunk_id": "mupssee::eligibility::000"
+            },
+            {
+              "slug": "nscs",
+              "score": 0.53615,
+              "section": "overview",
+              "chunk_id": "nscs::overview"
+            },
+            {
+              "slug": "safaew-bcew",
+              "score": 0.53364,
+              "section": "eligibility",
+              "chunk_id": "safaew-bcew::eligibility::012"
+            },
+            {
+              "slug": "famapbandocwwb",
+              "score": 0.53302,
+              "section": "eligibility",
+              "chunk_id": "famapbandocwwb::eligibility::004"
+            },
+            {
+              "slug": "mvky",
+              "score": 0.52844,
+              "section": "eligibility",
+              "chunk_id": "mvky::eligibility::004"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "safaew-bcew",
+              "score": 0.02819,
+              "section": "eligibility",
+              "chunk_id": "safaew-bcew::eligibility::012"
+            },
+            {
+              "slug": "pomis",
+              "score": 0.02763,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            },
+            {
+              "slug": "mvpy",
+              "score": 0.02536,
+              "section": "eligibility",
+              "chunk_id": "mvpy::eligibility::007"
+            },
+            {
+              "slug": "ngy",
+              "score": 0.02121,
+              "section": "overview",
+              "chunk_id": "ngy::overview"
+            },
+            {
+              "slug": "vtvscsgit",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "vtvscsgit::overview"
+            },
+            {
+              "slug": "sfgcs",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "sfgcs::eligibility::002"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "ssy::eligibility::000"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::002"
+            },
+            {
+              "slug": "mnssy",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "mnssy::eligibility::005"
+            },
+            {
+              "slug": "awvsssi",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "awvsssi::eligibility::001"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      }
+    },
+    {
+      "id": "gold_065",
+      "language": "te",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmv"
+      ],
+      "excluded_schemes": [],
+      "query": "నేను ఆంధ్రప్రదేశ్‌లో 33 ఏళ్ల స్వర్ణకారుడిని (బంగారు నగలు తయారుచేస్తాను). ఇది మా కుటుంబ వృత్తి, మరియు నేను ఇంతకు ముందు ఎలాంటి రుణం తీసుకోలేదు.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "kyp",
+              "score": 10.64972,
+              "section": "eligibility",
+              "chunk_id": "kyp::eligibility::001"
+            },
+            {
+              "slug": "cmagy",
+              "score": 10.17827,
+              "section": "eligibility",
+              "chunk_id": "cmagy::eligibility::003"
+            },
+            {
+              "slug": "cmossm",
+              "score": 9.83013,
+              "section": "eligibility",
+              "chunk_id": "cmossm::eligibility::018"
+            },
+            {
+              "slug": "nfsmcss",
+              "score": 8.87605,
+              "section": "eligibility",
+              "chunk_id": "nfsmcss::eligibility::002"
+            },
+            {
+              "slug": "mjpovnbcebcs",
+              "score": 8.48307,
+              "section": "eligibility",
+              "chunk_id": "mjpovnbcebcs::eligibility::017"
+            },
+            {
+              "slug": "jrfbio",
+              "score": 8.0102,
+              "section": "eligibility",
+              "chunk_id": "jrfbio::eligibility::002"
+            },
+            {
+              "slug": "tncmfp",
+              "score": 7.48842,
+              "section": "eligibility",
+              "chunk_id": "tncmfp::eligibility::004"
+            },
+            {
+              "slug": "financial-assistance-scheme",
+              "score": 7.11752,
+              "section": "eligibility",
+              "chunk_id": "financial-assistance-scheme::eligibility::054"
+            },
+            {
+              "slug": "subsidy-scheme-for-taxi",
+              "score": 5.83712,
+              "section": "overview",
+              "chunk_id": "subsidy-scheme-for-taxi::overview"
+            },
+            {
+              "slug": "isepqisrdceoplccn",
+              "score": 5.52834,
+              "section": "overview",
+              "chunk_id": "isepqisrdceoplccn::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "sm",
+              "score": 0.46861,
+              "section": "eligibility",
+              "chunk_id": "sm::eligibility::001"
+            },
+            {
+              "slug": "dls-punjab",
+              "score": 0.46564,
+              "section": "eligibility",
+              "chunk_id": "dls-punjab::eligibility::004"
+            },
+            {
+              "slug": "ssspy",
+              "score": 0.46469,
+              "section": "eligibility",
+              "chunk_id": "ssspy::eligibility::001"
+            },
+            {
+              "slug": "assp",
+              "score": 0.45838,
+              "section": "eligibility",
+              "chunk_id": "assp::eligibility::000"
+            },
+            {
+              "slug": "svby",
+              "score": 0.4573,
+              "section": "eligibility",
+              "chunk_id": "svby::eligibility::000"
+            },
+            {
+              "slug": "ses",
+              "score": 0.45429,
+              "section": "eligibility",
+              "chunk_id": "ses::eligibility::003"
+            },
+            {
+              "slug": "oasas",
+              "score": 0.45326,
+              "section": "eligibility",
+              "chunk_id": "oasas::eligibility::001"
+            },
+            {
+              "slug": "bmssy",
+              "score": 0.45267,
+              "section": "eligibility",
+              "chunk_id": "bmssy::eligibility::003"
+            },
+            {
+              "slug": "mirs",
+              "score": 0.45149,
+              "section": "eligibility",
+              "chunk_id": "mirs::eligibility::001"
+            },
+            {
+              "slug": "uea",
+              "score": 0.4507,
+              "section": "eligibility",
+              "chunk_id": "uea::eligibility::004"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "sm",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "sm::eligibility::001"
+            },
+            {
+              "slug": "kyp",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "kyp::eligibility::001"
+            },
+            {
+              "slug": "dls-punjab",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "dls-punjab::eligibility::004"
+            },
+            {
+              "slug": "cmagy",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "cmagy::eligibility::003"
+            },
+            {
+              "slug": "ssspy",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "ssspy::eligibility::001"
+            },
+            {
+              "slug": "assp",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "assp::eligibility::000"
+            },
+            {
+              "slug": "svby",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "svby::eligibility::000"
+            },
+            {
+              "slug": "cmossm",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "cmossm::eligibility::018"
+            },
+            {
+              "slug": "ses",
+              "score": 0.01515,
+              "section": "eligibility",
+              "chunk_id": "ses::eligibility::003"
+            },
+            {
+              "slug": "nfsmcss",
+              "score": 0.01515,
+              "section": "eligibility",
+              "chunk_id": "nfsmcss::eligibility::002"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      }
+    },
+    {
+      "id": "gold_067",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmmvy"
+      ],
+      "excluded_schemes": [],
+      "query": "I am pregnant with my first child, I have a job, and I am losing wages because of the pregnancy.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 32.75432,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "sfgcs",
+              "score": 23.92633,
+              "section": "eligibility",
+              "chunk_id": "sfgcs::eligibility::002"
+            },
+            {
+              "slug": "arogya-lakshmi",
+              "score": 23.66199,
+              "section": "eligibility",
+              "chunk_id": "arogya-lakshmi::eligibility::002"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 19.93747,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::004"
+            },
+            {
+              "slug": "bby",
+              "score": 19.54483,
+              "section": "eligibility",
+              "chunk_id": "bby::eligibility::002"
+            },
+            {
+              "slug": "vtvscsgit",
+              "score": 18.55896,
+              "section": "overview",
+              "chunk_id": "vtvscsgit::overview"
+            },
+            {
+              "slug": "mtp-pulws",
+              "score": 18.52078,
+              "section": "eligibility",
+              "chunk_id": "mtp-pulws::eligibility::008"
+            },
+            {
+              "slug": "ds-aandn",
+              "score": 17.50799,
+              "section": "eligibility",
+              "chunk_id": "ds-aandn::eligibility::006"
+            },
+            {
+              "slug": "gvmccgs",
+              "score": 17.25701,
+              "section": "eligibility",
+              "chunk_id": "gvmccgs::eligibility::000"
+            },
+            {
+              "slug": "assy",
+              "score": 17.0457,
+              "section": "eligibility",
+              "chunk_id": "assy::eligibility::011"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pmmvy",
+              "score": 0.59881,
+              "section": "eligibility",
+              "chunk_id": "pmmvy::eligibility::001"
+            },
+            {
+              "slug": "mbmbocwwb",
+              "score": 0.56007,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb::overview"
+            },
+            {
+              "slug": "mb-gbocwwb",
+              "score": 0.54995,
+              "section": "overview",
+              "chunk_id": "mb-gbocwwb::overview"
+            },
+            {
+              "slug": "famcw",
+              "score": 0.54926,
+              "section": "overview",
+              "chunk_id": "famcw::overview"
+            },
+            {
+              "slug": "masgbocwwb",
+              "score": 0.54477,
+              "section": "overview",
+              "chunk_id": "masgbocwwb::overview"
+            },
+            {
+              "slug": "mbs-pulws",
+              "score": 0.54311,
+              "section": "eligibility",
+              "chunk_id": "mbs-pulws::eligibility::003"
+            },
+            {
+              "slug": "mafcw",
+              "score": 0.53903,
+              "section": "overview",
+              "chunk_id": "mafcw::overview"
+            },
+            {
+              "slug": "skpsy",
+              "score": 0.53856,
+              "section": "overview",
+              "chunk_id": "skpsy::overview"
+            },
+            {
+              "slug": "mbcbocwwb",
+              "score": 0.53671,
+              "section": "overview",
+              "chunk_id": "mbcbocwwb::overview"
+            },
+            {
+              "slug": "masglwb",
+              "score": 0.53628,
+              "section": "overview",
+              "chunk_id": "masglwb::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "arogya-lakshmi",
+              "score": 0.02568,
+              "section": "eligibility",
+              "chunk_id": "arogya-lakshmi::eligibility::002"
+            },
+            {
+              "slug": "mamata",
+              "score": 0.02369,
+              "section": "overview",
+              "chunk_id": "mamata::overview"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.02233,
+              "section": "overview",
+              "chunk_id": "mbs-hbocwwb::overview"
+            },
+            {
+              "slug": "gfapscplw",
+              "score": 0.02155,
+              "section": "eligibility",
+              "chunk_id": "gfapscplw::eligibility::004"
+            },
+            {
+              "slug": "pmmvy",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "pmmvy::eligibility::001"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "mbmbocwwb",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb::overview"
+            },
+            {
+              "slug": "sfgcs",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "sfgcs::eligibility::002"
+            },
+            {
+              "slug": "mb-gbocwwb",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "mb-gbocwwb::overview"
+            },
+            {
+              "slug": "famcw",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "famcw::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.2,
+          "first_hit_rank": 5
+        }
+      }
+    },
+    {
+      "id": "gold_072",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "ssy"
+      ],
+      "excluded_schemes": [],
+      "query": "I just had a baby girl and want to start saving for her future.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "cmgcpsi",
+              "score": 17.15736,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::004"
+            },
+            {
+              "slug": "mmy",
+              "score": 15.308,
+              "section": "overview",
+              "chunk_id": "mmy::overview"
+            },
+            {
+              "slug": "mvp",
+              "score": 14.36513,
+              "section": "eligibility",
+              "chunk_id": "mvp::eligibility::001"
+            },
+            {
+              "slug": "sjpfsgc",
+              "score": 13.44923,
+              "section": "eligibility",
+              "chunk_id": "sjpfsgc::eligibility::000"
+            },
+            {
+              "slug": "cmgcpsii",
+              "score": 12.54856,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsii::eligibility::004"
+            },
+            {
+              "slug": "kps",
+              "score": 12.20096,
+              "section": "eligibility",
+              "chunk_id": "kps::eligibility::000"
+            },
+            {
+              "slug": "sasi",
+              "score": 11.90107,
+              "section": "eligibility",
+              "chunk_id": "sasi::eligibility::001"
+            },
+            {
+              "slug": "maapbandocwwb",
+              "score": 11.62035,
+              "section": "eligibility",
+              "chunk_id": "maapbandocwwb::eligibility::004"
+            },
+            {
+              "slug": "aewc-mesifai-vi",
+              "score": 11.35486,
+              "section": "eligibility",
+              "chunk_id": "aewc-mesifai-vi::eligibility::004"
+            },
+            {
+              "slug": "msssgc",
+              "score": 11.30868,
+              "section": "eligibility",
+              "chunk_id": "msssgc::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "lbs",
+              "score": 0.56017,
+              "section": "overview",
+              "chunk_id": "lbs::overview"
+            },
+            {
+              "slug": "mesy",
+              "score": 0.55402,
+              "section": "eligibility",
+              "chunk_id": "mesy::eligibility::008"
+            },
+            {
+              "slug": "ngy",
+              "score": 0.54864,
+              "section": "overview",
+              "chunk_id": "ngy::overview"
+            },
+            {
+              "slug": "mssc",
+              "score": 0.54537,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::012"
+            },
+            {
+              "slug": "dls",
+              "score": 0.54252,
+              "section": "overview",
+              "chunk_id": "dls::overview"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.53915,
+              "section": "overview",
+              "chunk_id": "ssy::overview"
+            },
+            {
+              "slug": "gfapphoogcws81s",
+              "score": 0.53788,
+              "section": "overview",
+              "chunk_id": "gfapphoogcws81s::overview"
+            },
+            {
+              "slug": "cmkuy",
+              "score": 0.53254,
+              "section": "overview",
+              "chunk_id": "cmkuy::overview"
+            },
+            {
+              "slug": "gifogc-fp",
+              "score": 0.53156,
+              "section": "overview",
+              "chunk_id": "gifogc-fp::overview"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 0.52911,
+              "section": "overview",
+              "chunk_id": "cmgcpsi::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.16666666666666666,
+          "first_hit_rank": 6
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "cmgcpsi",
+              "score": 0.0247,
+              "section": "overview",
+              "chunk_id": "cmgcpsi::overview"
+            },
+            {
+              "slug": "bys",
+              "score": 0.02456,
+              "section": "eligibility",
+              "chunk_id": "bys::eligibility::000"
+            },
+            {
+              "slug": "lly",
+              "score": 0.02379,
+              "section": "overview",
+              "chunk_id": "lly::overview"
+            },
+            {
+              "slug": "lbs",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "lbs::overview"
+            },
+            {
+              "slug": "mesy",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "mesy::eligibility::008"
+            },
+            {
+              "slug": "mmy",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "mmy::overview"
+            },
+            {
+              "slug": "ngy",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "ngy::overview"
+            },
+            {
+              "slug": "mvp",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "mvp::eligibility::001"
+            },
+            {
+              "slug": "mssc",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::012"
+            },
+            {
+              "slug": "sjpfsgc",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "sjpfsgc::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      }
+    },
+    {
+      "id": "gold_077",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmay-g"
+      ],
+      "excluded_schemes": [],
+      "query": "I live in a kutcha house in rural Madhya Pradesh with no shelter of my own, essentially living on alms.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "gssy",
+              "score": 28.58582,
+              "section": "eligibility",
+              "chunk_id": "gssy::eligibility::002"
+            },
+            {
+              "slug": "aos",
+              "score": 24.21953,
+              "section": "eligibility",
+              "chunk_id": "aos::eligibility::002"
+            },
+            {
+              "slug": "bpgy",
+              "score": 24.21953,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::002"
+            },
+            {
+              "slug": "pi",
+              "score": 17.77857,
+              "section": "eligibility",
+              "chunk_id": "pi::eligibility::001"
+            },
+            {
+              "slug": "dfhsscoebc",
+              "score": 17.31854,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::005"
+            },
+            {
+              "slug": "spay",
+              "score": 16.87098,
+              "section": "overview",
+              "chunk_id": "spay::overview"
+            },
+            {
+              "slug": "pmsm",
+              "score": 16.7184,
+              "section": "eligibility",
+              "chunk_id": "pmsm::eligibility::002"
+            },
+            {
+              "slug": "sssvamnapy",
+              "score": 16.4676,
+              "section": "overview",
+              "chunk_id": "sssvamnapy::overview"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 16.15522,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::000"
+            },
+            {
+              "slug": "rpsy",
+              "score": 15.22981,
+              "section": "overview",
+              "chunk_id": "rpsy::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.1111111111111111,
+          "first_hit_rank": 9
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "bpgy",
+              "score": 0.57596,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::002"
+            },
+            {
+              "slug": "clssmig",
+              "score": 0.56449,
+              "section": "eligibility",
+              "chunk_id": "clssmig::eligibility::000"
+            },
+            {
+              "slug": "gaoah",
+              "score": 0.55145,
+              "section": "overview",
+              "chunk_id": "gaoah::overview"
+            },
+            {
+              "slug": "cmhap",
+              "score": 0.54553,
+              "section": "eligibility",
+              "chunk_id": "cmhap::eligibility::005"
+            },
+            {
+              "slug": "nhs-west-bengal",
+              "score": 0.52955,
+              "section": "eligibility",
+              "chunk_id": "nhs-west-bengal::eligibility::002"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 0.52951,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::000"
+            },
+            {
+              "slug": "hiip",
+              "score": 0.52567,
+              "section": "overview",
+              "chunk_id": "hiip::overview"
+            },
+            {
+              "slug": "hs",
+              "score": 0.52073,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "gitanjali-housing",
+              "score": 0.51978,
+              "section": "overview",
+              "chunk_id": "gitanjali-housing::overview"
+            },
+            {
+              "slug": "pmsm",
+              "score": 0.51892,
+              "section": "overview",
+              "chunk_id": "pmsm::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.16666666666666666,
+          "first_hit_rank": 6
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "bpgy",
+              "score": 0.03227,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::002"
+            },
+            {
+              "slug": "aos",
+              "score": 0.02983,
+              "section": "eligibility",
+              "chunk_id": "aos::eligibility::002"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 0.02924,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::000"
+            },
+            {
+              "slug": "gssy",
+              "score": 0.02703,
+              "section": "eligibility",
+              "chunk_id": "gssy::eligibility::002"
+            },
+            {
+              "slug": "hs",
+              "score": 0.02661,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "pi",
+              "score": 0.02456,
+              "section": "eligibility",
+              "chunk_id": "pi::eligibility::004"
+            },
+            {
+              "slug": "maps",
+              "score": 0.02335,
+              "section": "overview",
+              "chunk_id": "maps::overview"
+            },
+            {
+              "slug": "mabay",
+              "score": 0.02322,
+              "section": "overview",
+              "chunk_id": "mabay::overview"
+            },
+            {
+              "slug": "aks",
+              "score": 0.01953,
+              "section": "eligibility",
+              "chunk_id": "aks::eligibility::001"
+            },
+            {
+              "slug": "clssmig",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "clssmig::eligibility::000"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.3333333333333333,
+          "first_hit_rank": 3
+        }
+      }
+    },
+    {
+      "id": "gold_082",
+      "language": "en",
+      "test_type": "clarify",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "I need a house, can you help me?",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "aos",
+              "score": 17.31523,
+              "section": "eligibility",
+              "chunk_id": "aos::eligibility::001"
+            },
+            {
+              "slug": "gcrsp-p2",
+              "score": 16.50906,
+              "section": "eligibility",
+              "chunk_id": "gcrsp-p2::eligibility::001"
+            },
+            {
+              "slug": "pomis",
+              "score": 13.37876,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            },
+            {
+              "slug": "mkdmaeasybeaskm",
+              "score": 12.73036,
+              "section": "eligibility",
+              "chunk_id": "mkdmaeasybeaskm::eligibility::001"
+            },
+            {
+              "slug": "isec",
+              "score": 12.633,
+              "section": "eligibility",
+              "chunk_id": "isec::eligibility::007"
+            },
+            {
+              "slug": "daay",
+              "score": 12.01981,
+              "section": "eligibility",
+              "chunk_id": "daay::eligibility::014"
+            },
+            {
+              "slug": "hksadmmyghkdms",
+              "score": 10.96138,
+              "section": "exclusions",
+              "chunk_id": "hksadmmyghkdms::exclusions::003"
+            },
+            {
+              "slug": "gssby",
+              "score": 10.09809,
+              "section": "eligibility",
+              "chunk_id": "gssby::eligibility::001"
+            },
+            {
+              "slug": "pfts",
+              "score": 9.56478,
+              "section": "eligibility",
+              "chunk_id": "pfts::eligibility::008"
+            },
+            {
+              "slug": "owjws",
+              "score": 9.40415,
+              "section": "eligibility",
+              "chunk_id": "owjws::eligibility::000"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "cmhap",
+              "score": 0.61088,
+              "section": "overview",
+              "chunk_id": "cmhap::overview"
+            },
+            {
+              "slug": "ghcsscp",
+              "score": 0.59459,
+              "section": "eligibility",
+              "chunk_id": "ghcsscp::eligibility::002"
+            },
+            {
+              "slug": "faimcescstc",
+              "score": 0.59289,
+              "section": "eligibility",
+              "chunk_id": "faimcescstc::eligibility::005"
+            },
+            {
+              "slug": "dfhsscoebc",
+              "score": 0.58604,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::004"
+            },
+            {
+              "slug": "hs",
+              "score": 0.57481,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "thrgrr-sw",
+              "score": 0.57474,
+              "section": "eligibility",
+              "chunk_id": "thrgrr-sw::eligibility::003"
+            },
+            {
+              "slug": "clssmig",
+              "score": 0.57027,
+              "section": "eligibility",
+              "chunk_id": "clssmig::eligibility::000"
+            },
+            {
+              "slug": "nhs-west-bengal",
+              "score": 0.56687,
+              "section": "eligibility",
+              "chunk_id": "nhs-west-bengal::eligibility::002"
+            },
+            {
+              "slug": "prerana",
+              "score": 0.56483,
+              "section": "eligibility",
+              "chunk_id": "prerana::eligibility::006"
+            },
+            {
+              "slug": "giatngorhcavpusd",
+              "score": 0.56403,
+              "section": "eligibility",
+              "chunk_id": "giatngorhcavpusd::eligibility::007"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "ghcsscp",
+              "score": 0.02614,
+              "section": "eligibility",
+              "chunk_id": "ghcsscp::eligibility::004"
+            },
+            {
+              "slug": "thrgrr-sw",
+              "score": 0.02414,
+              "section": "eligibility",
+              "chunk_id": "thrgrr-sw::eligibility::003"
+            },
+            {
+              "slug": "hs",
+              "score": 0.0228,
+              "section": "eligibility",
+              "chunk_id": "hs::eligibility::008"
+            },
+            {
+              "slug": "bpgy",
+              "score": 0.02233,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::004"
+            },
+            {
+              "slug": "dfhsscoebc",
+              "score": 0.02092,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::005"
+            },
+            {
+              "slug": "cmhap",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "cmhap::overview"
+            },
+            {
+              "slug": "aos",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "aos::eligibility::001"
+            },
+            {
+              "slug": "gcrsp-p2",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "gcrsp-p2::eligibility::001"
+            },
+            {
+              "slug": "faimcescstc",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "faimcescstc::eligibility::005"
+            },
+            {
+              "slug": "pomis",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_083",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "famc-hbocwwb"
+      ],
+      "excluded_schemes": [],
+      "query": "I am a construction worker in Haryana, registered with the welfare board for two years now. My daughter is getting married.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "darw-hbocwwb",
+              "score": 28.65718,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 28.14352,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 28.14352,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 27.43903,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 26.54431,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 26.0928,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 25.99419,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 25.70771,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 25.70771,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 25.70771,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.14285714285714285,
+          "first_hit_rank": 7
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "famtw",
+              "score": 0.67209,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.66855,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "mbmbocwwb-meghalaya",
+              "score": 0.64786,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb-meghalaya::overview"
+            },
+            {
+              "slug": "kvsy",
+              "score": 0.63008,
+              "section": "overview",
+              "chunk_id": "kvsy::overview"
+            },
+            {
+              "slug": "ma-pbaocwwb",
+              "score": 0.62513,
+              "section": "overview",
+              "chunk_id": "ma-pbaocwwb::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.62122,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mafcw",
+              "score": 0.61751,
+              "section": "overview",
+              "chunk_id": "mafcw::overview"
+            },
+            {
+              "slug": "kscbocwwb",
+              "score": 0.61496,
+              "section": "overview",
+              "chunk_id": "kscbocwwb::overview"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.61342,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.60739,
+              "section": "overview",
+              "chunk_id": "pbs-hbocwwb::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.5,
+          "first_hit_rank": 2
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.03105,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.03031,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.02991,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.02753,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.02724,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.02722,
+              "section": "overview",
+              "chunk_id": "pbs-hbocwwb::overview"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.0266,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "maabocwwb",
+              "score": 0.02313,
+              "section": "eligibility",
+              "chunk_id": "maabocwwb::eligibility::002"
+            },
+            {
+              "slug": "ma-pbaocwwb",
+              "score": 0.02207,
+              "section": "eligibility",
+              "chunk_id": "ma-pbaocwwb::eligibility::001"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        }
+      }
+    },
+    {
+      "id": "gold_084",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "famc-hbocwwb"
+      ],
+      "query": "I started working as a construction laborer in Haryana three months ago and just registered with the welfare board. My son is getting married next month.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 25.18847,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 23.40909,
+              "section": "overview",
+              "chunk_id": "dprw-hbocwwb::overview"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 23.02303,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "ypidnabftcw",
+              "score": 22.6799,
+              "section": "overview",
+              "chunk_id": "ypidnabftcw::overview"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 22.40097,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "wpcbocwwb",
+              "score": 22.3067,
+              "section": "overview",
+              "chunk_id": "wpcbocwwb::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 22.20362,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 21.88271,
+              "section": "overview",
+              "chunk_id": "gpt-hbocwwb::overview"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 21.86746,
+              "section": "overview",
+              "chunk_id": "mbs-hbocwwb::overview"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 21.80488,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "rank": 1,
+              "section": "overview"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.65287,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.63611,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbmbocwwb-meghalaya",
+              "score": 0.6335,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb-meghalaya::overview"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.63133,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.62615,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.6244,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "kvsy",
+              "score": 0.60814,
+              "section": "overview",
+              "chunk_id": "kvsy::overview"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.6036,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "maabocwwb",
+              "score": 0.60162,
+              "section": "eligibility",
+              "chunk_id": "maabocwwb::eligibility::002"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.59858,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "rank": 1,
+              "section": "eligibility"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.03252,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.03058,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.02947,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.02904,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.02848,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.0278,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 0.02758,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.02737,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.02712,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 0.0256,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "rank": 1,
+              "section": "overview"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_086",
+      "language": "en",
+      "test_type": "clarify",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "I do construction work in Haryana but I've never registered with any welfare board.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 25.65094,
+              "section": "overview",
+              "chunk_id": "mbs-hbocwwb::overview"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 23.62575,
+              "section": "overview",
+              "chunk_id": "pbs-hbocwwb::overview"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 23.02303,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 22.40097,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 22.40097,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 22.20362,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 21.80488,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 21.62207,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 21.30296,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 20.99314,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.60143,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "nspgy",
+              "score": 0.58954,
+              "section": "eligibility",
+              "chunk_id": "nspgy::eligibility::006"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.58864,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 0.58393,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.57805,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.57592,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 0.5751,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.57152,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.55862,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.55811,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.03154,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.03126,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 0.03125,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.03037,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.03008,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 0.02963,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.02927,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.0292,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.02857,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 0.02797,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_089",
+      "language": "en",
+      "test_type": "no_match",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "I heard about something called 'Universal Farmer Bonus Yojana', can I apply for it?",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "slesvkspy",
+              "score": 15.31745,
+              "section": "exclusions",
+              "chunk_id": "slesvkspy::exclusions::006"
+            },
+            {
+              "slug": "spytis-i",
+              "score": 15.21067,
+              "section": "eligibility",
+              "chunk_id": "spytis-i::eligibility::000"
+            },
+            {
+              "slug": "vtvscsgit",
+              "score": 14.20636,
+              "section": "overview",
+              "chunk_id": "vtvscsgit::overview"
+            },
+            {
+              "slug": "scsssetul",
+              "score": 14.08059,
+              "section": "eligibility",
+              "chunk_id": "scsssetul::eligibility::007"
+            },
+            {
+              "slug": "spk",
+              "score": 13.70912,
+              "section": "eligibility",
+              "chunk_id": "spk::eligibility::005"
+            },
+            {
+              "slug": "mabcstss",
+              "score": 13.58935,
+              "section": "overview",
+              "chunk_id": "mabcstss::overview"
+            },
+            {
+              "slug": "rgisfm",
+              "score": 13.05178,
+              "section": "eligibility",
+              "chunk_id": "rgisfm::eligibility::000"
+            },
+            {
+              "slug": "sfgcs",
+              "score": 12.87068,
+              "section": "eligibility",
+              "chunk_id": "sfgcs::eligibility::002"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 12.86196,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::002"
+            },
+            {
+              "slug": "dgy",
+              "score": 12.80009,
+              "section": "eligibility",
+              "chunk_id": "dgy::eligibility::001"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pm-kusum",
+              "score": 0.61997,
+              "section": "eligibility",
+              "chunk_id": "pm-kusum::eligibility::001"
+            },
+            {
+              "slug": "cmsguy",
+              "score": 0.6144,
+              "section": "eligibility",
+              "chunk_id": "cmsguy::eligibility::001"
+            },
+            {
+              "slug": "ssyc",
+              "score": 0.59439,
+              "section": "eligibility",
+              "chunk_id": "ssyc::eligibility::000"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.58769,
+              "section": "overview",
+              "chunk_id": "pmfby::overview"
+            },
+            {
+              "slug": "gny",
+              "score": 0.58641,
+              "section": "overview",
+              "chunk_id": "gny::overview"
+            },
+            {
+              "slug": "mkky",
+              "score": 0.58491,
+              "section": "eligibility",
+              "chunk_id": "mkky::eligibility::008"
+            },
+            {
+              "slug": "kpy",
+              "score": 0.58156,
+              "section": "overview",
+              "chunk_id": "kpy::overview"
+            },
+            {
+              "slug": "kdky",
+              "score": 0.5806,
+              "section": "eligibility",
+              "chunk_id": "kdky::eligibility::004"
+            },
+            {
+              "slug": "mksy",
+              "score": 0.57904,
+              "section": "eligibility",
+              "chunk_id": "mksy::eligibility::006"
+            },
+            {
+              "slug": "visvas",
+              "score": 0.57498,
+              "section": "eligibility",
+              "chunk_id": "visvas::eligibility::010"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "rgkny",
+              "score": 0.02132,
+              "section": "eligibility",
+              "chunk_id": "rgkny::eligibility::001"
+            },
+            {
+              "slug": "pm-kusum",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "pm-kusum::eligibility::001"
+            },
+            {
+              "slug": "slesvkspy",
+              "score": 0.01639,
+              "section": "exclusions",
+              "chunk_id": "slesvkspy::exclusions::006"
+            },
+            {
+              "slug": "cmsguy",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "cmsguy::eligibility::001"
+            },
+            {
+              "slug": "spytis-i",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "spytis-i::eligibility::000"
+            },
+            {
+              "slug": "vtvscsgit",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "vtvscsgit::overview"
+            },
+            {
+              "slug": "ssyc",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "ssyc::eligibility::000"
+            },
+            {
+              "slug": "scsssetul",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "scsssetul::eligibility::007"
+            },
+            {
+              "slug": "spk",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "spk::eligibility::005"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.01515,
+              "section": "overview",
+              "chunk_id": "pmfby::overview"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_093",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "ssy"
+      ],
+      "query": "I am 25, unmarried, and want to open a small savings scheme for myself.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 16.91487,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "nscs",
+              "score": 16.74474,
+              "section": "eligibility",
+              "chunk_id": "nscs::eligibility::005"
+            },
+            {
+              "slug": "pmsswwcpfp",
+              "score": 15.76523,
+              "section": "eligibility",
+              "chunk_id": "pmsswwcpfp::eligibility::012"
+            },
+            {
+              "slug": "msps",
+              "score": 14.6446,
+              "section": "eligibility",
+              "chunk_id": "msps::eligibility::001"
+            },
+            {
+              "slug": "mpps",
+              "score": 14.44332,
+              "section": "eligibility",
+              "chunk_id": "mpps::eligibility::003"
+            },
+            {
+              "slug": "cmkry",
+              "score": 13.80575,
+              "section": "eligibility",
+              "chunk_id": "cmkry::eligibility::005"
+            },
+            {
+              "slug": "cnkgs",
+              "score": 13.69637,
+              "section": "eligibility",
+              "chunk_id": "cnkgs::eligibility::001"
+            },
+            {
+              "slug": "thasp",
+              "score": 13.48346,
+              "section": "eligibility",
+              "chunk_id": "thasp::eligibility::001"
+            },
+            {
+              "slug": "bbhs",
+              "score": 13.28907,
+              "section": "eligibility",
+              "chunk_id": "bbhs::eligibility::002"
+            },
+            {
+              "slug": "rf",
+              "score": 13.09307,
+              "section": "eligibility",
+              "chunk_id": "rf::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "nscs",
+              "score": 0.56978,
+              "section": "overview",
+              "chunk_id": "nscs::overview"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.56928,
+              "section": "overview",
+              "chunk_id": "ssy::overview"
+            },
+            {
+              "slug": "25-ciss",
+              "score": 0.53106,
+              "section": "eligibility",
+              "chunk_id": "25-ciss::eligibility::000"
+            },
+            {
+              "slug": "prerana",
+              "score": 0.52797,
+              "section": "eligibility",
+              "chunk_id": "prerana::eligibility::006"
+            },
+            {
+              "slug": "pomis",
+              "score": 0.52758,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            },
+            {
+              "slug": "scss",
+              "score": 0.5194,
+              "section": "overview",
+              "chunk_id": "scss::overview"
+            },
+            {
+              "slug": "mupsese",
+              "score": 0.51895,
+              "section": "eligibility",
+              "chunk_id": "mupsese::eligibility::001"
+            },
+            {
+              "slug": "esdp",
+              "score": 0.51752,
+              "section": "eligibility",
+              "chunk_id": "esdp::eligibility::001"
+            },
+            {
+              "slug": "big",
+              "score": 0.51539,
+              "section": "eligibility",
+              "chunk_id": "big::eligibility::008"
+            },
+            {
+              "slug": "mupssee",
+              "score": 0.51538,
+              "section": "eligibility",
+              "chunk_id": "mupssee::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ssy",
+              "rank": 2,
+              "section": "overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "nscs",
+              "score": 0.02655,
+              "section": "eligibility",
+              "chunk_id": "nscs::eligibility::005"
+            },
+            {
+              "slug": "suwps",
+              "score": 0.02453,
+              "section": "overview",
+              "chunk_id": "suwps::overview"
+            },
+            {
+              "slug": "25-ciss",
+              "score": 0.02041,
+              "section": "overview",
+              "chunk_id": "25-ciss::overview"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "ssy::overview"
+            },
+            {
+              "slug": "pmsswwcpfp",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "pmsswwcpfp::eligibility::012"
+            },
+            {
+              "slug": "prerana",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "prerana::eligibility::006"
+            },
+            {
+              "slug": "msps",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "msps::eligibility::001"
+            },
+            {
+              "slug": "pomis",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            },
+            {
+              "slug": "mpps",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "mpps::eligibility::003"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ssy",
+              "rank": 5,
+              "section": "overview"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gold_095",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pm-kisan"
+      ],
+      "excluded_schemes": [],
+      "query": "I want a Vishwakarma loan, but I am the only earning member and I'm also the sole registered farmer in the family already getting PM-KISAN.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "pmv",
+              "score": 27.25667,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::006"
+            },
+            {
+              "slug": "maddapp-i",
+              "score": 23.53209,
+              "section": "eligibility",
+              "chunk_id": "maddapp-i::eligibility::009"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 22.98429,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "mkky",
+              "score": 22.16507,
+              "section": "eligibility",
+              "chunk_id": "mkky::eligibility::001"
+            },
+            {
+              "slug": "sse25rbusc",
+              "score": 21.82796,
+              "section": "eligibility",
+              "chunk_id": "sse25rbusc::eligibility::001"
+            },
+            {
+              "slug": "pmyasasvipmsobcebcdnts",
+              "score": 21.61102,
+              "section": "eligibility",
+              "chunk_id": "pmyasasvipmsobcebcdnts::eligibility::005"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 20.79625,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::000"
+            },
+            {
+              "slug": "pm-yasasvipmsobcebcdnts",
+              "score": 19.66555,
+              "section": "eligibility",
+              "chunk_id": "pm-yasasvipmsobcebcdnts::eligibility::021"
+            },
+            {
+              "slug": "csspostmsossi",
+              "score": 19.55101,
+              "section": "exclusions",
+              "chunk_id": "csspostmsossi::exclusions::017"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 19.39053,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::013"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pmv",
+              "score": 0.67311,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::006"
+            },
+            {
+              "slug": "nsklvrpbkpy",
+              "score": 0.61377,
+              "section": "eligibility",
+              "chunk_id": "nsklvrpbkpy::eligibility::004"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 0.59843,
+              "section": "overview",
+              "chunk_id": "pm-kisan::overview"
+            },
+            {
+              "slug": "yuvasree",
+              "score": 0.59489,
+              "section": "eligibility",
+              "chunk_id": "yuvasree::eligibility::005"
+            },
+            {
+              "slug": "faspalscf",
+              "score": 0.59418,
+              "section": "eligibility",
+              "chunk_id": "faspalscf::eligibility::005"
+            },
+            {
+              "slug": "cmkry",
+              "score": 0.58634,
+              "section": "eligibility",
+              "chunk_id": "cmkry::eligibility::001"
+            },
+            {
+              "slug": "ysrvm",
+              "score": 0.58278,
+              "section": "eligibility",
+              "chunk_id": "ysrvm::eligibility::016"
+            },
+            {
+              "slug": "nsskvy",
+              "score": 0.58223,
+              "section": "eligibility",
+              "chunk_id": "nsskvy::eligibility::001"
+            },
+            {
+              "slug": "cmcalss",
+              "score": 0.58078,
+              "section": "eligibility",
+              "chunk_id": "cmcalss::eligibility::002"
+            },
+            {
+              "slug": "nskvmyhvphvbkpy",
+              "score": 0.57811,
+              "section": "eligibility",
+              "chunk_id": "nskvmyhvphvbkpy::eligibility::005"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.3333333333333333,
+          "first_hit_rank": 3
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "pmv",
+              "score": 0.03279,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::006"
+            },
+            {
+              "slug": "mkky",
+              "score": 0.02686,
+              "section": "eligibility",
+              "chunk_id": "mkky::eligibility::001"
+            },
+            {
+              "slug": "nsklvrpbkpy",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "nsklvrpbkpy::eligibility::004"
+            },
+            {
+              "slug": "maddapp-i",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "maddapp-i::eligibility::009"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "sse25rbusc",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "sse25rbusc::eligibility::001"
+            },
+            {
+              "slug": "pmyasasvipmsobcebcdnts",
+              "score": 0.01515,
+              "section": "eligibility",
+              "chunk_id": "pmyasasvipmsobcebcdnts::eligibility::005"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 0.01471,
+              "section": "overview",
+              "chunk_id": "pm-kisan::overview"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 0.01471,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::000"
+            },
+            {
+              "slug": "yuvasree",
+              "score": 0.01449,
+              "section": "eligibility",
+              "chunk_id": "yuvasree::eligibility::005"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.125,
+          "first_hit_rank": 8
+        }
+      }
+    },
+    {
+      "id": "gold_099",
+      "language": "en",
+      "test_type": "clarify",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "I am a weaver in Odisha, this is our traditional family craft, and I'm 40 years old.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "cmgcpsi",
+              "score": 21.31319,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::002"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 18.57954,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "dsctar",
+              "score": 17.70935,
+              "section": "eligibility",
+              "chunk_id": "dsctar::eligibility::003"
+            },
+            {
+              "slug": "mtc",
+              "score": 17.5033,
+              "section": "eligibility",
+              "chunk_id": "mtc::eligibility::005"
+            },
+            {
+              "slug": "owjws",
+              "score": 16.80635,
+              "section": "eligibility",
+              "chunk_id": "owjws::eligibility::000"
+            },
+            {
+              "slug": "awvsssi",
+              "score": 16.42522,
+              "section": "overview",
+              "chunk_id": "awvsssi::overview"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 16.40369,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::004"
+            },
+            {
+              "slug": "ddanwrasi",
+              "score": 16.25732,
+              "section": "eligibility",
+              "chunk_id": "ddanwrasi::eligibility::001"
+            },
+            {
+              "slug": "cmcalss",
+              "score": 16.00607,
+              "section": "eligibility",
+              "chunk_id": "cmcalss::eligibility::010"
+            },
+            {
+              "slug": "usttad",
+              "score": 15.57641,
+              "section": "eligibility",
+              "chunk_id": "usttad::eligibility::007"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "bbsy",
+              "score": 0.62737,
+              "section": "overview",
+              "chunk_id": "bbsy::overview"
+            },
+            {
+              "slug": "naari",
+              "score": 0.57011,
+              "section": "eligibility",
+              "chunk_id": "naari::eligibility::000"
+            },
+            {
+              "slug": "mtc",
+              "score": 0.5532,
+              "section": "eligibility",
+              "chunk_id": "mtc::eligibility::004"
+            },
+            {
+              "slug": "mgbby-odisha",
+              "score": 0.5512,
+              "section": "eligibility",
+              "chunk_id": "mgbby-odisha::eligibility::000"
+            },
+            {
+              "slug": "aksmsy",
+              "score": 0.54501,
+              "section": "eligibility",
+              "chunk_id": "aksmsy::eligibility::001"
+            },
+            {
+              "slug": "mbjy",
+              "score": 0.53815,
+              "section": "overview",
+              "chunk_id": "mbjy::overview"
+            },
+            {
+              "slug": "rescaw",
+              "score": 0.53176,
+              "section": "eligibility",
+              "chunk_id": "rescaw::eligibility::000"
+            },
+            {
+              "slug": "mksyodisha",
+              "score": 0.52436,
+              "section": "overview",
+              "chunk_id": "mksyodisha::overview"
+            },
+            {
+              "slug": "atpm",
+              "score": 0.52259,
+              "section": "overview",
+              "chunk_id": "atpm::overview"
+            },
+            {
+              "slug": "hss",
+              "score": 0.51849,
+              "section": "eligibility",
+              "chunk_id": "hss::eligibility::001"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "mtc",
+              "score": 0.02869,
+              "section": "eligibility",
+              "chunk_id": "mtc::eligibility::004"
+            },
+            {
+              "slug": "mgtocpp",
+              "score": 0.0238,
+              "section": "eligibility",
+              "chunk_id": "mgtocpp::eligibility::002"
+            },
+            {
+              "slug": "doh",
+              "score": 0.02363,
+              "section": "overview",
+              "chunk_id": "doh::overview"
+            },
+            {
+              "slug": "ysrnn",
+              "score": 0.01908,
+              "section": "eligibility",
+              "chunk_id": "ysrnn::eligibility::005"
+            },
+            {
+              "slug": "bbsy",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "bbsy::overview"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::002"
+            },
+            {
+              "slug": "naari",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "naari::eligibility::000"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "dsctar",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "dsctar::eligibility::003"
+            },
+            {
+              "slug": "mgbby-odisha",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "mgbby-odisha::eligibility::000"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
