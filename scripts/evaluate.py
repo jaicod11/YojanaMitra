@@ -1,7 +1,8 @@
 """Evaluate scheme retrieval against the gold set.
 
-    python scripts/evaluate.py                        # dev split, all modes
-    python scripts/evaluate.py --split test --final   # once, at the end
+    python scripts/evaluate.py                                # dev, raw descriptions
+    python scripts/evaluate.py --query-source rewritten       # dev, understand() rewrites
+    python scripts/evaluate.py --split test --final           # once, at the end
 
 Reads data/gold/gold_set.jsonl, drops skip_scoring rows, keeps the requested
 split, and runs each row's description through backend/app/retrieval.search
@@ -19,13 +20,26 @@ in every mode (bm25, dense, hybrid), taking the top 10 schemes.
   schemes, and asking or declining is the job of a later stage. They are
   counted in the output.
 
+--query-source rewritten runs each description through
+backend/app/understand.py (cached in data/cache/understand.jsonl) and
+retrieves with its search_query_en; a row whose understanding is invalid
+falls back to the raw description, and the fallbacks are counted. It also
+scores profile extraction against expected_profile: per-field accuracy over
+rows whose gold value is non-null, and the false-fill rate over rows whose
+gold value is null (the model filled a field the gold leaves empty).
+State, gender and caste must match exactly; age exactly; income within 1%;
+land within 0.05 acre or 2%. Occupation and family are free text in the gold,
+so they match on word overlap (one word set contains the other, or Jaccard
+>= 0.5) and their accuracy is approximate.
+
 Every metric is also broken down by language. Results, including each row's
-top 10 with evidence, go to data/eval/<split>_<timestamp>.json.
+query and top 10 with evidence, go to data/eval/<split>_<timestamp>.json.
 
 Tuning may only look at dev; test is run once, at the end (data/gold/README.md).
 """
 import argparse
 import json
+import re
 import sys
 import time
 from collections import defaultdict
@@ -70,6 +84,51 @@ def summarize(rows, mode):
     }
 
 
+PROFILE_KEYS = ("occupation", "state", "age", "gender", "annual_income_inr", "land_acres", "caste_category", "family")
+FREE_TEXT_FIELDS = ("occupation", "family")
+_FILLER = {"a", "an", "the", "of", "and", "in", "to", "with", "for", "is", "has"}
+
+
+def _words(value):
+    return set(re.findall(r"[a-z0-9]+", str(value).lower())) - _FILLER
+
+
+def field_matches(key, pred, gold):
+    if key == "age":
+        return int(pred) == int(gold)
+    if key == "annual_income_inr":
+        return abs(pred - gold) <= 0.01 * gold
+    if key == "land_acres":
+        return abs(pred - gold) <= max(0.05, 0.02 * gold)
+    if key in FREE_TEXT_FIELDS:
+        a, b = _words(pred), _words(gold)
+        return bool(a and b) and (a <= b or b <= a or len(a & b) / len(a | b) >= 0.5)
+    return str(pred).casefold() == str(gold).casefold()
+
+
+def score_profiles(pairs):
+    """pairs: [(predicted_profile, gold_profile)] -> per-field and overall scores."""
+    per_field, totals = {}, {"correct": 0, "gold_non_null": 0, "filled": 0, "gold_null": 0}
+    for key in PROFILE_KEYS:
+        c = n = f = m = 0
+        for pred, gold in pairs:
+            if gold[key] is not None:
+                n += 1
+                c += pred[key] is not None and field_matches(key, pred[key], gold[key])
+            else:
+                m += 1
+                f += pred[key] is not None
+        per_field[key] = {"gold_non_null": n, "correct": c, "accuracy": round(c / n, 4) if n else None,
+                          "gold_null": m, "filled": f, "false_fill_rate": round(f / m, 4) if m else None,
+                          "approximate": key in FREE_TEXT_FIELDS}
+        for name, v in (("correct", c), ("gold_non_null", n), ("filled", f), ("gold_null", m)):
+            totals[name] += v
+    overall = {"accuracy": round(totals["correct"] / totals["gold_non_null"], 4) if totals["gold_non_null"] else None,
+               "false_fill_rate": round(totals["filled"] / totals["gold_null"], 4) if totals["gold_null"] else None,
+               **totals}
+    return {"fields": per_field, "overall": overall}
+
+
 def fmt(x):
     return "   —  " if x is None else f"{x:6.3f}"
 
@@ -78,6 +137,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--split", choices=["dev", "test"], default="dev")
     ap.add_argument("--final", action="store_true", help="required to run the test split")
+    ap.add_argument("--query-source", choices=["raw", "rewritten"], default="raw",
+                    help="retrieve with the raw description or understand()'s search_query_en")
     args = ap.parse_args()
     if args.split == "test" and not args.final:
         ap.error("the test split is run once, at the end (see data/gold/README.md); pass --final to run it")
@@ -92,16 +153,43 @@ def main():
     print(f"{args.split}: {len(rows)} rows {dict(counts)} "
           f"({sum(1 for r in gold if r.get('skip_scoring'))} skip_scoring rows excluded)")
 
+    queries = {r["id"]: r["description"] for r in rows}
+    understood, fallbacks, prompt_version = {}, [], None
+    if args.query_source == "rewritten":
+        from app.understand import PROMPT_VERSION, UnderstandError, understand
+        prompt_version = PROMPT_VERSION
+        for i, r in enumerate(rows, 1):
+            try:
+                u = understand(r["description"], r["language"])
+            except UnderstandError as e:
+                sys.exit(f"error: understand() failed on {r['id']}: {e}\n"
+                         f"{i - 1} rows are already cached; rerun to continue")
+            understood[r["id"]] = u
+            if u["status"] == "ok" and u["search_query_en"]:
+                queries[r["id"]] = u["search_query_en"]
+            else:
+                fallbacks.append(r["id"])
+            meta = u["_meta"]
+            print(f"  understand {i:2d}/{len(rows)} {r['id']} [{r['language']}] {u['status']:7s} "
+                  f"{'cached' if meta['cached'] else meta['provider'] + ', ' + str(len(meta['attempts'])) + ' call(s)'}")
+        if fallbacks:
+            print(f"  {len(fallbacks)} rows fell back to the raw description: {fallbacks}")
+
     retriever = default_retriever()
     latency = defaultdict(list)
     results = []
     for r in rows:
         entry = {"id": r["id"], "language": r["language"], "test_type": r["test_type"],
                  "expected_schemes": r["expected_schemes"], "excluded_schemes": r.get("excluded_schemes", []),
-                 "modes": {}}
+                 "query": queries[r["id"]], "modes": {}}
+        if r["id"] in understood:
+            u = understood[r["id"]]
+            entry["understand"] = {k: u[k] for k in ("status", "search_query_en", "clarifying_question", "profile",
+                                                     "confidence", "evidence", "errors")}
+            entry["understand"]["provider"] = u["_meta"]["provider"]
         for mode in EVAL_MODES:
             t0 = time.time()
-            hits = retriever.search(r["description"], k=TOP_K, mode=mode)
+            hits = retriever.search(queries[r["id"]], k=TOP_K, mode=mode)
             latency[mode].append(time.time() - t0)
             slugs = [h["slug"] for h in hits]
             m = {"top10": [{"slug": h["slug"], "score": round(h["score"], 5), "section": h["evidence"]["section"],
@@ -147,9 +235,33 @@ def main():
                   if r["test_type"] == "positive" and not r["modes"][mode]["first_hit_rank"]]
         print(f"  {mode:7s} {', '.join(missed) or '(none)'}")
 
+    profile_scores = None
+    if understood:
+        gold_by_id = {r["id"]: r for r in rows}
+        pairs = [(understood[i]["profile"], gold_by_id[i]["expected_profile"]) for i in understood]
+        profile_scores = score_profiles(pairs)
+        profile_scores["by_language"] = {
+            lang: score_profiles([(understood[i]["profile"], gold_by_id[i]["expected_profile"])
+                                  for i in understood if gold_by_id[i]["language"] == lang])["overall"]
+            for lang in languages}
+        print(f"\nprofile extraction ({len(pairs)} rows; occupation and family matched by word overlap, approximate)")
+        print(f"  {'field':18s} {'accuracy':>9s} {'(n gold non-null)':>18s} {'false-fill':>11s} {'(n gold null)':>14s}")
+        for key, f in profile_scores["fields"].items():
+            print(f"  {key + (' ~' if f['approximate'] else ''):18s} {fmt(f['accuracy']):>9s} {f['gold_non_null']:>18d} "
+                  f"{fmt(f['false_fill_rate']):>11s} {f['gold_null']:>14d}")
+        o = profile_scores["overall"]
+        print(f"  {'all fields':18s} {fmt(o['accuracy']):>9s} {o['gold_non_null']:>18d} "
+              f"{fmt(o['false_fill_rate']):>11s} {o['gold_null']:>14d}")
+        for lang, o in profile_scores["by_language"].items():
+            print(f"  {lang:18s} {fmt(o['accuracy']):>9s} {o['gold_non_null']:>18d} "
+                  f"{fmt(o['false_fill_rate']):>11s} {o['gold_null']:>14d}")
+
     manifest = retriever.manifest
     out = {
         "split": args.split,
+        "query_source": args.query_source,
+        "understand_prompt_version": prompt_version,
+        "rewrite_fallbacks": fallbacks,
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
         "gold_sha256": file_sha256(GOLD_PATH),
         "index": {"chunks_sha256": manifest["chunks_sha256"], "chunk_count": manifest["chunk_count"],
@@ -157,6 +269,7 @@ def main():
         "retrieval": {"top_k": TOP_K, "candidates_per_list": CANDIDATES, "rrf_k": RRF_K},
         "counts": {"rows": len(rows), **counts, "not_scored": counts["clarify"] + counts["no_match"]},
         "metrics": metrics,
+        "profile_extraction": profile_scores,
         "rows": results,
     }
     EVAL_DIR.mkdir(parents=True, exist_ok=True)

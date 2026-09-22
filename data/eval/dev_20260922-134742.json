@@ -1,0 +1,5108 @@
+{
+  "split": "dev",
+  "query_source": "rewritten",
+  "understand_prompt_version": "understand-v1",
+  "rewrite_fallbacks": [
+    "gold_039"
+  ],
+  "timestamp": "2026-09-22T13:47:42+05:30",
+  "gold_sha256": "9ebc22f014abd84b7020eb70204b3a38b8acaf70e9b84fa162f2ac8cfff22790",
+  "index": {
+    "chunks_sha256": "04b4c023a172825758c6963427189736917d0ae3b4ef16a231fdafb13ab46a53",
+    "chunk_count": 15825,
+    "dense": {
+      "model": "BAAI/bge-m3",
+      "dims": 1024,
+      "max_seq_length": 1024,
+      "dtype": "float16",
+      "normalized": true,
+      "faiss_index": "IndexFlatIP",
+      "device": "mps"
+    },
+    "build_date": "2026-09-22T07:10:43+00:00"
+  },
+  "retrieval": {
+    "top_k": 10,
+    "candidates_per_list": 50,
+    "rrf_k": 60
+  },
+  "counts": {
+    "rows": 20,
+    "exclusion": 6,
+    "positive": 10,
+    "clarify": 3,
+    "no_match": 1,
+    "not_scored": 4
+  },
+  "metrics": {
+    "bm25": {
+      "positive": {
+        "n": 10,
+        "recall@5": 0.3,
+        "recall@10": 0.4,
+        "mrr@10": 0.26
+      },
+      "exclusion": {
+        "n": 6,
+        "false_inclusion_rate": 0.5,
+        "inclusions_via_exclusions_chunk": 1
+      },
+      "by_language": {
+        "en": {
+          "positive": {
+            "n": 8,
+            "recall@5": 0.375,
+            "recall@10": 0.5,
+            "mrr@10": 0.325
+          },
+          "exclusion": {
+            "n": 6,
+            "false_inclusion_rate": 0.5,
+            "inclusions_via_exclusions_chunk": 1
+          }
+        },
+        "hi": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "te": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        }
+      },
+      "median_latency_s": 0.053
+    },
+    "dense": {
+      "positive": {
+        "n": 10,
+        "recall@5": 0.4,
+        "recall@10": 0.4,
+        "mrr@10": 0.27
+      },
+      "exclusion": {
+        "n": 6,
+        "false_inclusion_rate": 0.6667,
+        "inclusions_via_exclusions_chunk": 0
+      },
+      "by_language": {
+        "en": {
+          "positive": {
+            "n": 8,
+            "recall@5": 0.375,
+            "recall@10": 0.375,
+            "mrr@10": 0.3125
+          },
+          "exclusion": {
+            "n": 6,
+            "false_inclusion_rate": 0.6667,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "hi": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "te": {
+          "positive": {
+            "n": 1,
+            "recall@5": 1.0,
+            "recall@10": 1.0,
+            "mrr@10": 0.2
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        }
+      },
+      "median_latency_s": 0.091
+    },
+    "hybrid": {
+      "positive": {
+        "n": 10,
+        "recall@5": 0.3,
+        "recall@10": 0.6,
+        "mrr@10": 0.2867
+      },
+      "exclusion": {
+        "n": 6,
+        "false_inclusion_rate": 1.0,
+        "inclusions_via_exclusions_chunk": 1
+      },
+      "by_language": {
+        "en": {
+          "positive": {
+            "n": 8,
+            "recall@5": 0.375,
+            "recall@10": 0.5,
+            "mrr@10": 0.325
+          },
+          "exclusion": {
+            "n": 6,
+            "false_inclusion_rate": 1.0,
+            "inclusions_via_exclusions_chunk": 1
+          }
+        },
+        "hi": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 1.0,
+            "mrr@10": 0.1667
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        },
+        "te": {
+          "positive": {
+            "n": 1,
+            "recall@5": 0.0,
+            "recall@10": 1.0,
+            "mrr@10": 0.1
+          },
+          "exclusion": {
+            "n": 0,
+            "false_inclusion_rate": null,
+            "inclusions_via_exclusions_chunk": 0
+          }
+        }
+      },
+      "median_latency_s": 0.099
+    }
+  },
+  "profile_extraction": {
+    "fields": {
+      "occupation": {
+        "gold_non_null": 12,
+        "correct": 10,
+        "accuracy": 0.8333,
+        "gold_null": 8,
+        "filled": 2,
+        "false_fill_rate": 0.25,
+        "approximate": true
+      },
+      "state": {
+        "gold_non_null": 11,
+        "correct": 10,
+        "accuracy": 0.9091,
+        "gold_null": 9,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "age": {
+        "gold_non_null": 6,
+        "correct": 5,
+        "accuracy": 0.8333,
+        "gold_null": 14,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "gender": {
+        "gold_non_null": 2,
+        "correct": 1,
+        "accuracy": 0.5,
+        "gold_null": 18,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "annual_income_inr": {
+        "gold_non_null": 0,
+        "correct": 0,
+        "accuracy": null,
+        "gold_null": 20,
+        "filled": 2,
+        "false_fill_rate": 0.1,
+        "approximate": false
+      },
+      "land_acres": {
+        "gold_non_null": 2,
+        "correct": 2,
+        "accuracy": 1.0,
+        "gold_null": 18,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "caste_category": {
+        "gold_non_null": 0,
+        "correct": 0,
+        "accuracy": null,
+        "gold_null": 20,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": false
+      },
+      "family": {
+        "gold_non_null": 16,
+        "correct": 2,
+        "accuracy": 0.125,
+        "gold_null": 4,
+        "filled": 0,
+        "false_fill_rate": 0.0,
+        "approximate": true
+      }
+    },
+    "overall": {
+      "accuracy": 0.6122,
+      "false_fill_rate": 0.036,
+      "correct": 30,
+      "gold_non_null": 49,
+      "filled": 4,
+      "gold_null": 111
+    },
+    "by_language": {
+      "en": {
+        "accuracy": 0.5952,
+        "false_fill_rate": 0.0392,
+        "correct": 25,
+        "gold_non_null": 42,
+        "filled": 4,
+        "gold_null": 102
+      },
+      "hi": {
+        "accuracy": 0.6667,
+        "false_fill_rate": 0.0,
+        "correct": 2,
+        "gold_non_null": 3,
+        "filled": 0,
+        "gold_null": 5
+      },
+      "te": {
+        "accuracy": 0.75,
+        "false_fill_rate": 0.0,
+        "correct": 3,
+        "gold_non_null": 4,
+        "filled": 0,
+        "gold_null": 4
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "gold_003",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "pm-kisan"
+      ],
+      "query": "A farmer in Punjab who owns 10 acres of farmland and files income tax returns is looking for government welfare schemes.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 27.98111,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::002"
+            },
+            {
+              "slug": "sgiavowwst",
+              "score": 20.54701,
+              "section": "eligibility",
+              "chunk_id": "sgiavowwst::eligibility::007"
+            },
+            {
+              "slug": "wdwps",
+              "score": 17.53037,
+              "section": "overview",
+              "chunk_id": "wdwps::overview"
+            },
+            {
+              "slug": "ysrrb",
+              "score": 17.03747,
+              "section": "exclusions",
+              "chunk_id": "ysrrb::exclusions::042"
+            },
+            {
+              "slug": "ysrvm",
+              "score": 16.35616,
+              "section": "eligibility",
+              "chunk_id": "ysrvm::eligibility::012"
+            },
+            {
+              "slug": "jt",
+              "score": 15.99098,
+              "section": "eligibility",
+              "chunk_id": "jt::eligibility::003"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 15.75661,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::007"
+            },
+            {
+              "slug": "ysrc",
+              "score": 15.41787,
+              "section": "eligibility",
+              "chunk_id": "ysrc::eligibility::002"
+            },
+            {
+              "slug": "ysrebcn",
+              "score": 15.30823,
+              "section": "eligibility",
+              "chunk_id": "ysrebcn::eligibility::002"
+            },
+            {
+              "slug": "ysrkn",
+              "score": 15.20015,
+              "section": "eligibility",
+              "chunk_id": "ysrkn::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "ftis",
+              "score": 0.62089,
+              "section": "overview",
+              "chunk_id": "ftis::overview"
+            },
+            {
+              "slug": "rcs",
+              "score": 0.61443,
+              "section": "eligibility",
+              "chunk_id": "rcs::eligibility::001"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 0.61103,
+              "section": "overview",
+              "chunk_id": "pm-kisan::overview"
+            },
+            {
+              "slug": "sfs",
+              "score": 0.60977,
+              "section": "overview",
+              "chunk_id": "sfs::overview"
+            },
+            {
+              "slug": "pcds",
+              "score": 0.60867,
+              "section": "eligibility",
+              "chunk_id": "pcds::eligibility::001"
+            },
+            {
+              "slug": "pps",
+              "score": 0.60289,
+              "section": "eligibility",
+              "chunk_id": "pps::eligibility::001"
+            },
+            {
+              "slug": "pfts",
+              "score": 0.60081,
+              "section": "overview",
+              "chunk_id": "pfts::overview"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.59902,
+              "section": "eligibility",
+              "chunk_id": "pmfby::eligibility::000"
+            },
+            {
+              "slug": "afag",
+              "score": 0.59879,
+              "section": "eligibility",
+              "chunk_id": "afag::eligibility::002"
+            },
+            {
+              "slug": "fds",
+              "score": 0.5961,
+              "section": "eligibility",
+              "chunk_id": "fds::eligibility::001"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pm-kisan",
+              "rank": 3,
+              "section": "overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "dysrhis",
+              "score": 0.02639,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::002"
+            },
+            {
+              "slug": "pfts",
+              "score": 0.02591,
+              "section": "overview",
+              "chunk_id": "pfts::overview"
+            },
+            {
+              "slug": "ftis",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "ftis::overview"
+            },
+            {
+              "slug": "rcs",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "rcs::eligibility::001"
+            },
+            {
+              "slug": "sgiavowwst",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "sgiavowwst::eligibility::007"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "pm-kisan::overview"
+            },
+            {
+              "slug": "wdwps",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "wdwps::overview"
+            },
+            {
+              "slug": "sfs",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "sfs::overview"
+            },
+            {
+              "slug": "ysrrb",
+              "score": 0.01562,
+              "section": "exclusions",
+              "chunk_id": "ysrrb::exclusions::042"
+            },
+            {
+              "slug": "pcds",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "pcds::eligibility::001"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pm-kisan",
+              "rank": 6,
+              "section": "overview"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A farmer in Punjab who owns 10 acres of farmland and files income tax returns is looking for government welfare schemes.",
+        "clarifying_question": "Could you please tell me your age and your approximate annual family income?",
+        "profile": {
+          "occupation": "farmer",
+          "state": "Punjab",
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": 10,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "medium",
+          "state": "high",
+          "land_acres": "high"
+        },
+        "evidence": {
+          "occupation": "I own 10 acres of farmland",
+          "state": "Punjab",
+          "land_acres": "10 acres of farmland"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_007",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "rythu-bima"
+      ],
+      "excluded_schemes": [],
+      "query": "A 45-year-old farmer in Telangana is looking for life insurance.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "farmer-insurance",
+              "score": 20.45786,
+              "section": "overview",
+              "chunk_id": "farmer-insurance::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 18.07405,
+              "section": "eligibility",
+              "chunk_id": "rythu-bima::eligibility::010"
+            },
+            {
+              "slug": "pmjjby",
+              "score": 14.31231,
+              "section": "overview",
+              "chunk_id": "pmjjby::overview"
+            },
+            {
+              "slug": "cpis",
+              "score": 13.04078,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::007"
+            },
+            {
+              "slug": "imspeksyrcr",
+              "score": 11.75643,
+              "section": "eligibility",
+              "chunk_id": "imspeksyrcr::eligibility::001"
+            },
+            {
+              "slug": "jjais",
+              "score": 11.67815,
+              "section": "eligibility",
+              "chunk_id": "jjais::eligibility::000"
+            },
+            {
+              "slug": "ksis",
+              "score": 11.61348,
+              "section": "eligibility",
+              "chunk_id": "ksis::eligibility::008"
+            },
+            {
+              "slug": "nais",
+              "score": 11.05338,
+              "section": "eligibility",
+              "chunk_id": "nais::eligibility::001"
+            },
+            {
+              "slug": "aaby",
+              "score": 10.86125,
+              "section": "eligibility",
+              "chunk_id": "aaby::eligibility::004"
+            },
+            {
+              "slug": "kcr-nutrition-kit",
+              "score": 10.85486,
+              "section": "eligibility",
+              "chunk_id": "kcr-nutrition-kit::eligibility::010"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.5,
+          "first_hit_rank": 2
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "farmer-insurance",
+              "score": 0.71794,
+              "section": "overview",
+              "chunk_id": "farmer-insurance::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 0.60435,
+              "section": "overview",
+              "chunk_id": "rythu-bima::overview"
+            },
+            {
+              "slug": "oapsucmupt",
+              "score": 0.57609,
+              "section": "eligibility",
+              "chunk_id": "oapsucmupt::eligibility::001"
+            },
+            {
+              "slug": "slesvkspy",
+              "score": 0.57582,
+              "section": "eligibility",
+              "chunk_id": "slesvkspy::eligibility::001"
+            },
+            {
+              "slug": "cpis",
+              "score": 0.55494,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::007"
+            },
+            {
+              "slug": "haritha-haram",
+              "score": 0.55353,
+              "section": "overview",
+              "chunk_id": "haritha-haram::overview"
+            },
+            {
+              "slug": "jjais",
+              "score": 0.5524,
+              "section": "eligibility",
+              "chunk_id": "jjais::eligibility::000"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.54907,
+              "section": "eligibility",
+              "chunk_id": "pmfby::eligibility::000"
+            },
+            {
+              "slug": "nais",
+              "score": 0.54665,
+              "section": "eligibility",
+              "chunk_id": "nais::eligibility::001"
+            },
+            {
+              "slug": "pps",
+              "score": 0.54597,
+              "section": "eligibility",
+              "chunk_id": "pps::eligibility::000"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.5,
+          "first_hit_rank": 2
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "farmer-insurance",
+              "score": 0.03279,
+              "section": "overview",
+              "chunk_id": "farmer-insurance::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 0.0315,
+              "section": "overview",
+              "chunk_id": "rythu-bima::overview"
+            },
+            {
+              "slug": "cpis",
+              "score": 0.02879,
+              "section": "eligibility",
+              "chunk_id": "cpis::eligibility::007"
+            },
+            {
+              "slug": "oapsucmupt",
+              "score": 0.02788,
+              "section": "eligibility",
+              "chunk_id": "oapsucmupt::eligibility::001"
+            },
+            {
+              "slug": "jjais",
+              "score": 0.02778,
+              "section": "eligibility",
+              "chunk_id": "jjais::eligibility::000"
+            },
+            {
+              "slug": "nais",
+              "score": 0.02599,
+              "section": "eligibility",
+              "chunk_id": "nais::eligibility::001"
+            },
+            {
+              "slug": "pmjjby",
+              "score": 0.02523,
+              "section": "overview",
+              "chunk_id": "pmjjby::overview"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.02263,
+              "section": "eligibility",
+              "chunk_id": "pmfby::eligibility::002"
+            },
+            {
+              "slug": "slesvkspy",
+              "score": 0.01515,
+              "section": "eligibility",
+              "chunk_id": "slesvkspy::eligibility::001"
+            },
+            {
+              "slug": "haritha-haram",
+              "score": 0.01429,
+              "section": "overview",
+              "chunk_id": "haritha-haram::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.5,
+          "first_hit_rank": 2
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A 45-year-old farmer in Telangana is looking for life insurance.",
+        "clarifying_question": "Could you please tell me your annual family income and if you hold a BPL (Below Poverty Line) card?",
+        "profile": {
+          "occupation": "farmer",
+          "state": "Telangana",
+          "age": 45,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high",
+          "age": "high"
+        },
+        "evidence": {
+          "occupation": "I am a farmer",
+          "state": "Telangana",
+          "age": "45 years old"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_014",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "pm-kisan"
+      ],
+      "query": "A retired government schoolteacher in Karnataka with a monthly pension of Rs 12,000 and ownership of 4 acres of farmland is looking for applicable government welfare schemes.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "mkky",
+              "score": 23.18591,
+              "section": "eligibility",
+              "chunk_id": "mkky::eligibility::005"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 22.98912,
+              "section": "exclusions",
+              "chunk_id": "pm-kisan::exclusions::003"
+            },
+            {
+              "slug": "gwpss",
+              "score": 22.456,
+              "section": "overview",
+              "chunk_id": "gwpss::overview"
+            },
+            {
+              "slug": "namo-shetkari-mahasanman-nidhi-yojana",
+              "score": 21.56092,
+              "section": "exclusions",
+              "chunk_id": "namo-shetkari-mahasanman-nidhi-yojana::exclusions::005"
+            },
+            {
+              "slug": "ysrrb",
+              "score": 21.28003,
+              "section": "exclusions",
+              "chunk_id": "ysrrb::exclusions::037"
+            },
+            {
+              "slug": "uwps",
+              "score": 19.84616,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "pscp",
+              "score": 19.74698,
+              "section": "overview",
+              "chunk_id": "pscp::overview"
+            },
+            {
+              "slug": "slg",
+              "score": 19.27701,
+              "section": "overview",
+              "chunk_id": "slg::overview"
+            },
+            {
+              "slug": "airavata",
+              "score": 18.94238,
+              "section": "eligibility",
+              "chunk_id": "airavata::eligibility::005"
+            },
+            {
+              "slug": "tps",
+              "score": 18.64179,
+              "section": "overview",
+              "chunk_id": "tps::overview"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pm-kisan",
+              "rank": 2,
+              "section": "exclusions"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "oapsucmupt",
+              "score": 0.63069,
+              "section": "overview",
+              "chunk_id": "oapsucmupt::overview"
+            },
+            {
+              "slug": "ignvpyr",
+              "score": 0.62757,
+              "section": "overview",
+              "chunk_id": "ignvpyr::overview"
+            },
+            {
+              "slug": "vps",
+              "score": 0.62394,
+              "section": "overview",
+              "chunk_id": "vps::overview"
+            },
+            {
+              "slug": "gwpss",
+              "score": 0.61528,
+              "section": "overview",
+              "chunk_id": "gwpss::overview"
+            },
+            {
+              "slug": "ignwpstn",
+              "score": 0.6138,
+              "section": "overview",
+              "chunk_id": "ignwpstn::overview"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 0.61263,
+              "section": "overview",
+              "chunk_id": "ignoaps-sikkim::overview"
+            },
+            {
+              "slug": "igndpstn",
+              "score": 0.61137,
+              "section": "overview",
+              "chunk_id": "igndpstn::overview"
+            },
+            {
+              "slug": "cmenspy",
+              "score": 0.60916,
+              "section": "overview",
+              "chunk_id": "cmenspy::overview"
+            },
+            {
+              "slug": "dwps",
+              "score": 0.60657,
+              "section": "overview",
+              "chunk_id": "dwps::overview"
+            },
+            {
+              "slug": "dpswdwp",
+              "score": 0.60613,
+              "section": "overview",
+              "chunk_id": "dpswdwp::overview"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "gwpss",
+              "score": 0.0315,
+              "section": "overview",
+              "chunk_id": "gwpss::overview"
+            },
+            {
+              "slug": "namo-shetkari-mahasanman-nidhi-yojana",
+              "score": 0.02515,
+              "section": "exclusions",
+              "chunk_id": "namo-shetkari-mahasanman-nidhi-yojana::exclusions::005"
+            },
+            {
+              "slug": "uwps",
+              "score": 0.02477,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "ignsap",
+              "score": 0.02261,
+              "section": "overview",
+              "chunk_id": "ignsap::overview"
+            },
+            {
+              "slug": "wdwps",
+              "score": 0.02042,
+              "section": "overview",
+              "chunk_id": "wdwps::overview"
+            },
+            {
+              "slug": "jjoaps",
+              "score": 0.01993,
+              "section": "overview",
+              "chunk_id": "jjoaps::overview"
+            },
+            {
+              "slug": "oapsucmupt",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "oapsucmupt::overview"
+            },
+            {
+              "slug": "mkky",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "mkky::eligibility::005"
+            },
+            {
+              "slug": "ignvpyr",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "ignvpyr::overview"
+            },
+            {
+              "slug": "pm-kisan",
+              "score": 0.01613,
+              "section": "exclusions",
+              "chunk_id": "pm-kisan::exclusions::003"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pm-kisan",
+              "rank": 10,
+              "section": "exclusions"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A retired government schoolteacher in Karnataka with a monthly pension of Rs 12,000 and ownership of 4 acres of farmland is looking for applicable government welfare schemes.",
+        "clarifying_question": "Could you please tell me your age and if you belong to any specific caste category like SC, ST, or OBC?",
+        "profile": {
+          "occupation": "retired government schoolteacher",
+          "state": "Karnataka",
+          "age": null,
+          "gender": null,
+          "annual_income_inr": 144000,
+          "land_acres": 4,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high",
+          "annual_income_inr": "high",
+          "land_acres": "high"
+        },
+        "evidence": {
+          "occupation": "retired as a government schoolteacher",
+          "state": "Karnataka",
+          "annual_income_inr": "pension of 12,000 rupees a month",
+          "land_acres": "4 acres of ancestral farmland"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_039",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "ignwps"
+      ],
+      "query": "I am a 38-year-old widow in Karnataka, BPL family.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "ignwps-sikkim",
+              "score": 16.01512,
+              "section": "eligibility",
+              "chunk_id": "ignwps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "ignwpsmp",
+              "score": 15.77157,
+              "section": "eligibility",
+              "chunk_id": "ignwpsmp::eligibility::001"
+            },
+            {
+              "slug": "iscwr",
+              "score": 15.65916,
+              "section": "eligibility",
+              "chunk_id": "iscwr::eligibility::000"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 15.46403,
+              "section": "eligibility",
+              "chunk_id": "ignoaps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "oap",
+              "score": 15.23239,
+              "section": "eligibility",
+              "chunk_id": "oap::eligibility::002"
+            },
+            {
+              "slug": "uwps",
+              "score": 14.27758,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "dysrhis",
+              "score": 14.17478,
+              "section": "eligibility",
+              "chunk_id": "dysrhis::eligibility::006"
+            },
+            {
+              "slug": "oapwb",
+              "score": 13.30577,
+              "section": "exclusions",
+              "chunk_id": "oapwb::exclusions::011"
+            },
+            {
+              "slug": "ddanwrasi",
+              "score": 12.3859,
+              "section": "eligibility",
+              "chunk_id": "ddanwrasi::eligibility::000"
+            },
+            {
+              "slug": "fapnw",
+              "score": 12.22942,
+              "section": "eligibility",
+              "chunk_id": "fapnw::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "ignwpsmp",
+              "score": 0.59939,
+              "section": "eligibility",
+              "chunk_id": "ignwpsmp::eligibility::001"
+            },
+            {
+              "slug": "ignwps-sikkim",
+              "score": 0.59661,
+              "section": "eligibility",
+              "chunk_id": "ignwps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "sspmphmrp",
+              "score": 0.59249,
+              "section": "overview",
+              "chunk_id": "sspmphmrp::overview"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 0.57794,
+              "section": "eligibility",
+              "chunk_id": "ignoaps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "lbsspy",
+              "score": 0.57169,
+              "section": "eligibility",
+              "chunk_id": "lbsspy::eligibility::000"
+            },
+            {
+              "slug": "iscwr",
+              "score": 0.56615,
+              "section": "eligibility",
+              "chunk_id": "iscwr::eligibility::000"
+            },
+            {
+              "slug": "ignwps",
+              "score": 0.56345,
+              "section": "overview",
+              "chunk_id": "ignwps::overview"
+            },
+            {
+              "slug": "uwps",
+              "score": 0.56199,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "ignvpyrr",
+              "score": 0.56179,
+              "section": "eligibility",
+              "chunk_id": "ignvpyrr::eligibility::001"
+            },
+            {
+              "slug": "fapnw",
+              "score": 0.55942,
+              "section": "eligibility",
+              "chunk_id": "fapnw::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ignwps",
+              "rank": 7,
+              "section": "overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "ignwpsmp",
+              "score": 0.03252,
+              "section": "eligibility",
+              "chunk_id": "ignwpsmp::eligibility::001"
+            },
+            {
+              "slug": "ignwps-sikkim",
+              "score": 0.03252,
+              "section": "eligibility",
+              "chunk_id": "ignwps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "ignoaps-sikkim",
+              "score": 0.03125,
+              "section": "eligibility",
+              "chunk_id": "ignoaps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "iscwr",
+              "score": 0.03102,
+              "section": "eligibility",
+              "chunk_id": "iscwr::eligibility::000"
+            },
+            {
+              "slug": "uwps",
+              "score": 0.02963,
+              "section": "overview",
+              "chunk_id": "uwps::overview"
+            },
+            {
+              "slug": "ignwps",
+              "score": 0.02862,
+              "section": "overview",
+              "chunk_id": "ignwps::overview"
+            },
+            {
+              "slug": "fapnw",
+              "score": 0.02837,
+              "section": "eligibility",
+              "chunk_id": "fapnw::eligibility::002"
+            },
+            {
+              "slug": "oap",
+              "score": 0.02477,
+              "section": "eligibility",
+              "chunk_id": "oap::eligibility::004"
+            },
+            {
+              "slug": "ignvpyrr",
+              "score": 0.0247,
+              "section": "eligibility",
+              "chunk_id": "ignvpyrr::eligibility::001"
+            },
+            {
+              "slug": "suwps",
+              "score": 0.02442,
+              "section": "eligibility",
+              "chunk_id": "suwps::eligibility::002"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ignwps",
+              "rank": 6,
+              "section": "overview"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "invalid",
+        "search_query_en": null,
+        "clarifying_question": null,
+        "profile": {
+          "occupation": null,
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {},
+        "evidence": {},
+        "errors": [
+          "evidence for family must be words copied exactly from the person's text; got 'widow, BPL family'"
+        ],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_053",
+      "language": "hi",
+      "test_type": "positive",
+      "expected_schemes": [
+        "igndps"
+      ],
+      "excluded_schemes": [],
+      "query": "A 50-year-old person living in Bihar with 82% disability and a below poverty line status is looking for government welfare schemes.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "lbsspy",
+              "score": 33.89476,
+              "section": "overview",
+              "chunk_id": "lbsspy::overview"
+            },
+            {
+              "slug": "nsap-ignoaps",
+              "score": 28.35392,
+              "section": "eligibility",
+              "chunk_id": "nsap-ignoaps::eligibility::001"
+            },
+            {
+              "slug": "sss-gujarat",
+              "score": 25.76761,
+              "section": "eligibility",
+              "chunk_id": "sss-gujarat::eligibility::004"
+            },
+            {
+              "slug": "oap",
+              "score": 25.58801,
+              "section": "eligibility",
+              "chunk_id": "oap::eligibility::003"
+            },
+            {
+              "slug": "gfampmblpl",
+              "score": 24.56227,
+              "section": "overview",
+              "chunk_id": "gfampmblpl::overview"
+            },
+            {
+              "slug": "pssppy",
+              "score": 23.45922,
+              "section": "eligibility",
+              "chunk_id": "pssppy::eligibility::002"
+            },
+            {
+              "slug": "nfbs",
+              "score": 23.45922,
+              "section": "eligibility",
+              "chunk_id": "nfbs::eligibility::001"
+            },
+            {
+              "slug": "ignvpyr",
+              "score": 23.3544,
+              "section": "eligibility",
+              "chunk_id": "ignvpyr::eligibility::002"
+            },
+            {
+              "slug": "ignvpy",
+              "score": 23.3544,
+              "section": "eligibility",
+              "chunk_id": "ignvpy::eligibility::002"
+            },
+            {
+              "slug": "smile",
+              "score": 23.13558,
+              "section": "eligibility",
+              "chunk_id": "smile::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "ms",
+              "score": 0.66643,
+              "section": "eligibility",
+              "chunk_id": "ms::eligibility::000"
+            },
+            {
+              "slug": "oapwb",
+              "score": 0.6614,
+              "section": "overview",
+              "chunk_id": "oapwb::overview"
+            },
+            {
+              "slug": "da-60ada",
+              "score": 0.65886,
+              "section": "overview",
+              "chunk_id": "da-60ada::overview"
+            },
+            {
+              "slug": "dpps",
+              "score": 0.6536,
+              "section": "eligibility",
+              "chunk_id": "dpps::eligibility::001"
+            },
+            {
+              "slug": "dpwb",
+              "score": 0.6509,
+              "section": "overview",
+              "chunk_id": "dpwb::overview"
+            },
+            {
+              "slug": "fafpwsn",
+              "score": 0.64496,
+              "section": "overview",
+              "chunk_id": "fafpwsn::overview"
+            },
+            {
+              "slug": "disabled-pension",
+              "score": 0.64351,
+              "section": "overview",
+              "chunk_id": "disabled-pension::overview"
+            },
+            {
+              "slug": "gfadap",
+              "score": 0.64308,
+              "section": "overview",
+              "chunk_id": "gfadap::overview"
+            },
+            {
+              "slug": "sapwdpfaa",
+              "score": 0.64278,
+              "section": "overview",
+              "chunk_id": "sapwdpfaa::overview"
+            },
+            {
+              "slug": "uatdp",
+              "score": 0.63904,
+              "section": "overview",
+              "chunk_id": "uatdp::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "lbsspy",
+              "score": 0.02955,
+              "section": "overview",
+              "chunk_id": "lbsspy::overview"
+            },
+            {
+              "slug": "sss-gujarat",
+              "score": 0.02597,
+              "section": "eligibility",
+              "chunk_id": "sss-gujarat::eligibility::004"
+            },
+            {
+              "slug": "nsap-ignoaps",
+              "score": 0.02522,
+              "section": "eligibility",
+              "chunk_id": "nsap-ignoaps::eligibility::001"
+            },
+            {
+              "slug": "cmdps-sikkim",
+              "score": 0.02519,
+              "section": "eligibility",
+              "chunk_id": "cmdps-sikkim::eligibility::002"
+            },
+            {
+              "slug": "ignsap",
+              "score": 0.02354,
+              "section": "overview",
+              "chunk_id": "ignsap::overview"
+            },
+            {
+              "slug": "igndps",
+              "score": 0.0235,
+              "section": "eligibility",
+              "chunk_id": "igndps::eligibility::006"
+            },
+            {
+              "slug": "igndpstn",
+              "score": 0.0224,
+              "section": "overview",
+              "chunk_id": "igndpstn::overview"
+            },
+            {
+              "slug": "igndps-sikkim",
+              "score": 0.02209,
+              "section": "eligibility",
+              "chunk_id": "igndps-sikkim::eligibility::001"
+            },
+            {
+              "slug": "rgssspf-2012",
+              "score": 0.02051,
+              "section": "eligibility",
+              "chunk_id": "rgssspf-2012::eligibility::000"
+            },
+            {
+              "slug": "ms",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "ms::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.16666666666666666,
+          "first_hit_rank": 6
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A 50-year-old person living in Bihar with 82% disability and a below poverty line status is looking for government welfare schemes.",
+        "clarifying_question": null,
+        "profile": {
+          "occupation": null,
+          "state": "Bihar",
+          "age": 50,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "bpl_82_percent_disability"
+        },
+        "confidence": {
+          "state": "high",
+          "age": "high",
+          "family": "high"
+        },
+        "evidence": {
+          "state": "बिहार",
+          "age": "50 साल",
+          "family": "82% विकलांगता है। मेरा परिवार गरीबी रेखा से नीचे है।"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_056",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "pmv"
+      ],
+      "query": "A blacksmith who previously took a Mudra loan for a workshop is looking for information on government welfare schemes.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "nhdpccwms",
+              "score": 18.27199,
+              "section": "eligibility",
+              "chunk_id": "nhdpccwms::eligibility::003"
+            },
+            {
+              "slug": "pmay-u",
+              "score": 15.7549,
+              "section": "eligibility",
+              "chunk_id": "pmay-u::eligibility::007"
+            },
+            {
+              "slug": "pmv",
+              "score": 14.33419,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::005"
+            },
+            {
+              "slug": "pmegp",
+              "score": 13.43787,
+              "section": "eligibility",
+              "chunk_id": "pmegp::eligibility::006"
+            },
+            {
+              "slug": "scdf",
+              "score": 12.38501,
+              "section": "eligibility",
+              "chunk_id": "scdf::eligibility::003"
+            },
+            {
+              "slug": "sda2013",
+              "score": 11.9477,
+              "section": "exclusions",
+              "chunk_id": "sda2013::exclusions::015"
+            },
+            {
+              "slug": "cbssc-amy",
+              "score": 11.78296,
+              "section": "eligibility",
+              "chunk_id": "cbssc-amy::eligibility::015"
+            },
+            {
+              "slug": "mnssby",
+              "score": 11.69052,
+              "section": "eligibility",
+              "chunk_id": "mnssby::eligibility::000"
+            },
+            {
+              "slug": "s-esdp",
+              "score": 11.66452,
+              "section": "eligibility",
+              "chunk_id": "s-esdp::eligibility::004"
+            },
+            {
+              "slug": "dalit-bandhu",
+              "score": 11.64197,
+              "section": "exclusions",
+              "chunk_id": "dalit-bandhu::exclusions::024"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pmv",
+              "rank": 3,
+              "section": "eligibility"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "lpt-gbocwwb",
+              "score": 0.58941,
+              "section": "overview",
+              "chunk_id": "lpt-gbocwwb::overview"
+            },
+            {
+              "slug": "sapwdpfaa",
+              "score": 0.58827,
+              "section": "overview",
+              "chunk_id": "sapwdpfaa::overview"
+            },
+            {
+              "slug": "nhdpccwms",
+              "score": 0.58811,
+              "section": "eligibility",
+              "chunk_id": "nhdpccwms::eligibility::000"
+            },
+            {
+              "slug": "ltmbocwwb",
+              "score": 0.58159,
+              "section": "overview",
+              "chunk_id": "ltmbocwwb::overview"
+            },
+            {
+              "slug": "ltas",
+              "score": 0.57792,
+              "section": "overview",
+              "chunk_id": "ltas::overview"
+            },
+            {
+              "slug": "fasetdp",
+              "score": 0.57434,
+              "section": "overview",
+              "chunk_id": "fasetdp::overview"
+            },
+            {
+              "slug": "mupsese",
+              "score": 0.57288,
+              "section": "overview",
+              "chunk_id": "mupsese::overview"
+            },
+            {
+              "slug": "aems",
+              "score": 0.57184,
+              "section": "overview",
+              "chunk_id": "aems::overview"
+            },
+            {
+              "slug": "sds-pbaocwwb",
+              "score": 0.57107,
+              "section": "overview",
+              "chunk_id": "sds-pbaocwwb::overview"
+            },
+            {
+              "slug": "fadse",
+              "score": 0.57061,
+              "section": "overview",
+              "chunk_id": "fadse::overview"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "nhdpccwms",
+              "score": 0.03132,
+              "section": "eligibility",
+              "chunk_id": "nhdpccwms::eligibility::003"
+            },
+            {
+              "slug": "lpt-gbocwwb",
+              "score": 0.03009,
+              "section": "overview",
+              "chunk_id": "lpt-gbocwwb::overview"
+            },
+            {
+              "slug": "sapwdpfaa",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "sapwdpfaa::overview"
+            },
+            {
+              "slug": "pmay-u",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "pmay-u::eligibility::007"
+            },
+            {
+              "slug": "pmv",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::005"
+            },
+            {
+              "slug": "ltmbocwwb",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "ltmbocwwb::overview"
+            },
+            {
+              "slug": "pmegp",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "pmegp::eligibility::006"
+            },
+            {
+              "slug": "ltas",
+              "score": 0.01538,
+              "section": "overview",
+              "chunk_id": "ltas::overview"
+            },
+            {
+              "slug": "scdf",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "scdf::eligibility::003"
+            },
+            {
+              "slug": "sda2013",
+              "score": 0.01515,
+              "section": "exclusions",
+              "chunk_id": "sda2013::exclusions::015"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "pmv",
+              "rank": 5,
+              "section": "eligibility"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A blacksmith who previously took a Mudra loan for a workshop is looking for information on government welfare schemes.",
+        "clarifying_question": "Could you please tell me which state you live in and what your approximate annual family income is?",
+        "profile": {
+          "occupation": "blacksmith",
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "high"
+        },
+        "evidence": {
+          "occupation": "I am a blacksmith"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_062",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmmy"
+      ],
+      "excluded_schemes": [],
+      "query": "A person with tailoring experience needs a loan of 3 lakh rupees to start a tailoring business.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "otci-citabtct",
+              "score": 20.29572,
+              "section": "eligibility",
+              "chunk_id": "otci-citabtct::eligibility::004"
+            },
+            {
+              "slug": "sanfsosms",
+              "score": 18.42481,
+              "section": "eligibility",
+              "chunk_id": "sanfsosms::eligibility::002"
+            },
+            {
+              "slug": "ttscandbc",
+              "score": 17.58424,
+              "section": "eligibility",
+              "chunk_id": "ttscandbc::eligibility::000"
+            },
+            {
+              "slug": "nbcfdc-gls",
+              "score": 16.62102,
+              "section": "overview",
+              "chunk_id": "nbcfdc-gls::overview"
+            },
+            {
+              "slug": "ttr",
+              "score": 16.05686,
+              "section": "overview",
+              "chunk_id": "ttr::overview"
+            },
+            {
+              "slug": "stls",
+              "score": 14.91708,
+              "section": "overview",
+              "chunk_id": "stls::overview"
+            },
+            {
+              "slug": "cbssc-tl",
+              "score": 14.57521,
+              "section": "overview",
+              "chunk_id": "cbssc-tl::overview"
+            },
+            {
+              "slug": "sei",
+              "score": 13.94748,
+              "section": "overview",
+              "chunk_id": "sei::overview"
+            },
+            {
+              "slug": "rgsfsae",
+              "score": 13.57646,
+              "section": "overview",
+              "chunk_id": "rgsfsae::overview"
+            },
+            {
+              "slug": "dpgsslalgsc",
+              "score": 13.39361,
+              "section": "overview",
+              "chunk_id": "dpgsslalgsc::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "bns",
+              "score": 0.62966,
+              "section": "eligibility",
+              "chunk_id": "bns::eligibility::005"
+            },
+            {
+              "slug": "sanfsosms",
+              "score": 0.62444,
+              "section": "eligibility",
+              "chunk_id": "sanfsosms::eligibility::002"
+            },
+            {
+              "slug": "mupssee",
+              "score": 0.61103,
+              "section": "overview",
+              "chunk_id": "mupssee::overview"
+            },
+            {
+              "slug": "gmmacl-ds",
+              "score": 0.60985,
+              "section": "eligibility",
+              "chunk_id": "gmmacl-ds::eligibility::004"
+            },
+            {
+              "slug": "dls-punjab",
+              "score": 0.60839,
+              "section": "eligibility",
+              "chunk_id": "dls-punjab::eligibility::004"
+            },
+            {
+              "slug": "ttscandbc",
+              "score": 0.60678,
+              "section": "eligibility",
+              "chunk_id": "ttscandbc::eligibility::003"
+            },
+            {
+              "slug": "dlbe",
+              "score": 0.60436,
+              "section": "overview",
+              "chunk_id": "dlbe::overview"
+            },
+            {
+              "slug": "uyegp",
+              "score": 0.60136,
+              "section": "eligibility",
+              "chunk_id": "uyegp::eligibility::007"
+            },
+            {
+              "slug": "sl",
+              "score": 0.6004,
+              "section": "eligibility",
+              "chunk_id": "sl::eligibility::001"
+            },
+            {
+              "slug": "vetls",
+              "score": 0.59826,
+              "section": "overview",
+              "chunk_id": "vetls::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "sanfsosms",
+              "score": 0.03226,
+              "section": "eligibility",
+              "chunk_id": "sanfsosms::eligibility::002"
+            },
+            {
+              "slug": "ttscandbc",
+              "score": 0.02885,
+              "section": "eligibility",
+              "chunk_id": "ttscandbc::eligibility::003"
+            },
+            {
+              "slug": "bns",
+              "score": 0.0267,
+              "section": "eligibility",
+              "chunk_id": "bns::eligibility::005"
+            },
+            {
+              "slug": "sei",
+              "score": 0.02516,
+              "section": "overview",
+              "chunk_id": "sei::overview"
+            },
+            {
+              "slug": "dls-punjab",
+              "score": 0.02491,
+              "section": "eligibility",
+              "chunk_id": "dls-punjab::eligibility::004"
+            },
+            {
+              "slug": "vt-pudu",
+              "score": 0.02439,
+              "section": "overview",
+              "chunk_id": "vt-pudu::overview"
+            },
+            {
+              "slug": "sl",
+              "score": 0.02411,
+              "section": "eligibility",
+              "chunk_id": "sl::eligibility::001"
+            },
+            {
+              "slug": "nbcfdc-gls",
+              "score": 0.02349,
+              "section": "eligibility",
+              "chunk_id": "nbcfdc-gls::eligibility::001"
+            },
+            {
+              "slug": "dpgsslalgsc",
+              "score": 0.02295,
+              "section": "overview",
+              "chunk_id": "dpgsslalgsc::overview"
+            },
+            {
+              "slug": "slswe",
+              "score": 0.02014,
+              "section": "eligibility",
+              "chunk_id": "slswe::eligibility::004"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A person with tailoring experience needs a loan of 3 lakh rupees to start a tailoring business.",
+        "clarifying_question": "Could you please tell me which state you live in and your approximate annual family income?",
+        "profile": {
+          "occupation": "tailor",
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "medium"
+        },
+        "evidence": {
+          "occupation": "tailoring experience"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_064",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmjdy"
+      ],
+      "excluded_schemes": [],
+      "query": "An adult without a bank account wants to open a bank account for themselves and their 11-year-old child.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "msps",
+              "score": 29.78885,
+              "section": "eligibility",
+              "chunk_id": "msps::eligibility::001"
+            },
+            {
+              "slug": "mpps",
+              "score": 29.46575,
+              "section": "eligibility",
+              "chunk_id": "mpps::eligibility::003"
+            },
+            {
+              "slug": "ngy",
+              "score": 29.28603,
+              "section": "overview",
+              "chunk_id": "ngy::overview"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 28.19068,
+              "section": "eligibility",
+              "chunk_id": "rythu-bima::eligibility::037"
+            },
+            {
+              "slug": "hsjps",
+              "score": 28.178,
+              "section": "eligibility",
+              "chunk_id": "hsjps::eligibility::009"
+            },
+            {
+              "slug": "ngin",
+              "score": 26.83654,
+              "section": "eligibility",
+              "chunk_id": "ngin::eligibility::010"
+            },
+            {
+              "slug": "pmfby",
+              "score": 25.94665,
+              "section": "eligibility",
+              "chunk_id": "pmfby::eligibility::004"
+            },
+            {
+              "slug": "naari",
+              "score": 25.50339,
+              "section": "exclusions",
+              "chunk_id": "naari::exclusions::006"
+            },
+            {
+              "slug": "kalia",
+              "score": 24.96582,
+              "section": "eligibility",
+              "chunk_id": "kalia::eligibility::006"
+            },
+            {
+              "slug": "cmmfi",
+              "score": 24.42756,
+              "section": "eligibility",
+              "chunk_id": "cmmfi::eligibility::005"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pomis",
+              "score": 0.58318,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::005"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.57817,
+              "section": "eligibility",
+              "chunk_id": "ssy::eligibility::000"
+            },
+            {
+              "slug": "mnssy",
+              "score": 0.57502,
+              "section": "eligibility",
+              "chunk_id": "mnssy::eligibility::005"
+            },
+            {
+              "slug": "mssc",
+              "score": 0.55979,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::012"
+            },
+            {
+              "slug": "mupssee",
+              "score": 0.5562,
+              "section": "eligibility",
+              "chunk_id": "mupssee::eligibility::000"
+            },
+            {
+              "slug": "sbsky",
+              "score": 0.54145,
+              "section": "eligibility",
+              "chunk_id": "sbsky::eligibility::004"
+            },
+            {
+              "slug": "mvpy",
+              "score": 0.5375,
+              "section": "eligibility",
+              "chunk_id": "mvpy::eligibility::007"
+            },
+            {
+              "slug": "mupsese",
+              "score": 0.53704,
+              "section": "eligibility",
+              "chunk_id": "mupsese::eligibility::001"
+            },
+            {
+              "slug": "famapbandocwwb",
+              "score": 0.53685,
+              "section": "eligibility",
+              "chunk_id": "famapbandocwwb::eligibility::004"
+            },
+            {
+              "slug": "fsdcwdw",
+              "score": 0.53587,
+              "section": "eligibility",
+              "chunk_id": "fsdcwdw::eligibility::002"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "ngy",
+              "score": 0.02976,
+              "section": "overview",
+              "chunk_id": "ngy::overview"
+            },
+            {
+              "slug": "kalia",
+              "score": 0.02819,
+              "section": "eligibility",
+              "chunk_id": "kalia::eligibility::006"
+            },
+            {
+              "slug": "mvpy",
+              "score": 0.02804,
+              "section": "eligibility",
+              "chunk_id": "mvpy::eligibility::007"
+            },
+            {
+              "slug": "pomis",
+              "score": 0.02655,
+              "section": "eligibility",
+              "chunk_id": "pomis::eligibility::003"
+            },
+            {
+              "slug": "mvky",
+              "score": 0.02415,
+              "section": "eligibility",
+              "chunk_id": "mvky::eligibility::004"
+            },
+            {
+              "slug": "aasra",
+              "score": 0.02399,
+              "section": "eligibility",
+              "chunk_id": "aasra::eligibility::001"
+            },
+            {
+              "slug": "tsnucy",
+              "score": 0.02309,
+              "section": "eligibility",
+              "chunk_id": "tsnucy::eligibility::005"
+            },
+            {
+              "slug": "gny",
+              "score": 0.02244,
+              "section": "eligibility",
+              "chunk_id": "gny::eligibility::003"
+            },
+            {
+              "slug": "dalit-bandhu",
+              "score": 0.02232,
+              "section": "eligibility",
+              "chunk_id": "dalit-bandhu::eligibility::007"
+            },
+            {
+              "slug": "safaew-bcew",
+              "score": 0.02167,
+              "section": "eligibility",
+              "chunk_id": "safaew-bcew::eligibility::012"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "An adult without a bank account wants to open a bank account for themselves and their 11-year-old child.",
+        "clarifying_question": "Which state or union territory do you live in?",
+        "profile": {
+          "occupation": null,
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "one_child_age_11"
+        },
+        "confidence": {
+          "family": "high"
+        },
+        "evidence": {
+          "family": "my 11-year-old"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_065",
+      "language": "te",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmv"
+      ],
+      "excluded_schemes": [],
+      "query": "A 33-year-old goldsmith in Andhra Pradesh is looking for government welfare schemes or loan assistance for his profession.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "dpgsslampgdsc",
+              "score": 16.15963,
+              "section": "overview",
+              "chunk_id": "dpgsslampgdsc::overview"
+            },
+            {
+              "slug": "oapsapbandocwwb",
+              "score": 16.08742,
+              "section": "overview",
+              "chunk_id": "oapsapbandocwwb::overview"
+            },
+            {
+              "slug": "ysrrb",
+              "score": 15.82502,
+              "section": "eligibility",
+              "chunk_id": "ysrrb::eligibility::027"
+            },
+            {
+              "slug": "upoaps",
+              "score": 15.75966,
+              "section": "exclusions",
+              "chunk_id": "upoaps::exclusions::002"
+            },
+            {
+              "slug": "rtftsccw",
+              "score": 14.68728,
+              "section": "eligibility",
+              "chunk_id": "rtftsccw::eligibility::004"
+            },
+            {
+              "slug": "jt",
+              "score": 14.61633,
+              "section": "eligibility",
+              "chunk_id": "jt::eligibility::000"
+            },
+            {
+              "slug": "dpgsslamgsc",
+              "score": 14.5449,
+              "section": "overview",
+              "chunk_id": "dpgsslamgsc::overview"
+            },
+            {
+              "slug": "hliss-glwb",
+              "score": 14.54278,
+              "section": "eligibility",
+              "chunk_id": "hliss-glwb::eligibility::001"
+            },
+            {
+              "slug": "ysrc",
+              "score": 14.13521,
+              "section": "eligibility",
+              "chunk_id": "ysrc::eligibility::000"
+            },
+            {
+              "slug": "ysrln",
+              "score": 14.13521,
+              "section": "eligibility",
+              "chunk_id": "ysrln::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "ags",
+              "score": 0.58965,
+              "section": "overview",
+              "chunk_id": "ags::overview"
+            },
+            {
+              "slug": "ddanwrasii",
+              "score": 0.57396,
+              "section": "overview",
+              "chunk_id": "ddanwrasii::overview"
+            },
+            {
+              "slug": "ddanwrasi",
+              "score": 0.57271,
+              "section": "overview",
+              "chunk_id": "ddanwrasi::overview"
+            },
+            {
+              "slug": "jc",
+              "score": 0.56944,
+              "section": "overview",
+              "chunk_id": "jc::overview"
+            },
+            {
+              "slug": "pmv",
+              "score": 0.56437,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::000"
+            },
+            {
+              "slug": "mranmas1",
+              "score": 0.56415,
+              "section": "overview",
+              "chunk_id": "mranmas1::overview"
+            },
+            {
+              "slug": "fadse",
+              "score": 0.56069,
+              "section": "overview",
+              "chunk_id": "fadse::overview"
+            },
+            {
+              "slug": "evrmnmasfdopwsii",
+              "score": 0.55689,
+              "section": "overview",
+              "chunk_id": "evrmnmasfdopwsii::overview"
+            },
+            {
+              "slug": "sapwdpfaa",
+              "score": 0.55459,
+              "section": "overview",
+              "chunk_id": "sapwdpfaa::overview"
+            },
+            {
+              "slug": "aillam",
+              "score": 0.55438,
+              "section": "overview",
+              "chunk_id": "aillam::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 0.2,
+          "first_hit_rank": 5
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "swlhps",
+              "score": 0.01952,
+              "section": "overview",
+              "chunk_id": "swlhps::overview"
+            },
+            {
+              "slug": "ags",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "ags::overview"
+            },
+            {
+              "slug": "dpgsslampgdsc",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "dpgsslampgdsc::overview"
+            },
+            {
+              "slug": "ddanwrasii",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "ddanwrasii::overview"
+            },
+            {
+              "slug": "oapsapbandocwwb",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "oapsapbandocwwb::overview"
+            },
+            {
+              "slug": "ddanwrasi",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "ddanwrasi::overview"
+            },
+            {
+              "slug": "ysrrb",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "ysrrb::eligibility::027"
+            },
+            {
+              "slug": "jc",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "jc::overview"
+            },
+            {
+              "slug": "upoaps",
+              "score": 0.01562,
+              "section": "exclusions",
+              "chunk_id": "upoaps::exclusions::002"
+            },
+            {
+              "slug": "pmv",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.1,
+          "first_hit_rank": 10
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A 33-year-old goldsmith in Andhra Pradesh is looking for government welfare schemes or loan assistance for his profession.",
+        "clarifying_question": "మీ వార్షిక కుటుంబ ఆదాయం ఎంత మరియు మీకు ఏదైనా కుల ధృవీకరణ పత్రం (SC/ST/OBC) ఉందా?",
+        "profile": {
+          "occupation": "goldsmith",
+          "state": "Andhra Pradesh",
+          "age": 33,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high",
+          "age": "high"
+        },
+        "evidence": {
+          "occupation": "స్వర్ణకారుడిని (బంగారు నగలు తయారుచేస్తాను)",
+          "state": "ఆంధ్రప్రదేశ్‌లో",
+          "age": "33 ఏళ్ల"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_067",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmmvy"
+      ],
+      "excluded_schemes": [],
+      "query": "A pregnant woman who is currently employed and experiencing wage loss due to her pregnancy is looking for government welfare support.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "pmmvy",
+              "score": 48.91195,
+              "section": "eligibility",
+              "chunk_id": "pmmvy::eligibility::001"
+            },
+            {
+              "slug": "arogya-lakshmi",
+              "score": 30.24738,
+              "section": "eligibility",
+              "chunk_id": "arogya-lakshmi::eligibility::002"
+            },
+            {
+              "slug": "bpsy",
+              "score": 21.14505,
+              "section": "overview",
+              "chunk_id": "bpsy::overview"
+            },
+            {
+              "slug": "kcr-nutrition-kit",
+              "score": 19.13788,
+              "section": "eligibility",
+              "chunk_id": "kcr-nutrition-kit::eligibility::001"
+            },
+            {
+              "slug": "masglwb",
+              "score": 19.10006,
+              "section": "eligibility",
+              "chunk_id": "masglwb::eligibility::004"
+            },
+            {
+              "slug": "mtp-pulws",
+              "score": 18.52078,
+              "section": "eligibility",
+              "chunk_id": "mtp-pulws::eligibility::008"
+            },
+            {
+              "slug": "mamata",
+              "score": 18.38599,
+              "section": "overview",
+              "chunk_id": "mamata::overview"
+            },
+            {
+              "slug": "mtamsy",
+              "score": 18.28935,
+              "section": "eligibility",
+              "chunk_id": "mtamsy::eligibility::001"
+            },
+            {
+              "slug": "nssfp",
+              "score": 17.37105,
+              "section": "eligibility",
+              "chunk_id": "nssfp::eligibility::001"
+            },
+            {
+              "slug": "jssk",
+              "score": 16.67139,
+              "section": "eligibility",
+              "chunk_id": "jssk::eligibility::000"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "pmmvy",
+              "score": 0.65863,
+              "section": "eligibility",
+              "chunk_id": "pmmvy::eligibility::001"
+            },
+            {
+              "slug": "mb-gbocwwb",
+              "score": 0.65794,
+              "section": "overview",
+              "chunk_id": "mb-gbocwwb::overview"
+            },
+            {
+              "slug": "gfapscplw",
+              "score": 0.65295,
+              "section": "eligibility",
+              "chunk_id": "gfapscplw::eligibility::003"
+            },
+            {
+              "slug": "masglwb",
+              "score": 0.64987,
+              "section": "overview",
+              "chunk_id": "masglwb::overview"
+            },
+            {
+              "slug": "mbmbocwwb",
+              "score": 0.64591,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb::overview"
+            },
+            {
+              "slug": "mat-pbaocwwb",
+              "score": 0.63996,
+              "section": "overview",
+              "chunk_id": "mat-pbaocwwb::overview"
+            },
+            {
+              "slug": "masgbocwwb",
+              "score": 0.63835,
+              "section": "overview",
+              "chunk_id": "masgbocwwb::overview"
+            },
+            {
+              "slug": "mbsukbocwwb",
+              "score": 0.63828,
+              "section": "overview",
+              "chunk_id": "mbsukbocwwb::overview"
+            },
+            {
+              "slug": "wpwb",
+              "score": 0.62379,
+              "section": "overview",
+              "chunk_id": "wpwb::overview"
+            },
+            {
+              "slug": "mbsapbandocwwb",
+              "score": 0.62066,
+              "section": "overview",
+              "chunk_id": "mbsapbandocwwb::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "pmmvy",
+              "score": 0.03279,
+              "section": "eligibility",
+              "chunk_id": "pmmvy::eligibility::001"
+            },
+            {
+              "slug": "gfapscplw",
+              "score": 0.02996,
+              "section": "eligibility",
+              "chunk_id": "gfapscplw::eligibility::003"
+            },
+            {
+              "slug": "mat-pbaocwwb",
+              "score": 0.02703,
+              "section": "eligibility",
+              "chunk_id": "mat-pbaocwwb::eligibility::003"
+            },
+            {
+              "slug": "bpsy",
+              "score": 0.02513,
+              "section": "overview",
+              "chunk_id": "bpsy::overview"
+            },
+            {
+              "slug": "k-pudu",
+              "score": 0.02261,
+              "section": "overview",
+              "chunk_id": "k-pudu::overview"
+            },
+            {
+              "slug": "admptpfdap",
+              "score": 0.02003,
+              "section": "eligibility",
+              "chunk_id": "admptpfdap::eligibility::000"
+            },
+            {
+              "slug": "mb-gbocwwb",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "mb-gbocwwb::overview"
+            },
+            {
+              "slug": "arogya-lakshmi",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "arogya-lakshmi::eligibility::002"
+            },
+            {
+              "slug": "masglwb",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "masglwb::overview"
+            },
+            {
+              "slug": "kcr-nutrition-kit",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "kcr-nutrition-kit::eligibility::001"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A pregnant woman who is currently employed and experiencing wage loss due to her pregnancy is looking for government welfare support.",
+        "clarifying_question": "Could you please tell me which state you live in?",
+        "profile": {
+          "occupation": "employee",
+          "state": null,
+          "age": null,
+          "gender": "female",
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "pregnant_first_child"
+        },
+        "confidence": {
+          "occupation": "medium",
+          "gender": "high",
+          "family": "high"
+        },
+        "evidence": {
+          "occupation": "I have a job",
+          "gender": "pregnant",
+          "family": "pregnant with my first child"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_072",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "ssy"
+      ],
+      "excluded_schemes": [],
+      "query": "A parent with a newborn baby girl wants to find government savings schemes for her future.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "aocpscgs",
+              "score": 15.22603,
+              "section": "eligibility",
+              "chunk_id": "aocpscgs::eligibility::002"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 14.4363,
+              "section": "overview",
+              "chunk_id": "pbs-hbocwwb::overview"
+            },
+            {
+              "slug": "bsy-pudu",
+              "score": 14.37408,
+              "section": "overview",
+              "chunk_id": "bsy-pudu::overview"
+            },
+            {
+              "slug": "kvy",
+              "score": 13.38435,
+              "section": "eligibility",
+              "chunk_id": "kvy::eligibility::001"
+            },
+            {
+              "slug": "mssc",
+              "score": 13.21807,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::001"
+            },
+            {
+              "slug": "cmgcpsii",
+              "score": 12.54856,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsii::eligibility::004"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 12.54856,
+              "section": "eligibility",
+              "chunk_id": "cmgcpsi::eligibility::004"
+            },
+            {
+              "slug": "ds-aandn",
+              "score": 11.94011,
+              "section": "overview",
+              "chunk_id": "ds-aandn::overview"
+            },
+            {
+              "slug": "grsscgs",
+              "score": 11.82569,
+              "section": "eligibility",
+              "chunk_id": "grsscgs::eligibility::003"
+            },
+            {
+              "slug": "sjpfsgc",
+              "score": 11.7274,
+              "section": "eligibility",
+              "chunk_id": "sjpfsgc::eligibility::005"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "gifogc-fp",
+              "score": 0.58656,
+              "section": "overview",
+              "chunk_id": "gifogc-fp::overview"
+            },
+            {
+              "slug": "lbs",
+              "score": 0.57581,
+              "section": "overview",
+              "chunk_id": "lbs::overview"
+            },
+            {
+              "slug": "bsy-pudu",
+              "score": 0.56795,
+              "section": "overview",
+              "chunk_id": "bsy-pudu::overview"
+            },
+            {
+              "slug": "cmgcpsi",
+              "score": 0.56617,
+              "section": "overview",
+              "chunk_id": "cmgcpsi::overview"
+            },
+            {
+              "slug": "cmgcpsii",
+              "score": 0.56332,
+              "section": "overview",
+              "chunk_id": "cmgcpsii::overview"
+            },
+            {
+              "slug": "gfapphoogcws81s",
+              "score": 0.56053,
+              "section": "overview",
+              "chunk_id": "gfapphoogcws81s::overview"
+            },
+            {
+              "slug": "mamata",
+              "score": 0.55955,
+              "section": "overview",
+              "chunk_id": "mamata::overview"
+            },
+            {
+              "slug": "ngy",
+              "score": 0.5572,
+              "section": "overview",
+              "chunk_id": "ngy::overview"
+            },
+            {
+              "slug": "masgbocwwb",
+              "score": 0.55705,
+              "section": "eligibility",
+              "chunk_id": "masgbocwwb::eligibility::002"
+            },
+            {
+              "slug": "ags",
+              "score": 0.55408,
+              "section": "overview",
+              "chunk_id": "ags::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "bsy-pudu",
+              "score": 0.03175,
+              "section": "overview",
+              "chunk_id": "bsy-pudu::overview"
+            },
+            {
+              "slug": "lbs",
+              "score": 0.02964,
+              "section": "overview",
+              "chunk_id": "lbs::overview"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.02964,
+              "section": "overview",
+              "chunk_id": "pbs-hbocwwb::overview"
+            },
+            {
+              "slug": "gfapphoogcws81s",
+              "score": 0.02797,
+              "section": "overview",
+              "chunk_id": "gfapphoogcws81s::overview"
+            },
+            {
+              "slug": "ds-aandn",
+              "score": 0.02586,
+              "section": "overview",
+              "chunk_id": "ds-aandn::overview"
+            },
+            {
+              "slug": "mssc",
+              "score": 0.02534,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::012"
+            },
+            {
+              "slug": "ags",
+              "score": 0.02449,
+              "section": "overview",
+              "chunk_id": "ags::overview"
+            },
+            {
+              "slug": "cmkuy",
+              "score": 0.02369,
+              "section": "overview",
+              "chunk_id": "cmkuy::overview"
+            },
+            {
+              "slug": "mkaps",
+              "score": 0.02089,
+              "section": "overview",
+              "chunk_id": "mkaps::overview"
+            },
+            {
+              "slug": "gifogc-fp",
+              "score": 0.01639,
+              "section": "overview",
+              "chunk_id": "gifogc-fp::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A parent with a newborn baby girl wants to find government savings schemes for her future.",
+        "clarifying_question": "Could you please tell me which state you live in, as many savings schemes are state-specific?",
+        "profile": {
+          "occupation": null,
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "has_baby_girl"
+        },
+        "confidence": {
+          "family": "high"
+        },
+        "evidence": {
+          "family": "I just had a baby girl"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_077",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pmay-g"
+      ],
+      "excluded_schemes": [],
+      "query": "A person living in a kutcha house in rural Madhya Pradesh with no shelter of their own and no income needs assistance with housing.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "spay",
+              "score": 29.71842,
+              "section": "overview",
+              "chunk_id": "spay::overview"
+            },
+            {
+              "slug": "pmsm",
+              "score": 25.306,
+              "section": "eligibility",
+              "chunk_id": "pmsm::eligibility::002"
+            },
+            {
+              "slug": "aos",
+              "score": 24.21953,
+              "section": "eligibility",
+              "chunk_id": "aos::eligibility::002"
+            },
+            {
+              "slug": "bpgy",
+              "score": 24.21953,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::002"
+            },
+            {
+              "slug": "dfhsscoebc",
+              "score": 21.37866,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::005"
+            },
+            {
+              "slug": "cmhap",
+              "score": 21.33677,
+              "section": "eligibility",
+              "chunk_id": "cmhap::eligibility::004"
+            },
+            {
+              "slug": "pi",
+              "score": 20.88573,
+              "section": "eligibility",
+              "chunk_id": "pi::eligibility::001"
+            },
+            {
+              "slug": "ahs",
+              "score": 20.3565,
+              "section": "eligibility",
+              "chunk_id": "ahs::eligibility::000"
+            },
+            {
+              "slug": "sss-gujarat",
+              "score": 20.04046,
+              "section": "eligibility",
+              "chunk_id": "sss-gujarat::eligibility::004"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 19.85063,
+              "section": "overview",
+              "chunk_id": "pmay-g::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.1,
+          "first_hit_rank": 10
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "bpgy",
+              "score": 0.64255,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::002"
+            },
+            {
+              "slug": "clssmig",
+              "score": 0.61464,
+              "section": "eligibility",
+              "chunk_id": "clssmig::eligibility::000"
+            },
+            {
+              "slug": "gaoah",
+              "score": 0.60897,
+              "section": "overview",
+              "chunk_id": "gaoah::overview"
+            },
+            {
+              "slug": "cmhap",
+              "score": 0.60695,
+              "section": "eligibility",
+              "chunk_id": "cmhap::eligibility::005"
+            },
+            {
+              "slug": "swsp",
+              "score": 0.60395,
+              "section": "eligibility",
+              "chunk_id": "swsp::eligibility::003"
+            },
+            {
+              "slug": "nhs-west-bengal",
+              "score": 0.5991,
+              "section": "eligibility",
+              "chunk_id": "nhs-west-bengal::eligibility::002"
+            },
+            {
+              "slug": "hs",
+              "score": 0.59541,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "fsdcwdw",
+              "score": 0.58518,
+              "section": "eligibility",
+              "chunk_id": "fsdcwdw::eligibility::004"
+            },
+            {
+              "slug": "hvcp",
+              "score": 0.58347,
+              "section": "overview",
+              "chunk_id": "hvcp::overview"
+            },
+            {
+              "slug": "hiip",
+              "score": 0.58278,
+              "section": "overview",
+              "chunk_id": "hiip::overview"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "bpgy",
+              "score": 0.03202,
+              "section": "eligibility",
+              "chunk_id": "bpgy::eligibility::002"
+            },
+            {
+              "slug": "cmhap",
+              "score": 0.02899,
+              "section": "overview",
+              "chunk_id": "cmhap::overview"
+            },
+            {
+              "slug": "swsp",
+              "score": 0.02872,
+              "section": "eligibility",
+              "chunk_id": "swsp::eligibility::003"
+            },
+            {
+              "slug": "hs",
+              "score": 0.02862,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "spay",
+              "score": 0.02778,
+              "section": "eligibility",
+              "chunk_id": "spay::eligibility::001"
+            },
+            {
+              "slug": "nspgy",
+              "score": 0.02685,
+              "section": "eligibility",
+              "chunk_id": "nspgy::eligibility::008"
+            },
+            {
+              "slug": "hvcp",
+              "score": 0.02663,
+              "section": "overview",
+              "chunk_id": "hvcp::overview"
+            },
+            {
+              "slug": "aos",
+              "score": 0.02629,
+              "section": "eligibility",
+              "chunk_id": "aos::eligibility::002"
+            },
+            {
+              "slug": "gitanjali-housing",
+              "score": 0.02295,
+              "section": "overview",
+              "chunk_id": "gitanjali-housing::overview"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 0.0225,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 1.0,
+          "rr@10": 0.1,
+          "first_hit_rank": 10
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A person living in a kutcha house in rural Madhya Pradesh with no shelter of their own and no income needs assistance with housing.",
+        "clarifying_question": "Do you have a BPL (Below Poverty Line) card or an Antyodaya Anna Yojana (AAY) ration card?",
+        "profile": {
+          "occupation": "unemployed",
+          "state": "Madhya Pradesh",
+          "age": null,
+          "gender": null,
+          "annual_income_inr": 0,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "homeless"
+        },
+        "confidence": {
+          "occupation": "medium",
+          "state": "high",
+          "annual_income_inr": "medium",
+          "family": "high"
+        },
+        "evidence": {
+          "occupation": "living on alms",
+          "state": "Madhya Pradesh",
+          "annual_income_inr": "living on alms",
+          "family": "no shelter of my own"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_082",
+      "language": "en",
+      "test_type": "clarify",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "The person is looking for government assistance to obtain a house.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "aas",
+              "score": 12.16461,
+              "section": "eligibility",
+              "chunk_id": "aas::eligibility::000"
+            },
+            {
+              "slug": "aay-goa",
+              "score": 11.36904,
+              "section": "overview",
+              "chunk_id": "aay-goa::overview"
+            },
+            {
+              "slug": "daay",
+              "score": 11.31931,
+              "section": "eligibility",
+              "chunk_id": "daay::eligibility::013"
+            },
+            {
+              "slug": "spay",
+              "score": 10.81203,
+              "section": "eligibility",
+              "chunk_id": "spay::eligibility::001"
+            },
+            {
+              "slug": "dfhsscoebc",
+              "score": 10.64507,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::004"
+            },
+            {
+              "slug": "mabay",
+              "score": 10.34041,
+              "section": "overview",
+              "chunk_id": "mabay::overview"
+            },
+            {
+              "slug": "sgfaiweps",
+              "score": 9.93622,
+              "section": "eligibility",
+              "chunk_id": "sgfaiweps::eligibility::003"
+            },
+            {
+              "slug": "fapgsprg",
+              "score": 9.93622,
+              "section": "eligibility",
+              "chunk_id": "fapgsprg::eligibility::002"
+            },
+            {
+              "slug": "fappsra",
+              "score": 9.78958,
+              "section": "eligibility",
+              "chunk_id": "fappsra::eligibility::004"
+            },
+            {
+              "slug": "mnssby",
+              "score": 9.54334,
+              "section": "eligibility",
+              "chunk_id": "mnssby::eligibility::000"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "cmhap",
+              "score": 0.62616,
+              "section": "overview",
+              "chunk_id": "cmhap::overview"
+            },
+            {
+              "slug": "hs",
+              "score": 0.62422,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "ghcsscp",
+              "score": 0.62383,
+              "section": "eligibility",
+              "chunk_id": "ghcsscp::eligibility::006"
+            },
+            {
+              "slug": "dfhsscoebc",
+              "score": 0.61814,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::004"
+            },
+            {
+              "slug": "faimcescstc",
+              "score": 0.61164,
+              "section": "eligibility",
+              "chunk_id": "faimcescstc::eligibility::005"
+            },
+            {
+              "slug": "sapwdpfaa",
+              "score": 0.60956,
+              "section": "overview",
+              "chunk_id": "sapwdpfaa::overview"
+            },
+            {
+              "slug": "swsp",
+              "score": 0.60591,
+              "section": "eligibility",
+              "chunk_id": "swsp::eligibility::004"
+            },
+            {
+              "slug": "faspalscf",
+              "score": 0.60304,
+              "section": "eligibility",
+              "chunk_id": "faspalscf::eligibility::007"
+            },
+            {
+              "slug": "thrgrr-sw",
+              "score": 0.60155,
+              "section": "eligibility",
+              "chunk_id": "thrgrr-sw::eligibility::003"
+            },
+            {
+              "slug": "gh",
+              "score": 0.59685,
+              "section": "eligibility",
+              "chunk_id": "gh::eligibility::001"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "dfhsscoebc",
+              "score": 0.03077,
+              "section": "eligibility",
+              "chunk_id": "dfhsscoebc::eligibility::004"
+            },
+            {
+              "slug": "swsp",
+              "score": 0.02639,
+              "section": "eligibility",
+              "chunk_id": "swsp::eligibility::003"
+            },
+            {
+              "slug": "apchapbandocwwb",
+              "score": 0.02601,
+              "section": "overview",
+              "chunk_id": "apchapbandocwwb::overview"
+            },
+            {
+              "slug": "cmhap",
+              "score": 0.02599,
+              "section": "eligibility",
+              "chunk_id": "cmhap::eligibility::004"
+            },
+            {
+              "slug": "ghcsscp",
+              "score": 0.0248,
+              "section": "eligibility",
+              "chunk_id": "ghcsscp::eligibility::002"
+            },
+            {
+              "slug": "apch-gbocwwb",
+              "score": 0.02129,
+              "section": "overview",
+              "chunk_id": "apch-gbocwwb::overview"
+            },
+            {
+              "slug": "aas",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "aas::eligibility::000"
+            },
+            {
+              "slug": "hs",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "hs::overview"
+            },
+            {
+              "slug": "aay-goa",
+              "score": 0.01613,
+              "section": "overview",
+              "chunk_id": "aay-goa::overview"
+            },
+            {
+              "slug": "daay",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "daay::eligibility::013"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "The person is looking for government assistance to obtain a house.",
+        "clarifying_question": "To help you find the right housing scheme, could you please tell me which state you live in and if you have a BPL (Below Poverty Line) card or belong to any specific caste category like SC, ST, or OBC?",
+        "profile": {
+          "occupation": null,
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {},
+        "evidence": {},
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_083",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "famc-hbocwwb"
+      ],
+      "excluded_schemes": [],
+      "query": "A construction worker in Haryana registered with the welfare board needs assistance for their daughter's marriage.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 35.23507,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 30.46107,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 30.00066,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 29.24292,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 28.37443,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 28.14352,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famtw",
+              "score": 27.96055,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "ma-pbaocwwb",
+              "score": 27.48433,
+              "section": "eligibility",
+              "chunk_id": "ma-pbaocwwb::eligibility::001"
+            },
+            {
+              "slug": "fam-gbocwwb",
+              "score": 26.69123,
+              "section": "eligibility",
+              "chunk_id": "fam-gbocwwb::eligibility::000"
+            },
+            {
+              "slug": "maabocwwb",
+              "score": 26.37889,
+              "section": "eligibility",
+              "chunk_id": "maabocwwb::eligibility::002"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.6993,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.69197,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.67787,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "kvsy",
+              "score": 0.67579,
+              "section": "overview",
+              "chunk_id": "kvsy::overview"
+            },
+            {
+              "slug": "ma-pbaocwwb",
+              "score": 0.6709,
+              "section": "overview",
+              "chunk_id": "ma-pbaocwwb::overview"
+            },
+            {
+              "slug": "mbmbocwwb-meghalaya",
+              "score": 0.66948,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb-meghalaya::overview"
+            },
+            {
+              "slug": "maabocwwb",
+              "score": 0.66645,
+              "section": "eligibility",
+              "chunk_id": "maabocwwb::eligibility::002"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.66194,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.65421,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.65125,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.03279,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.03083,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.03078,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.02988,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.02951,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "maabocwwb",
+              "score": 0.02879,
+              "section": "eligibility",
+              "chunk_id": "maabocwwb::eligibility::002"
+            },
+            {
+              "slug": "ma-pbaocwwb",
+              "score": 0.02783,
+              "section": "eligibility",
+              "chunk_id": "ma-pbaocwwb::eligibility::001"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.02727,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.02724,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "kscbocwwb",
+              "score": 0.02721,
+              "section": "overview",
+              "chunk_id": "kscbocwwb::overview"
+            }
+          ],
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "rr@10": 1.0,
+          "first_hit_rank": 1
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A construction worker in Haryana registered with the welfare board needs assistance for their daughter's marriage.",
+        "clarifying_question": null,
+        "profile": {
+          "occupation": "construction worker",
+          "state": "Haryana",
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "registered_with_welfare_board_daughter_getting_married"
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high",
+          "family": "high"
+        },
+        "evidence": {
+          "occupation": "construction worker",
+          "state": "Haryana",
+          "family": "registered with the welfare board for two years now. My daughter is getting married."
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_084",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "famc-hbocwwb"
+      ],
+      "query": "A construction laborer in Haryana who is registered with the welfare board needs information on benefits for a son's marriage.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 33.78482,
+              "section": "overview",
+              "chunk_id": "famc-hbocwwb::overview"
+            },
+            {
+              "slug": "famtw",
+              "score": 26.51384,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 25.15239,
+              "section": "overview",
+              "chunk_id": "bs-hbocwwb::overview"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 23.02303,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 22.40097,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 22.40097,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 22.20362,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 21.80488,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "saygbocwwb",
+              "score": 21.55613,
+              "section": "eligibility",
+              "chunk_id": "saygbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 21.30296,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "rank": 1,
+              "section": "overview"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.71574,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.71087,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "mbmbocwwb-meghalaya",
+              "score": 0.70668,
+              "section": "overview",
+              "chunk_id": "mbmbocwwb-meghalaya::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.69323,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.69192,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.68371,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.68135,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "kvsy",
+              "score": 0.67336,
+              "section": "overview",
+              "chunk_id": "kvsy::overview"
+            },
+            {
+              "slug": "maabocwwb",
+              "score": 0.6633,
+              "section": "eligibility",
+              "chunk_id": "maabocwwb::eligibility::002"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.6623,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "rank": 1,
+              "section": "eligibility"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.03227,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famtw",
+              "score": 0.03062,
+              "section": "overview",
+              "chunk_id": "famtw::overview"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.03033,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.02988,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.02964,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.02885,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.02859,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 0.02808,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbmbocwwb-meghalaya",
+              "score": 0.02781,
+              "section": "eligibility",
+              "chunk_id": "mbmbocwwb-meghalaya::eligibility::002"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.02773,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "famc-hbocwwb",
+              "rank": 1,
+              "section": "eligibility"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A construction laborer in Haryana who is registered with the welfare board needs information on benefits for a son's marriage.",
+        "clarifying_question": null,
+        "profile": {
+          "occupation": "construction laborer",
+          "state": "Haryana",
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "son_getting_married"
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high",
+          "family": "high"
+        },
+        "evidence": {
+          "occupation": "construction laborer",
+          "state": "Haryana",
+          "family": "My son is getting married next month."
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_086",
+      "language": "en",
+      "test_type": "clarify",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "A construction worker in Haryana who is not registered with any welfare board is looking for information on government welfare schemes.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "darw-hbocwwb",
+              "score": 31.89481,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 31.47671,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 31.47671,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 30.67666,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 29.82902,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 29.47592,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 29.0409,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 29.0409,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 29.0409,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 28.61854,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.66015,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.65577,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 0.64533,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.63877,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.63326,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 0.63026,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.62452,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "aduw-hbocwwb",
+              "score": 0.62442,
+              "section": "overview",
+              "chunk_id": "aduw-hbocwwb::overview"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 0.6231,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.62172,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "darwhbocwwb",
+              "score": 0.03226,
+              "section": "eligibility",
+              "chunk_id": "darwhbocwwb::eligibility::000"
+            },
+            {
+              "slug": "dprw-hbocwwb",
+              "score": 0.03175,
+              "section": "eligibility",
+              "chunk_id": "dprw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "fadc-hbocwwb",
+              "score": 0.03154,
+              "section": "eligibility",
+              "chunk_id": "fadc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "faecrw-hbocwwb",
+              "score": 0.03077,
+              "section": "eligibility",
+              "chunk_id": "faecrw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 0.03048,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "pbs-hbocwwb",
+              "score": 0.03033,
+              "section": "eligibility",
+              "chunk_id": "pbs-hbocwwb::eligibility::001"
+            },
+            {
+              "slug": "bs-hbocwwb",
+              "score": 0.03008,
+              "section": "eligibility",
+              "chunk_id": "bs-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "famc-hbocwwb",
+              "score": 0.02901,
+              "section": "eligibility",
+              "chunk_id": "famc-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "gpt-hbocwwb",
+              "score": 0.02899,
+              "section": "eligibility",
+              "chunk_id": "gpt-hbocwwb::eligibility::000"
+            },
+            {
+              "slug": "mbs-hbocwwb",
+              "score": 0.02857,
+              "section": "eligibility",
+              "chunk_id": "mbs-hbocwwb::eligibility::000"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A construction worker in Haryana who is not registered with any welfare board is looking for information on government welfare schemes.",
+        "clarifying_question": "Could you please tell me your age and your approximate annual family income?",
+        "profile": {
+          "occupation": "construction worker",
+          "state": "Haryana",
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high"
+        },
+        "evidence": {
+          "occupation": "construction work",
+          "state": "Haryana"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_089",
+      "language": "en",
+      "test_type": "no_match",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "A person is asking about the eligibility criteria for the Universal Farmer Bonus Yojana.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "gopinath-munde-shetkari-apghat-suraksha-sanugrah-audhan-yojana",
+              "score": 15.03175,
+              "section": "eligibility",
+              "chunk_id": "gopinath-munde-shetkari-apghat-suraksha-sanugrah-audhan-yojana::eligibility::001"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 14.22351,
+              "section": "eligibility",
+              "chunk_id": "rythu-bima::eligibility::034"
+            },
+            {
+              "slug": "vetls",
+              "score": 14.09297,
+              "section": "eligibility",
+              "chunk_id": "vetls::eligibility::000"
+            },
+            {
+              "slug": "igndps",
+              "score": 13.89324,
+              "section": "eligibility",
+              "chunk_id": "igndps::eligibility::000"
+            },
+            {
+              "slug": "rgkny",
+              "score": 13.50847,
+              "section": "eligibility",
+              "chunk_id": "rgkny::eligibility::001"
+            },
+            {
+              "slug": "radrs",
+              "score": 13.29854,
+              "section": "eligibility",
+              "chunk_id": "radrs::eligibility::012"
+            },
+            {
+              "slug": "kv",
+              "score": 13.24683,
+              "section": "eligibility",
+              "chunk_id": "kv::eligibility::000"
+            },
+            {
+              "slug": "jjais",
+              "score": 13.20512,
+              "section": "eligibility",
+              "chunk_id": "jjais::eligibility::000"
+            },
+            {
+              "slug": "icds-chandigarh",
+              "score": 12.81784,
+              "section": "eligibility",
+              "chunk_id": "icds-chandigarh::eligibility::002"
+            },
+            {
+              "slug": "fseg",
+              "score": 12.77131,
+              "section": "eligibility",
+              "chunk_id": "fseg::eligibility::003"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "aius",
+              "score": 0.6492,
+              "section": "eligibility",
+              "chunk_id": "aius::eligibility::001"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.64809,
+              "section": "eligibility",
+              "chunk_id": "pmfby::eligibility::004"
+            },
+            {
+              "slug": "sams",
+              "score": 0.64677,
+              "section": "eligibility",
+              "chunk_id": "sams::eligibility::001"
+            },
+            {
+              "slug": "oms",
+              "score": 0.64426,
+              "section": "eligibility",
+              "chunk_id": "oms::eligibility::001"
+            },
+            {
+              "slug": "mkky",
+              "score": 0.64293,
+              "section": "eligibility",
+              "chunk_id": "mkky::eligibility::002"
+            },
+            {
+              "slug": "ftis",
+              "score": 0.64019,
+              "section": "eligibility",
+              "chunk_id": "ftis::eligibility::001"
+            },
+            {
+              "slug": "anky",
+              "score": 0.63964,
+              "section": "eligibility",
+              "chunk_id": "anky::eligibility::001"
+            },
+            {
+              "slug": "rcs",
+              "score": 0.63949,
+              "section": "eligibility",
+              "chunk_id": "rcs::eligibility::001"
+            },
+            {
+              "slug": "bsyrj",
+              "score": 0.63855,
+              "section": "eligibility",
+              "chunk_id": "bsyrj::eligibility::000"
+            },
+            {
+              "slug": "cmsguy",
+              "score": 0.63637,
+              "section": "eligibility",
+              "chunk_id": "cmsguy::eligibility::001"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "anky",
+              "score": 0.02705,
+              "section": "eligibility",
+              "chunk_id": "anky::eligibility::001"
+            },
+            {
+              "slug": "cmkry",
+              "score": 0.02274,
+              "section": "eligibility",
+              "chunk_id": "cmkry::eligibility::004"
+            },
+            {
+              "slug": "gopinath-munde-shetkari-apghat-suraksha-sanugrah-audhan-yojana",
+              "score": 0.01974,
+              "section": "eligibility",
+              "chunk_id": "gopinath-munde-shetkari-apghat-suraksha-sanugrah-audhan-yojana::eligibility::000"
+            },
+            {
+              "slug": "aius",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "aius::eligibility::001"
+            },
+            {
+              "slug": "pmfby",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "pmfby::eligibility::004"
+            },
+            {
+              "slug": "rythu-bima",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "rythu-bima::eligibility::034"
+            },
+            {
+              "slug": "sams",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "sams::eligibility::001"
+            },
+            {
+              "slug": "vetls",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "vetls::eligibility::000"
+            },
+            {
+              "slug": "oms",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "oms::eligibility::001"
+            },
+            {
+              "slug": "igndps",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "igndps::eligibility::000"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A person is asking about the eligibility criteria for the Universal Farmer Bonus Yojana.",
+        "clarifying_question": "To help you check your eligibility, could you please tell me which state you live in?",
+        "profile": {
+          "occupation": "farmer",
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "medium"
+        },
+        "evidence": {
+          "occupation": "Universal Farmer Bonus Yojana"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_093",
+      "language": "en",
+      "test_type": "exclusion",
+      "expected_schemes": [],
+      "excluded_schemes": [
+        "ssy"
+      ],
+      "query": "A 25-year-old unmarried individual is looking for a small savings scheme.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "nscs",
+              "score": 15.94238,
+              "section": "eligibility",
+              "chunk_id": "nscs::eligibility::005"
+            },
+            {
+              "slug": "mssc",
+              "score": 15.94238,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::002"
+            },
+            {
+              "slug": "sbsky",
+              "score": 14.98889,
+              "section": "eligibility",
+              "chunk_id": "sbsky::eligibility::002"
+            },
+            {
+              "slug": "oapwb",
+              "score": 13.92151,
+              "section": "eligibility",
+              "chunk_id": "oapwb::eligibility::004"
+            },
+            {
+              "slug": "thasp",
+              "score": 13.48346,
+              "section": "eligibility",
+              "chunk_id": "thasp::eligibility::001"
+            },
+            {
+              "slug": "tdpspdstgmisg",
+              "score": 13.42409,
+              "section": "eligibility",
+              "chunk_id": "tdpspdstgmisg::eligibility::003"
+            },
+            {
+              "slug": "oadp",
+              "score": 13.26647,
+              "section": "eligibility",
+              "chunk_id": "oadp::eligibility::002"
+            },
+            {
+              "slug": "suwps",
+              "score": 12.84755,
+              "section": "eligibility",
+              "chunk_id": "suwps::eligibility::001"
+            },
+            {
+              "slug": "25-ciss",
+              "score": 12.74236,
+              "section": "eligibility",
+              "chunk_id": "25-ciss::eligibility::001"
+            },
+            {
+              "slug": "syss",
+              "score": 12.70019,
+              "section": "eligibility",
+              "chunk_id": "syss::eligibility::007"
+            }
+          ],
+          "excluded_in_top10": []
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "25-ciss",
+              "score": 0.53081,
+              "section": "eligibility",
+              "chunk_id": "25-ciss::eligibility::000"
+            },
+            {
+              "slug": "ssspy",
+              "score": 0.53021,
+              "section": "eligibility",
+              "chunk_id": "ssspy::eligibility::001"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.5223,
+              "section": "overview",
+              "chunk_id": "ssy::overview"
+            },
+            {
+              "slug": "suwps",
+              "score": 0.5166,
+              "section": "overview",
+              "chunk_id": "suwps::overview"
+            },
+            {
+              "slug": "spay",
+              "score": 0.51139,
+              "section": "eligibility",
+              "chunk_id": "spay::eligibility::001"
+            },
+            {
+              "slug": "su-swastha-yojna",
+              "score": 0.50859,
+              "section": "eligibility",
+              "chunk_id": "su-swastha-yojna::eligibility::008"
+            },
+            {
+              "slug": "batcs",
+              "score": 0.50843,
+              "section": "eligibility",
+              "chunk_id": "batcs::eligibility::001"
+            },
+            {
+              "slug": "pmay-g",
+              "score": 0.50812,
+              "section": "eligibility",
+              "chunk_id": "pmay-g::eligibility::015"
+            },
+            {
+              "slug": "nscs",
+              "score": 0.50801,
+              "section": "eligibility",
+              "chunk_id": "nscs::eligibility::001"
+            },
+            {
+              "slug": "sib",
+              "score": 0.50708,
+              "section": "eligibility",
+              "chunk_id": "sib::eligibility::001"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ssy",
+              "rank": 3,
+              "section": "overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "25-ciss",
+              "score": 0.02991,
+              "section": "eligibility",
+              "chunk_id": "25-ciss::eligibility::000"
+            },
+            {
+              "slug": "suwps",
+              "score": 0.02971,
+              "section": "overview",
+              "chunk_id": "suwps::overview"
+            },
+            {
+              "slug": "nscs",
+              "score": 0.02532,
+              "section": "overview",
+              "chunk_id": "nscs::overview"
+            },
+            {
+              "slug": "mnssby",
+              "score": 0.02167,
+              "section": "eligibility",
+              "chunk_id": "mnssby::eligibility::000"
+            },
+            {
+              "slug": "sei",
+              "score": 0.0197,
+              "section": "eligibility",
+              "chunk_id": "sei::eligibility::010"
+            },
+            {
+              "slug": "ssspy",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "ssspy::eligibility::001"
+            },
+            {
+              "slug": "mssc",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "mssc::eligibility::002"
+            },
+            {
+              "slug": "ssy",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "ssy::overview"
+            },
+            {
+              "slug": "sbsky",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "sbsky::eligibility::002"
+            },
+            {
+              "slug": "spay",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "spay::eligibility::001"
+            }
+          ],
+          "excluded_in_top10": [
+            {
+              "slug": "ssy",
+              "rank": 8,
+              "section": "overview"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A 25-year-old unmarried individual is looking for a small savings scheme.",
+        "clarifying_question": "Could you please tell me which state you reside in?",
+        "profile": {
+          "occupation": null,
+          "state": null,
+          "age": 25,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "unmarried"
+        },
+        "confidence": {
+          "age": "high",
+          "family": "high"
+        },
+        "evidence": {
+          "age": "I am 25",
+          "family": "unmarried"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_095",
+      "language": "en",
+      "test_type": "positive",
+      "expected_schemes": [
+        "pm-kisan"
+      ],
+      "excluded_schemes": [],
+      "query": "A sole earning member who is a registered farmer and a beneficiary of a central agricultural support scheme is seeking a loan.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "tlmvvcs",
+              "score": 19.73864,
+              "section": "eligibility",
+              "chunk_id": "tlmvvcs::eligibility::008"
+            },
+            {
+              "slug": "marvs",
+              "score": 18.4268,
+              "section": "eligibility",
+              "chunk_id": "marvs::eligibility::004"
+            },
+            {
+              "slug": "ars",
+              "score": 17.85823,
+              "section": "eligibility",
+              "chunk_id": "ars::eligibility::000"
+            },
+            {
+              "slug": "fseg",
+              "score": 17.01385,
+              "section": "eligibility",
+              "chunk_id": "fseg::eligibility::004"
+            },
+            {
+              "slug": "asfrfevcsea",
+              "score": 16.95284,
+              "section": "overview",
+              "chunk_id": "asfrfevcsea::overview"
+            },
+            {
+              "slug": "iflcbocwwb",
+              "score": 16.36348,
+              "section": "eligibility",
+              "chunk_id": "iflcbocwwb::eligibility::006"
+            },
+            {
+              "slug": "sslgiangiaimuif",
+              "score": 15.39081,
+              "section": "eligibility",
+              "chunk_id": "sslgiangiaimuif::eligibility::005"
+            },
+            {
+              "slug": "agr3fmsstf",
+              "score": 15.04309,
+              "section": "eligibility",
+              "chunk_id": "agr3fmsstf::eligibility::003"
+            },
+            {
+              "slug": "darw-hbocwwb",
+              "score": 14.92991,
+              "section": "eligibility",
+              "chunk_id": "darw-hbocwwb::eligibility::002"
+            },
+            {
+              "slug": "cegssc",
+              "score": 14.65598,
+              "section": "eligibility",
+              "chunk_id": "cegssc::eligibility::000"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "faspalscf",
+              "score": 0.66551,
+              "section": "eligibility",
+              "chunk_id": "faspalscf::eligibility::005"
+            },
+            {
+              "slug": "rcs",
+              "score": 0.65105,
+              "section": "eligibility",
+              "chunk_id": "rcs::eligibility::001"
+            },
+            {
+              "slug": "iatc",
+              "score": 0.65087,
+              "section": "eligibility",
+              "chunk_id": "iatc::eligibility::001"
+            },
+            {
+              "slug": "sfs",
+              "score": 0.64725,
+              "section": "eligibility",
+              "chunk_id": "sfs::eligibility::001"
+            },
+            {
+              "slug": "wcdcls",
+              "score": 0.64538,
+              "section": "eligibility",
+              "chunk_id": "wcdcls::eligibility::001"
+            },
+            {
+              "slug": "mdcas",
+              "score": 0.64099,
+              "section": "eligibility",
+              "chunk_id": "mdcas::eligibility::001"
+            },
+            {
+              "slug": "sams",
+              "score": 0.63975,
+              "section": "eligibility",
+              "chunk_id": "sams::eligibility::001"
+            },
+            {
+              "slug": "ftis",
+              "score": 0.63676,
+              "section": "eligibility",
+              "chunk_id": "ftis::eligibility::001"
+            },
+            {
+              "slug": "stlsmeghalaya",
+              "score": 0.63589,
+              "section": "eligibility",
+              "chunk_id": "stlsmeghalaya::eligibility::001"
+            },
+            {
+              "slug": "ssieemaf",
+              "score": 0.63475,
+              "section": "eligibility",
+              "chunk_id": "ssieemaf::eligibility::001"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "faspalscf",
+              "score": 0.02955,
+              "section": "eligibility",
+              "chunk_id": "faspalscf::eligibility::005"
+            },
+            {
+              "slug": "ssieemaf",
+              "score": 0.02439,
+              "section": "eligibility",
+              "chunk_id": "ssieemaf::eligibility::001"
+            },
+            {
+              "slug": "tlmvvcs",
+              "score": 0.01639,
+              "section": "eligibility",
+              "chunk_id": "tlmvvcs::eligibility::008"
+            },
+            {
+              "slug": "rcs",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "rcs::eligibility::001"
+            },
+            {
+              "slug": "marvs",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "marvs::eligibility::004"
+            },
+            {
+              "slug": "iatc",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "iatc::eligibility::001"
+            },
+            {
+              "slug": "ars",
+              "score": 0.01587,
+              "section": "eligibility",
+              "chunk_id": "ars::eligibility::000"
+            },
+            {
+              "slug": "sfs",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "sfs::eligibility::001"
+            },
+            {
+              "slug": "fseg",
+              "score": 0.01562,
+              "section": "eligibility",
+              "chunk_id": "fseg::eligibility::004"
+            },
+            {
+              "slug": "wcdcls",
+              "score": 0.01538,
+              "section": "eligibility",
+              "chunk_id": "wcdcls::eligibility::001"
+            }
+          ],
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "rr@10": 0.0,
+          "first_hit_rank": null
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A sole earning member who is a registered farmer and a beneficiary of a central agricultural support scheme is seeking a loan.",
+        "clarifying_question": "Could you please tell me which state you live in and what your specific trade or craft is, as the loan you mentioned is for traditional artisans and craftspeople?",
+        "profile": {
+          "occupation": "farmer",
+          "state": null,
+          "age": null,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": "sole_earning_member"
+        },
+        "confidence": {
+          "occupation": "high",
+          "family": "high"
+        },
+        "evidence": {
+          "occupation": "sole registered farmer",
+          "family": "I am the only earning member"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    },
+    {
+      "id": "gold_099",
+      "language": "en",
+      "test_type": "clarify",
+      "expected_schemes": [],
+      "excluded_schemes": [],
+      "query": "A 40-year-old weaver from Odisha is looking for government welfare schemes for traditional craftspeople.",
+      "modes": {
+        "bm25": {
+          "top10": [
+            {
+              "slug": "mtc",
+              "score": 14.42904,
+              "section": "eligibility",
+              "chunk_id": "mtc::eligibility::004"
+            },
+            {
+              "slug": "40shydcs",
+              "score": 13.70749,
+              "section": "eligibility",
+              "chunk_id": "40shydcs::eligibility::000"
+            },
+            {
+              "slug": "pfmeiiao",
+              "score": 13.17348,
+              "section": "eligibility",
+              "chunk_id": "pfmeiiao::eligibility::001"
+            },
+            {
+              "slug": "ysrpk",
+              "score": 12.93901,
+              "section": "eligibility",
+              "chunk_id": "ysrpk::eligibility::004"
+            },
+            {
+              "slug": "dsctar",
+              "score": 12.30644,
+              "section": "eligibility",
+              "chunk_id": "dsctar::eligibility::001"
+            },
+            {
+              "slug": "owjws",
+              "score": 11.70637,
+              "section": "eligibility",
+              "chunk_id": "owjws::eligibility::000"
+            },
+            {
+              "slug": "mssp-oai",
+              "score": 11.39804,
+              "section": "exclusions",
+              "chunk_id": "mssp-oai::exclusions::012"
+            },
+            {
+              "slug": "evgodrsd",
+              "score": 11.24242,
+              "section": "eligibility",
+              "chunk_id": "evgodrsd::eligibility::002"
+            },
+            {
+              "slug": "bpsaopsgy",
+              "score": 11.18631,
+              "section": "eligibility",
+              "chunk_id": "bpsaopsgy::eligibility::001"
+            },
+            {
+              "slug": "naari",
+              "score": 11.03896,
+              "section": "eligibility",
+              "chunk_id": "naari::eligibility::000"
+            }
+          ]
+        },
+        "dense": {
+          "top10": [
+            {
+              "slug": "bbsy",
+              "score": 0.67807,
+              "section": "overview",
+              "chunk_id": "bbsy::overview"
+            },
+            {
+              "slug": "pmv",
+              "score": 0.60953,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::000"
+            },
+            {
+              "slug": "atpm",
+              "score": 0.60905,
+              "section": "overview",
+              "chunk_id": "atpm::overview"
+            },
+            {
+              "slug": "tkgthe",
+              "score": 0.60606,
+              "section": "overview",
+              "chunk_id": "tkgthe::overview"
+            },
+            {
+              "slug": "doh",
+              "score": 0.6038,
+              "section": "overview",
+              "chunk_id": "doh::overview"
+            },
+            {
+              "slug": "mksyodisha",
+              "score": 0.60357,
+              "section": "overview",
+              "chunk_id": "mksyodisha::overview"
+            },
+            {
+              "slug": "mgtocpp",
+              "score": 0.5998,
+              "section": "overview",
+              "chunk_id": "mgtocpp::overview"
+            },
+            {
+              "slug": "jc",
+              "score": 0.59608,
+              "section": "overview",
+              "chunk_id": "jc::overview"
+            },
+            {
+              "slug": "nhdp-dba-saic",
+              "score": 0.59536,
+              "section": "overview",
+              "chunk_id": "nhdp-dba-saic::overview"
+            },
+            {
+              "slug": "lps",
+              "score": 0.59394,
+              "section": "overview",
+              "chunk_id": "lps::overview"
+            }
+          ]
+        },
+        "hybrid": {
+          "top10": [
+            {
+              "slug": "bbsy",
+              "score": 0.02938,
+              "section": "overview",
+              "chunk_id": "bbsy::overview"
+            },
+            {
+              "slug": "mtc",
+              "score": 0.02807,
+              "section": "overview",
+              "chunk_id": "mtc::overview"
+            },
+            {
+              "slug": "mgtocpp",
+              "score": 0.02712,
+              "section": "overview",
+              "chunk_id": "mgtocpp::overview"
+            },
+            {
+              "slug": "naari",
+              "score": 0.02542,
+              "section": "eligibility",
+              "chunk_id": "naari::eligibility::000"
+            },
+            {
+              "slug": "oapwb",
+              "score": 0.02074,
+              "section": "overview",
+              "chunk_id": "oapwb::overview"
+            },
+            {
+              "slug": "hss",
+              "score": 0.02042,
+              "section": "eligibility",
+              "chunk_id": "hss::eligibility::001"
+            },
+            {
+              "slug": "pmv",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "pmv::eligibility::000"
+            },
+            {
+              "slug": "40shydcs",
+              "score": 0.01613,
+              "section": "eligibility",
+              "chunk_id": "40shydcs::eligibility::000"
+            },
+            {
+              "slug": "atpm",
+              "score": 0.01587,
+              "section": "overview",
+              "chunk_id": "atpm::overview"
+            },
+            {
+              "slug": "tkgthe",
+              "score": 0.01562,
+              "section": "overview",
+              "chunk_id": "tkgthe::overview"
+            }
+          ]
+        }
+      },
+      "understand": {
+        "status": "ok",
+        "search_query_en": "A 40-year-old weaver from Odisha is looking for government welfare schemes for traditional craftspeople.",
+        "clarifying_question": "Could you please tell me your annual family income and if you belong to any specific caste category like SC, ST, or OBC?",
+        "profile": {
+          "occupation": "weaver",
+          "state": "Odisha",
+          "age": 40,
+          "gender": null,
+          "annual_income_inr": null,
+          "land_acres": null,
+          "caste_category": null,
+          "family": null
+        },
+        "confidence": {
+          "occupation": "high",
+          "state": "high",
+          "age": "high"
+        },
+        "evidence": {
+          "occupation": "I am a weaver",
+          "state": "in Odisha",
+          "age": "I'm 40 years old"
+        },
+        "errors": [],
+        "provider": "gemini"
+      }
+    }
+  ]
+}
