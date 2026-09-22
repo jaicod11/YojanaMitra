@@ -104,19 +104,30 @@ class Retriever:
         top = np.argsort(-scores)[:CANDIDATES]
         return [(int(i), float(scores[i])) for i in top if scores[i] > 0]
 
-    def _dense_candidates(self, query):
-        if self._dense_index is None:
-            import faiss
+    def encoder(self):
+        """The bge-m3 model the dense index was built with, loaded once and
+        shared (the matcher reuses it for occupation similarity)."""
+        if self._model is None:
             dense = self.manifest.get("dense")
             if not dense:
                 raise RuntimeError("the dense index has not been built; run scripts/build_index.py")
             if dense["model"] != MODEL_NAME:
                 raise RuntimeError(f"index was built with {dense['model']}, but queries use {MODEL_NAME}")
-            self._dense_index = faiss.read_index(str(self.index_dir / "dense.faiss"))
             self.device = self.device or pick_device()
             self._model = load_embedding_model(self.device, dense["max_seq_length"],
                                                fp16=dense.get("dtype") == "float16")
-        q = self._model.encode([query], normalize_embeddings=True, convert_to_numpy=True).astype("float32")
+        return self._model
+
+    def embed(self, texts):
+        """Normalized float32 embeddings for a list of texts."""
+        return self.encoder().encode(list(texts), normalize_embeddings=True, convert_to_numpy=True).astype("float32")
+
+    def _dense_candidates(self, query):
+        if self._dense_index is None:
+            import faiss
+            self.encoder()                      # validates the manifest and loads the model
+            self._dense_index = faiss.read_index(str(self.index_dir / "dense.faiss"))
+        q = self.embed([query])
         scores, idx = self._dense_index.search(q, CANDIDATES)
         return [(int(i), float(s)) for i, s in zip(idx[0], scores[0]) if i >= 0]
 
