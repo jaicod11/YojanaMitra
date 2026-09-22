@@ -1,0 +1,4675 @@
+{
+  "split": "dev",
+  "timestamp": "2026-09-22T20:28:40+05:30",
+  "understand_prompt_version": "understand-v4.1",
+  "generate_version": "generate-v1",
+  "top": 10,
+  "explained_top_n": 5,
+  "retrieval_mode": "hybrid",
+  "gold_sha256": "9ebc22f014abd84b7020eb70204b3a38b8acaf70e9b84fa162f2ac8cfff22790",
+  "index": {
+    "chunks_sha256": "04b4c023a172825758c6963427189736917d0ae3b4ef16a231fdafb13ab46a53",
+    "chunk_count": 15825,
+    "build_date": "2026-09-22T07:10:43+00:00"
+  },
+  "metrics": {
+    "rows": 20,
+    "llm_calls": 24,
+    "rows_without_call": 1,
+    "schemes_explained": 84,
+    "not_eligible_code_reasons": 67,
+    "hallucinated_eligibility": 0,
+    "hallucinated_vs_matcher_status": 0,
+    "claims_caught_by_validation": 0,
+    "citation_validity_first_attempt": {
+      "valid": 187,
+      "total": 188,
+      "rate": 0.9947
+    },
+    "citation_validity_all_attempts": {
+      "valid": 230,
+      "total": 231,
+      "rate": 0.9957
+    },
+    "final_citations": {
+      "total": 243,
+      "invalid": 0
+    },
+    "fallback": {
+      "schemes": 1,
+      "of": 84,
+      "rate": 0.0119,
+      "rows": 1
+    },
+    "retried_rows": 5,
+    "relevance_flags": 38,
+    "downgraded_eligible": 0,
+    "no_match_rows_naming_invented_scheme": 0
+  },
+  "hallucinated": [],
+  "caught": [],
+  "fallbacks": [
+    [
+      "gold_003",
+      "ysrkn",
+      "no valid answer after the retry"
+    ]
+  ],
+  "validation_problems": {
+    "'R7' is not one of this scheme's unchecked conditions []": 1,
+    "structural: the answer is not valid JSON (Unterminated string ": 1,
+    "F2 was already checked and passed for this scheme, so it can": 1,
+    "F1 was already checked and passed for this scheme, so it can": 1,
+    "F3 was already checked and passed for this scheme, so it can": 1,
+    "status must be 'eligible'": 2,
+    "F4 was already checked and passed for this scheme, so it can": 1,
+    "'R1' is not one of this scheme's unchecked conditions []": 1,
+    "citation 'pbs-hbocwwb": 1,
+    "the reason speaks of your daughter, but the person said noth": 1
+  },
+  "flags": [
+    [
+      "gold_003",
+      "pmay-g",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Paying income tax",
+        "fact": "I file income tax returns every year.",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_003",
+      "pm-kisan",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "All Persons who paid Income Tax in last assessment year",
+        "fact": "I file income tax returns every year.",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_007",
+      "cpis",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "individual farmers/growers offering at least 5 healthy nuts-bearing palms for insurance in specified age groups",
+        "fact": "occupation: farmer",
+        "fact_field": "occupation"
+      }
+    ],
+    [
+      "gold_053",
+      "oah",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Applicants should come under the below poverty line ( BPL) category",
+        "fact": "bpl household: yes",
+        "fact_field": "bpl_household"
+      }
+    ],
+    [
+      "gold_056",
+      "nhdpccwms",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Fresh loan may be sanctioned after one year of re-payment of previous mudra loan to the handloom beneficiaries who availed loan in the past and have re-paid.",
+        "fact": "I took a Mudra loan two years ago for my workshop.",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_062",
+      "sanfsosms",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The applicant should have knowledge of tailoring.",
+        "fact": "I have some tailoring experience",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_062",
+      "sei",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Borrower should not be in default to any bank/financial institution.",
+        "fact": "no defaults on any past loans",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_062",
+      "us",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The applicant should not have defaulted on any past loan with any financial institution.",
+        "fact": "no defaults on any past loans",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_064",
+      "safaew-bcew",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The Scholar should have a separate bank account.",
+        "fact": "I don't have a bank account.",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_064",
+      "safaew-bcew",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "More than one child of the same worker also should furnish a separate bank account number.",
+        "fact": "my 11-year-old also wants one",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_064",
+      "pomis",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Note: You can open an account on behalf of a minor who is 10 years old or older.",
+        "fact": "family: one child aged 11",
+        "fact_field": "family"
+      }
+    ],
+    [
+      "gold_064",
+      "mvpy",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Bank Account should be in the name of the student (a Joint Bank Account with parent/Guardian is also permissible), active and seeded with the Aadhaar no of the student.",
+        "fact": "I don't have a bank account.",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_064",
+      "ngy",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The applicant should ensure that the bank account provided by him is active.",
+        "fact": "I don't have a bank account.",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_065",
+      "swlhps",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The loans disbursed to Individual Weavers and Weaver Groups for weaving purposes that were outstanding on 31.03.2014 are eligible for coverage under the scheme.",
+        "fact": "I have never taken any loan before",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_067",
+      "arogya-lakshmi",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The pregnant woman must be in her first or second trimester of pregnancy to be eligible for the program.",
+        "fact": "family: pregnant with first child",
+        "fact_field": "family"
+      }
+    ],
+    [
+      "gold_067",
+      "mamata",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "except those who avail maternity benefit (who are themselves employees or wives of employees of State Govt/Central Govt/PSUs)",
+        "fact": "I have a job",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_067",
+      "pmmvy",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "All pregnant women and lactating mothers in regular employment with the Central Government or State Government or Public Sector Undertaking or those who are in receipt of similar benefits under any law for the time being in force shall not be entitled to benefits under PMMVY.",
+        "fact": "I have a job",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_072",
+      "cmgcpsi",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The family should have only one female child and no male child.",
+        "fact": "asking for: their child",
+        "fact_field": "applying_for"
+      }
+    ],
+    [
+      "gold_072",
+      "bys",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Benefits from the Bhagyalakshmi scheme are available to BPL families with up to 2 female children.",
+        "fact": "asking for: their child",
+        "fact_field": "applying_for"
+      }
+    ],
+    [
+      "gold_072",
+      "mesy",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "First girl child born in the family (up to one girl child).",
+        "fact": "asking for: their child",
+        "fact_field": "applying_for"
+      }
+    ],
+    [
+      "gold_077",
+      "pmay-g",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The universe of eligible beneficiaries under PMAY-G will include all the houseless households living in zero, one, or two-room houses with kutcha walls and kutcha roofs",
+        "fact": "I live in a kutcha house",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_077",
+      "pmay-g",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Households without shelter",
+        "fact": "no shelter of my own",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_077",
+      "pmay-g",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "Destitute/ living on alms",
+        "fact": "essentially living on alms",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_077",
+      "mabay",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The applicant family does not have a residence to live independently.",
+        "fact": "no shelter of my own",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_077",
+      "clssmig",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The beneficiary family should not own a pucca house (an all-weather dwelling unit) either in his/her name or in the name of any member of his/her family in any part of India.",
+        "fact": "no shelter of my own",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_083",
+      "famc-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker should have a minimum of one-year regular membership.",
+        "fact": "registered with the welfare board for two years now",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_083",
+      "fadc-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker must have a minimum of one-year regular membership.",
+        "fact": "registered with the welfare board for two years now",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_083",
+      "faecrw-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker should have a minimum of one-year regular membership.",
+        "fact": "registered with the welfare board for two years now",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_083",
+      "mbs-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered women worker should have a minimum of one-year regular membership.",
+        "fact": "registered with the welfare board for two years now",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_083",
+      "darwhbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker should have regular membership.",
+        "fact": "registered with the welfare board for two years now",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_084",
+      "famc-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker should have a minimum of one-year regular membership.",
+        "fact": "I started working as a construction laborer in Haryana three months ago",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_084",
+      "fadc-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker must have a minimum of one-year regular membership.",
+        "fact": "I started working as a construction laborer in Haryana three months ago",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_084",
+      "faecrw-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker should have a minimum of one-year regular membership.",
+        "fact": "I started working as a construction laborer in Haryana three months ago",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_084",
+      "pbs-hbocwwb",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registered worker should have a minimum of one-year regular membership.",
+        "fact": "I started working as a construction laborer in Haryana three months ago",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_093",
+      "pmsswwcpfp",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The scheme is open for widows and unmarried wards of CPFs personnel. However, marriage/re-marriage subsequently would not disqualify a person.",
+        "fact": "marital status: unmarried",
+        "fact_field": "marital_status"
+      }
+    ],
+    [
+      "gold_095",
+      "pmv",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The registration and benefits under the Scheme shall be restricted to one member of the family.",
+        "fact": "I am the only earning member",
+        "fact_field": "other_facts"
+      }
+    ],
+    [
+      "gold_095",
+      "mkky",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "The applicant should be registered under PM Kisan Samman Nidhi Yojana.",
+        "fact": "already received: PM-KISAN",
+        "fact_field": "prior_benefit_schemes"
+      }
+    ],
+    [
+      "gold_099",
+      "mgbby-odisha",
+      "needs_checking",
+      "needs_checking",
+      {
+        "condition": "the benefit of scholarship is restricted to two children of the member covered",
+        "fact": "age: 40",
+        "fact_field": "age"
+      }
+    ]
+  ],
+  "no_match_hits": [],
+  "rows": [
+    {
+      "id": "gold_003",
+      "language": "en",
+      "test_type": "exclusion",
+      "description": "I own 10 acres of farmland in Punjab and I file income tax returns every year.",
+      "notes": "PM-KISAN explicitly excludes farmer families where a member paid income tax in the last assessment year — a deliberate exclusion test.",
+      "query": "I own 10 acres of farmland in Punjab and I file income tax returns every year.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: farmer"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Punjab"
+        ],
+        [
+          "F3",
+          "land_acres",
+          "land acres: 10"
+        ],
+        [
+          "F4",
+          "other_facts",
+          "I file income tax returns every year."
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Punjab.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "pmay-g",
+          "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your income, residence, or land size. Additionally, your status as an income tax payer must be reviewed against the scheme's exclusion criteria.",
+          "citations": [
+            {
+              "chunk_id": "pmay-g::eligibility::000",
+              "quote": "The universe of eligible beneficiaries under PMAY-G will include all the houseless households living in zero, one, or two-room houses with kutcha walls and kutcha roofs"
+            },
+            {
+              "chunk_id": "pmay-g::eligibility::019",
+              "quote": "To ensure that assistance is targeted at those who are genuinely deprived and that the selection is objective and verifiable, the housing deprivation parameters in the SECC data will be used for identifying households and then verified by the Gram Sabhas."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Paying income tax",
+              "fact": "I file income tax returns every year.",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "ysrkn",
+          "scheme_name": "YSR Kapu Nestham",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Needs checking: nothing about you could be checked automatically, so the scheme's other conditions must be confirmed. The scheme's first condition: “1. Citizenship: The applicant should be a permanent resident of Andhra Pradesh.”",
+          "citations": [
+            {
+              "chunk_id": "ysrkn::eligibility::000",
+              "quote": "1. Citizenship: The applicant should be a permanent resident of Andhra Pradesh."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "fallback",
+          "fallback_reason": "no valid answer after the retry"
+        },
+        {
+          "rank": 4,
+          "slug": "pm-kisan",
+          "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your land ownership details. Your status as an income tax payer must also be checked against the scheme's exclusion criteria.",
+          "citations": [
+            {
+              "chunk_id": "pm-kisan::eligibility::000",
+              "quote": "All landholding farmers' families, which have cultivable land holding in their names are eligible to get benefit under the scheme."
+            },
+            {
+              "chunk_id": "pm-kisan::exclusions::005",
+              "quote": "All Persons who paid Income Tax in last assessment year"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "All Persons who paid Income Tax in last assessment year",
+              "fact": "I file income tax returns every year.",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "zbnf",
+          "scheme_name": "Zero Budget Natural Farming",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Rajasthan; you said you live in Punjab.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "sgiavowwst",
+          "scheme_name": "Scheme of Grant-in-Aid to Voluntary Organisations Working for the Welfare of Scheduled Tribes",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your social category or organizational status. This scheme is intended for voluntary organizations, and we require further information to assess your eligibility.",
+          "citations": [
+            {
+              "chunk_id": "sgiavowwst::eligibility::000",
+              "quote": "The applicant organization should be a registered voluntary organization (VO) /non- governmental organization (NGO) engaged in the conduct and promotion of social welfare of STs."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "awvsssi",
+          "scheme_name": "Award Of Stipend To VJNT And SBC Students Studying In ITI",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Maharashtra; you said you live in Punjab.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "brfsy",
+          "scheme_name": "Bihar Rajya Fasal Sahayata Yojna",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Bihar; you said you live in Punjab.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "ysrvm",
+          "scheme_name": "YSR Vahana Mitra",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Punjab.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "pfts",
+          "scheme_name": "Punjab Farm Tourism Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your state meets the requirement, but we could not verify your farm infrastructure, accommodation facilities, or operational standards. These details must be confirmed to determine if you qualify for the Gold or Silver category.",
+          "citations": [
+            {
+              "chunk_id": "pfts::eligibility::001",
+              "quote": "The Farm stay units having:An area of more than 5 acres with comfortable accommodation of not more than 9 lettable rooms (18 beds) built in it as per standards prescribed in Annexure-II of the scheme guidelines."
+            },
+            {
+              "chunk_id": "pfts::eligibility::005",
+              "quote": "The Farm Stay units having:An area up to 5 acres having comfortable accommodation of not more than 9 lettable rooms (18 beds) built in it as per the standards prescribed in Annexure - II of the scheme guidelines."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {
+              "S2": [
+                "S2: 'R7' is not one of this scheme's unchecked conditions []"
+              ]
+            },
+            "citations": {
+              "total": 9,
+              "valid": 9
+            }
+          },
+          {
+            "provider": "groq",
+            "model": "openai/gpt-oss-120b",
+            "structural_errors": [
+              "the answer is not valid JSON (Unterminated string starting at: line 1 column 970 (char 969))"
+            ],
+            "scheme_errors": {},
+            "citations": {
+              "total": 0,
+              "valid": 0
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:52:54+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_007",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I am a farmer in Telangana, 45 years old, and I want life insurance in case something happens to me.",
+      "notes": "Telangana's farmer life insurance scheme; premium subsidy differs for loanee vs non-loanee farmers.",
+      "query": "I am a farmer in Telangana, 45 years old, and I want life insurance in case something happens to me.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: farmer"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Telangana"
+        ],
+        [
+          "F3",
+          "age",
+          "age: 45"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "farmer-insurance",
+          "scheme_name": "Rs 5 Lakh Insurance Cover To Farmers",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "You are eligible because you meet the age, state, and occupation requirements for this insurance cover.",
+          "citations": [
+            {
+              "chunk_id": "farmer-insurance::eligibility::000",
+              "quote": "All the farmers in Telangana, who are aged between 18 and 60years"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "rythu-bima",
+          "scheme_name": "Rythu Bima Scheme",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "You meet the age, state, and occupation requirements for this scheme.",
+          "citations": [
+            {
+              "chunk_id": "rythu-bima::eligibility::000",
+              "quote": "Farmers in the state of Telangana are eligible to apply for the Rythu Bima Scheme."
+            },
+            {
+              "chunk_id": "rythu-bima::eligibility::011",
+              "quote": "Farmers in the age group of 18 to 59 years are eligible for enrollment under the scheme."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "jjais",
+          "scheme_name": "Janta Juth Accidental Insurance Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Gujarat; you said you live in Telangana.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "cpis",
+          "scheme_name": "Coconut Palm Insurance Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your age falls within the required range. It must still be confirmed if you are a grower with at least 5 healthy nut-bearing palms.",
+          "citations": [
+            {
+              "chunk_id": "cpis::eligibility::000",
+              "quote": "individual farmers/growers offering at least 5 healthy nuts-bearing palms for insurance in specified age groups"
+            },
+            {
+              "chunk_id": "cpis::eligibility::006",
+              "quote": "Insurance coverage is from the 4th/7th year to the 60th year"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "individual farmers/growers offering at least 5 healthy nuts-bearing palms for insurance in specified age groups",
+              "fact": "occupation: farmer",
+              "fact_field": "occupation"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "pmjjby",
+          "scheme_name": "Pradhan Mantri Jeevan Jyoti Bima Yojana",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "You meet the age requirement for this scheme. You must ensure you hold an individual bank or post office account to proceed.",
+          "citations": [
+            {
+              "chunk_id": "pmjjby::eligibility::000",
+              "quote": "The age of the applicant must be between 18 to 50 Years."
+            },
+            {
+              "chunk_id": "pmjjby::eligibility::001",
+              "quote": "The applicant must hold an individual bank / post office account."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Telangana.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "cmgcpsi",
+          "scheme_name": "Chief Minister's Girl Child Protection Scheme-I",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Tamil Nadu; you said you live in Telangana.",
+          "citations": [
+            {
+              "chunk_id": "cmgcpsi::eligibility::005",
+              "quote": "The parents/grandparents should be a native of Tamil Nadu by birth or continuous residence of not less than ten years at the time of applying to this scheme."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "slesvkspy",
+          "scheme_name": "Suraksha Laghu Evan Simant Vriddhajan Krishak Samman Pension Yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's minimum age is 55; you said 45. This scheme is only for residents of Rajasthan; you said you live in Telangana.",
+          "citations": [
+            {
+              "chunk_id": "slesvkspy::eligibility::001",
+              "quote": "The female applicant's age should be more than 55 years and the male more than 58 years."
+            },
+            {
+              "chunk_id": "slesvkspy::eligibility::000",
+              "quote": "The applicant should be a native of Rajasthan State."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "sjpfsgc",
+          "scheme_name": "Savitribai Jyotirao Phule Fellowship For Single Girl Child",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "While your age is within the limit for reserved categories, it must be confirmed if you are a single girl child pursuing a full-time Ph.D. program.",
+          "citations": [
+            {
+              "chunk_id": "sjpfsgc::eligibility::000",
+              "quote": "Any single girl child of her parents pursuing Ph.D. in any stream/subject in recognised Universities/Colleges/ Institutes is eligible to apply under the scheme."
+            },
+            {
+              "chunk_id": "sjpfsgc::eligibility::004",
+              "quote": "Girl students up to the age of 40 years for general category and 45 years for the reserved categories"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {
+              "S2": [
+                "S2: F2 was already checked and passed for this scheme, so it cannot be paired in relevant_unverified",
+                "S2: F1 was already checked and passed for this scheme, so it cannot be paired in relevant_unverified",
+                "S2: F3 was already checked and passed for this scheme, so it cannot be paired in relevant_unverified",
+                "S2: status must be 'eligible'; got 'needs_checking'"
+              ]
+            },
+            "citations": {
+              "total": 10,
+              "valid": 10
+            }
+          },
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 8,
+              "valid": 8
+            }
+          }
+        ],
+        "created": "2026-09-22T14:22:09+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_014",
+      "language": "en",
+      "test_type": "exclusion",
+      "description": "I retired as a government schoolteacher and now get a pension of 12,000 rupees a month. I also own 4 acres of ancestral farmland in Karnataka.",
+      "notes": "PM-KISAN excludes superannuated pensioners whose monthly pension is ₹10,000 or more — a deliberate exclusion test.",
+      "query": "I retired as a government schoolteacher and now get a pension of 12,000 rupees a month. I also own 4 acres of ancestral farmland in Karnataka.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: government schoolteacher"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Karnataka"
+        ],
+        [
+          "F3",
+          "annual_income_inr",
+          "annual income ₹1,44,000"
+        ],
+        [
+          "F4",
+          "land_acres",
+          "land acres: 4"
+        ],
+        [
+          "F5",
+          "other_facts",
+          "I retired as a government schoolteacher"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "sssps",
+          "scheme_name": "Swatantrata Sainik Samman Pension Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "This scheme is for freedom fighters or their dependents. We could not verify if you belong to the SC or ST category, which is required to check specific eligibility criteria.",
+          "citations": [
+            {
+              "chunk_id": "sssps::eligibility::003",
+              "quote": "The minimum period of actual imprisonment for pension eligibility has been reduced to three months, in the case of women and SC/ST freedom fighters from 01.08.1980."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "ysrpk",
+          "scheme_name": "YSR Pension Kanuka",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Karnataka.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "ignwpstn",
+          "scheme_name": "Indira Gandhi National Widow Pension Scheme - Tamil Nadu",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Tamil Nadu; you said you live in Karnataka.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "tps-hgv",
+          "scheme_name": "Tripura Pension Scheme For Providing Pension To The Retired Home Guard / Women Home Guard Volunteers",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Tripura; you said you live in Karnataka.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "cmat-ap",
+          "scheme_name": "Chief Ministergi Artistesinggi Tengbang (CMAT) – Artiste's Pension",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Manipur; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "cmat-ap::eligibility::000",
+              "quote": "The applicant should be a domicile of the State of Manipur."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "dwps",
+          "scheme_name": "Destitute Widow Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Tamil Nadu; you said you live in Karnataka.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "ptupiwoa50yaa",
+          "scheme_name": "Pension to Unmarried Poor, Incapacitated Women of Age 50 years and above",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Tamil Nadu; you said you live in Karnataka.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "piso",
+          "scheme_name": "Pension to Indigent Sportspersons of Odisha",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Odisha; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "piso::eligibility::000",
+              "quote": "Applicant should be a permanent resident of the State of Odisha."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "ignvpyr",
+          "scheme_name": "Indira Gandhi National Vrdhavastha Pension Yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Rajasthan; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "ignvpyr::eligibility::000",
+              "quote": "The applicant should be a native of Rajasthan."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "gwpss",
+          "scheme_name": "Goa Welfare / Pension Scheme For Seafarers",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Goa; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "gwpss::eligibility::004",
+              "quote": "The widow of a deceased Seaman can also be eligible on compassionate grounds, provided that she has been a resident of Goa for 15 years and that her annual income from all sources does not exceed ₹ 1,20,000/-."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 1,
+              "valid": 1
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:32:54+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_039",
+      "language": "en",
+      "test_type": "exclusion",
+      "description": "I am a 38-year-old widow in Karnataka, BPL family.",
+      "notes": "Just under the IGNWPS age threshold of 40 — a deliberate near-miss.",
+      "query": "I am a 38-year-old widow in Karnataka, BPL family.",
+      "facts": [
+        [
+          "F1",
+          "state",
+          "state: Karnataka"
+        ],
+        [
+          "F2",
+          "age",
+          "age: 38"
+        ],
+        [
+          "F3",
+          "gender",
+          "gender: female"
+        ],
+        [
+          "F4",
+          "marital_status",
+          "marital status: widowed"
+        ],
+        [
+          "F5",
+          "bpl_household",
+          "bpl household: yes"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "ignwpsmp",
+          "scheme_name": "Indira Gandhi National Widow Pension Scheme-Madhya Pradesh",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's age limit is 40-79; you said 38. This scheme is only for residents of Madhya Pradesh; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "ignwpsmp::eligibility::002",
+              "quote": "The application should be aged between 40 to 79 years."
+            },
+            {
+              "chunk_id": "ignwpsmp::eligibility::000",
+              "quote": "The applicant should be a domicile of the state of Madhya Pradesh."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "ignwps-sikkim",
+          "scheme_name": "Indira Gandhi National Widow Pension Scheme - Sikkim",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Sikkim; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "ignwps-sikkim::eligibility::000",
+              "quote": "The applicant should be a domicile of the state of Sikkim."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "ignoaps-sikkim",
+          "scheme_name": "Indira Gandhi National Old Age Pension Scheme - Sikkim",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's minimum age is 60; you said 38. This scheme is only for residents of Sikkim; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "ignoaps-sikkim::eligibility::002",
+              "quote": "The applicant should have attained the age of 60 years and above."
+            },
+            {
+              "chunk_id": "ignoaps-sikkim::eligibility::000",
+              "quote": "The applicant should be a resident of the state of Sikkim."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "iscwr",
+          "scheme_name": "Incentive For The Sc Widow Remarriage",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a widow living in Karnataka, which matches the state and marital status requirements. We still need to confirm if you belong to the SC community, if you were married within the last year, and if you meet the other scheme conditions.",
+          "citations": [
+            {
+              "chunk_id": "iscwr::eligibility::000",
+              "quote": "Applicant should be a resident of Karnataka state."
+            },
+            {
+              "chunk_id": "iscwr::eligibility::001",
+              "quote": "Applicant should belong to the SC community."
+            },
+            {
+              "chunk_id": "iscwr::eligibility::003",
+              "quote": "The scheme is applicable to be applied for within 1 year of marriage."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "uwps",
+          "scheme_name": "Uttarakhand Widow Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Uttarakhand; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "uwps::eligibility::003",
+              "quote": "Only permanent residents of Uttarakhand can apply."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "ignwps",
+          "scheme_name": "Indira Gandhi National Widow Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's age limit is 40-79; you said 38.",
+          "citations": [
+            {
+              "chunk_id": "ignwps::eligibility::000",
+              "quote": "The applicant must be a widow in the age group of 40-79 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "fapnw",
+          "scheme_name": "Financial Assistance To Poor & Needy Widow Women",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Manipur; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "fapnw::eligibility::000",
+              "quote": "The applicant should be a domicile of the state of Manipur."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "oap",
+          "scheme_name": "Old Age Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's minimum age is 60; you said 38. This scheme is only for residents of Uttarakhand; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "oap::eligibility::001",
+              "quote": "Only people who are 60 years or more of the state can apply for this scheme."
+            },
+            {
+              "chunk_id": "oap::eligibility::000",
+              "quote": "The applicant should be a permanent resident of Uttarakhand."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "ignvpyrr",
+          "scheme_name": "Indira Gandhi National Vidhva Pension yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is for people aged 40; you said 38. This scheme is only for residents of Rajasthan; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "ignvpyrr::eligibility::002",
+              "quote": "The application should be aged 40 years."
+            },
+            {
+              "chunk_id": "ignvpyrr::eligibility::000",
+              "quote": "The applicant should have a domicile in the state of Rajasthan."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "suwps",
+          "scheme_name": "Sikkim Unmarried Women Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's age limit is 45-59; you said 38. This scheme is only for these marital statuses: unmarried; you said you are widowed. This scheme is only for residents of Sikkim; you said you live in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "suwps::eligibility::003",
+              "quote": "The applicant should be in the 45-59 years age group."
+            },
+            {
+              "chunk_id": "suwps::eligibility::001",
+              "quote": "The applicant should be unmarried."
+            },
+            {
+              "chunk_id": "suwps::eligibility::000",
+              "quote": "The applicant should be a permanent resident of the state of Sikkim."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 3,
+              "valid": 3
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:33:17+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_053",
+      "language": "hi",
+      "test_type": "positive",
+      "description": "मैं बिहार में रहता हूँ, मेरी उम्र 50 साल है और मुझे 82% विकलांगता है। मेरा परिवार गरीबी रेखा से नीचे है।",
+      "notes": "Hindi entry: 50 years old, 82% disability, BPL family — meets all IGNDPS criteria.",
+      "query": "I live in Bihar, my age is 50 years and I have 82% disability. My family is below the poverty line.",
+      "facts": [
+        [
+          "F1",
+          "state",
+          "state: Bihar"
+        ],
+        [
+          "F2",
+          "age",
+          "age: 50"
+        ],
+        [
+          "F3",
+          "disability_percent",
+          "disability percent: 82"
+        ],
+        [
+          "F4",
+          "bpl_household",
+          "bpl household: yes"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "igndps-sikkim",
+          "scheme_name": "Indira Gandhi National Disability Pension Scheme - Sikkim",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "यह योजना केवल Sikkim के निवासियों के लिए है; आपने बताया कि आप Bihar में रहते हैं।",
+          "citations": [
+            {
+              "chunk_id": "igndps-sikkim::eligibility::000",
+              "quote": "The applicant should be a resident of the state of Sikkim."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "nfbs",
+          "scheme_name": "National Family Benefit Scheme",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "आपकी गरीबी रेखा से नीचे (BPL) होने की स्थिति इस योजना की शर्तों को पूरा करती है।",
+          "citations": [
+            {
+              "chunk_id": "nfbs::eligibility::001",
+              "quote": "The family of the applicant must be living Below Poverty Line (BPL)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "lbsspy",
+          "scheme_name": "Lakshmi Bai Samajik Suraksha Pension Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "आपकी आयु, राज्य और गरीबी रेखा से नीचे (BPL) होने की स्थिति इस योजना के नियमों से मेल खाती है। अभी यह पुष्टि करना बाकी है कि क्या आप एक विधवा महिला हैं और क्या आपके परिवार की वार्षिक आय निर्धारित सीमा के भीतर है।",
+          "citations": [
+            {
+              "chunk_id": "lbsspy::eligibility::001",
+              "quote": "The woman should be a widow. The woman should be living below the poverty line."
+            },
+            {
+              "chunk_id": "lbsspy::eligibility::002",
+              "quote": "The annual income of the woman's family should be Rs. 60,000/- or less."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "rgssspf-2012",
+          "scheme_name": "Rajiv Gandhi Social Security Scheme For Poor Families - 2012",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "यह योजना केवल Puducherry के निवासियों के लिए है; आपने बताया कि आप Bihar में रहते हैं।",
+          "citations": [
+            {
+              "chunk_id": "rgssspf-2012::eligibility::002",
+              "quote": "The applicant should be a permanent resident of the Union Territory of Puducherry."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "sspmphmrp",
+          "scheme_name": "Swasraya Scheme For Parents/Mothers Of Physically Handicapped/Mentally Retarded Persons",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "यह योजना केवल Kerala के निवासियों के लिए है; आपने बताया कि आप Bihar में रहते हैं।",
+          "citations": [
+            {
+              "chunk_id": "sspmphmrp::eligibility::000",
+              "quote": "The applicant should be a native and resident of Kerala State."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "disabled-pension",
+          "scheme_name": "Pension To The Disabled Person",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "यह योजना केवल Chandigarh के निवासियों के लिए है; आपने बताया कि आप Bihar में रहते हैं।",
+          "citations": [
+            {
+              "chunk_id": "disabled-pension::eligibility::001",
+              "quote": "The applicant must be a resident of UT Chandigarh for more than 3 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "cmdps-sikkim",
+          "scheme_name": "Chief Minister's State Disability Pension Scheme - Sikkim",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "यह योजना केवल Sikkim के निवासियों के लिए है; आपने बताया कि आप Bihar में रहते हैं।",
+          "citations": [
+            {
+              "chunk_id": "cmdps-sikkim::eligibility::000",
+              "quote": "The applicant should be a resident of the state of Sikkim."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "igndps",
+          "scheme_name": "Indira Gandhi National Disability Pension Scheme",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "आपकी आयु, विकलांगता का प्रतिशत और गरीबी रेखा से नीचे (BPL) होने की स्थिति इस योजना की शर्तों को पूरा करती है।",
+          "citations": [
+            {
+              "chunk_id": "igndps::eligibility::001",
+              "quote": "The age of the applicant should range between 18-79 years."
+            },
+            {
+              "chunk_id": "igndps::eligibility::004",
+              "quote": "The applicant's disability should be more than 80%."
+            },
+            {
+              "chunk_id": "igndps::eligibility::006",
+              "quote": "The applicant should belong to Below Poverty Line."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "oah",
+          "scheme_name": "Old Age Home (Sahara)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "आप बिहार राज्य के निवासी हैं, जो इस योजना के लिए आवश्यक है। अभी यह पुष्टि करना बाकी है कि क्या आप गरीबी रेखा से नीचे (BPL) आते हैं और क्या आपकी वार्षिक आय निर्धारित सीमा से कम है।",
+          "citations": [
+            {
+              "chunk_id": "oah::eligibility::000",
+              "quote": "Applicants should come under the below poverty line ( BPL) category (or)Annual Income should be below Rs. 60,000/-"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Applicants should come under the below poverty line ( BPL) category",
+              "fact": "bpl household: yes",
+              "fact_field": "bpl_household"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "nsap-ignoaps",
+          "scheme_name": "NSAP - Indira Gandhi National Old Age Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "इस योजना के लिए न्यूनतम आयु 60 वर्ष है; आपने अपनी आयु 50 वर्ष बताई है।",
+          "citations": [
+            {
+              "chunk_id": "nsap-ignoaps::eligibility::002",
+              "quote": "The applicant should be at least 60 years of age."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "hi",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {
+              "S1": [
+                "S1: F4 was already checked and passed for this scheme, so it cannot be paired in relevant_unverified",
+                "S1: status must be 'eligible'; got 'needs_checking'"
+              ]
+            },
+            "citations": {
+              "total": 9,
+              "valid": 9
+            }
+          },
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {
+              "S2": [
+                "S2: 'R1' is not one of this scheme's unchecked conditions []"
+              ]
+            },
+            "citations": {
+              "total": 8,
+              "valid": 8
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:34:12+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_056",
+      "language": "en",
+      "test_type": "exclusion",
+      "description": "I am a blacksmith and I took a Mudra loan two years ago for my workshop.",
+      "notes": "PM Vishwakarma excludes applicants who availed a similar self-employment loan (PMEGP/PM SVANidhi/Mudra) within the past 5 years — a deliberate exclusion test.",
+      "query": "I am a blacksmith and I took a Mudra loan two years ago for my workshop.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: blacksmith"
+        ],
+        [
+          "F2",
+          "prior_benefit_schemes",
+          "already received: Mudra loan"
+        ],
+        [
+          "F3",
+          "other_facts",
+          "I took a Mudra loan two years ago for my workshop."
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "nhdpccwms",
+          "scheme_name": "National Handloom Development Programme: Concessional Credit/Weaver MUDRA Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not confirm if your occupation as a blacksmith qualifies you for this scheme. Additionally, we must verify if you have met the one-year repayment requirement for your previous Mudra loan.",
+          "citations": [
+            {
+              "chunk_id": "nhdpccwms::eligibility::000",
+              "quote": "Handloom Weavers involved in weaving activity,Weaver Entrepreneur"
+            },
+            {
+              "chunk_id": "nhdpccwms::eligibility::003",
+              "quote": "Fresh loan may be sanctioned after one year of re-payment of previous mudra loan to the handloom beneficiaries who availed loan in the past and have re-paid."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Fresh loan may be sanctioned after one year of re-payment of previous mudra loan to the handloom beneficiaries who availed loan in the past and have re-paid.",
+              "fact": "I took a Mudra loan two years ago for my workshop.",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "pmmy",
+          "scheme_name": "Pradhan Mantri Mudra Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your credit track record and your skills or knowledge related to your workshop activity. Your status as a borrower must be assessed against the scheme's requirements.",
+          "citations": [
+            {
+              "chunk_id": "pmmy::eligibility::002",
+              "quote": "The applicant should not be a defaulter to any bank or financial institution and should have a satisfactory credit track record."
+            },
+            {
+              "chunk_id": "pmmy::eligibility::003",
+              "quote": "The individual borrowers may be required to possess the necessary skills/experience/ knowledge to undertake the proposed activity."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your state of residence, annual income, or land ownership details. These factors are necessary to determine if you meet the eligibility criteria for this health insurance scheme.",
+          "citations": [
+            {
+              "chunk_id": "dysrhis::eligibility::002",
+              "quote": "Landowners holding:Less than 12.00 Acres of wet landLess than 35.00 Acres of dry land"
+            },
+            {
+              "chunk_id": "dysrhis::eligibility::002",
+              "quote": "All households whose annual income is less than or upto Rs.5.00 Lakhs"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "modrob",
+          "scheme_name": "Modernisation And Removal Of Obsolescence",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "This scheme is intended for technical institutions and universities. We cannot confirm your eligibility as your occupation does not align with the institutional requirements of this program.",
+          "citations": [
+            {
+              "chunk_id": "modrob::eligibility::000",
+              "quote": "AICTE-approved technical institutions / University Departments with at least 10 years of existence"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "mssy",
+          "scheme_name": "Mukhayamantri Saur Swarojgar Yojna",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to verify your age and your status as a permanent resident of the state. Additionally, your standing with financial institutions must be confirmed.",
+          "citations": [
+            {
+              "chunk_id": "mssy::eligibility::000",
+              "quote": "The age of the applicant at the time of application should be minimum 18 years and the maximum age should not exceed 65 years."
+            },
+            {
+              "chunk_id": "mssy::eligibility::002",
+              "quote": "The applicant should be a permanent/native resident of the state."
+            },
+            {
+              "chunk_id": "mssy::eligibility::003",
+              "quote": "The applicant should not be a defaulter of any nationalized bank/financial institution/cooperative institution or other institution."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 10,
+              "valid": 10
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:35:26+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_062",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I want to start a tailoring business and need a loan of about 3 lakh rupees. I have some tailoring experience and no defaults on any past loans.",
+      "notes": "Not a family-based traditional trade, and no PMEGP-style manufacturing/service unit named, so a Mudra loan is the closer fit given relevant experience and a clean credit record.",
+      "query": "I want to start a tailoring business and need a loan of about 3 lakh rupees. I have some tailoring experience and no defaults on any past loans.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: tailor"
+        ],
+        [
+          "F2",
+          "other_facts",
+          "I have some tailoring experience"
+        ],
+        [
+          "F3",
+          "other_facts",
+          "no defaults on any past loans"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "sanfsosms",
+          "scheme_name": "Sathiyavanimuthu Ammaiyar Ninaivu Free Supply of Sewing Machine Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your tailoring experience matches the requirement for this scheme. We still need to confirm your age, annual income, and residency in Tamil Nadu to determine if you meet the remaining criteria.",
+          "citations": [
+            {
+              "chunk_id": "sanfsosms::eligibility::002",
+              "quote": "The applicant should have knowledge of tailoring."
+            },
+            {
+              "chunk_id": "sanfsosms::eligibility::000",
+              "quote": "The applicant's annual income should not exceed ₹72,000/-."
+            },
+            {
+              "chunk_id": "sanfsosms::eligibility::001",
+              "quote": "The age of the applicant should be between 20 to 40 years."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The applicant should have knowledge of tailoring.",
+              "fact": "I have some tailoring experience",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "dlbe",
+          "scheme_name": "Direct Loans For Business Enterprise",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "This scheme requires information regarding your family income and property ownership to be verified. We currently do not have enough information to check your eligibility.",
+          "citations": [
+            {
+              "chunk_id": "dlbe::overview",
+              "quote": "Loans will be provided only on a mortgage of property (building/land) to the corporation."
+            },
+            {
+              "chunk_id": "dlbe::overview",
+              "quote": "If the applicant's family income is below Rs 8.00 lakhs, t"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "sei",
+          "scheme_name": "Spurring Entrepreneurship Initiative",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your history of no loan defaults aligns with the scheme's requirements. We still need to confirm your age, education level, and residency in Jammu and Kashmir.",
+          "citations": [
+            {
+              "chunk_id": "sei::eligibility::006",
+              "quote": "Borrower should not be in default to any bank/financial institution."
+            },
+            {
+              "chunk_id": "sei::eligibility::000",
+              "quote": "The financial assistance would be given only to youth between the age of 18 to 40 years having a minimum qualification of 12th standard or above."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Borrower should not be in default to any bank/financial institution.",
+              "fact": "no defaults on any past loans",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "us",
+          "scheme_name": "Udyogini Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your history of no loan defaults aligns with the scheme's requirements. We still need to confirm your age, gender, family income, and residency in Karnataka.",
+          "citations": [
+            {
+              "chunk_id": "us::eligibility::004",
+              "quote": "The applicant should not have defaulted on any past loan with any financial institution."
+            },
+            {
+              "chunk_id": "us::eligibility::002",
+              "quote": "The age of the applicant should be between 18 to 55 years for all categories."
+            },
+            {
+              "chunk_id": "us::eligibility::000",
+              "quote": "The applicant should be a woman."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The applicant should not have defaulted on any past loan with any financial institution.",
+              "fact": "no defaults on any past loans",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "mmuy",
+          "scheme_name": "Mukhyamantri Mahila Utkarsh Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your age, gender, education level, and residency in Gujarat to check your eligibility for this scheme.",
+          "citations": [
+            {
+              "chunk_id": "mmuy::eligibility::000",
+              "quote": "The applicant should be a woman who is a permanent resident of Gujarat."
+            },
+            {
+              "chunk_id": "mmuy::eligibility::001",
+              "quote": "The applicant should be 18 years of age or above."
+            },
+            {
+              "chunk_id": "mmuy::eligibility::002",
+              "quote": "The applicant should have passed at least the 8th standard."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 13,
+              "valid": 13
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:55:39+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_064",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I don't have a bank account. I am an adult and want to open one, and my 11-year-old also wants one.",
+      "notes": "PMJDY covers both — the child (over 10) can hold an account with guardian support.",
+      "query": "I don't have a bank account. I am an adult and want to open one, and my 11-year-old also wants one.",
+      "facts": [
+        [
+          "F1",
+          "family",
+          "family: one child aged 11"
+        ],
+        [
+          "F2",
+          "other_facts",
+          "I don't have a bank account."
+        ],
+        [
+          "F3",
+          "other_facts",
+          "my 11-year-old also wants one"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "safaew-bcew",
+          "scheme_name": "Scheme For Award Of Financial Assistance For Education To The Wards Of Beedi/Cine/IOMC/LSDM Workers – Pre & Post- Matric",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your occupation or family income, which are required for this scheme. Additionally, you must have a separate bank account for your child, which you currently do not have.",
+          "citations": [
+            {
+              "chunk_id": "safaew-bcew::eligibility::006",
+              "quote": "Either of the parents of the students should be Beedi, Iron Ore Manganese & Chrome Ore Mines, Limestone & Dolomite Mines, and Cine workers with at least six months of service."
+            },
+            {
+              "chunk_id": "safaew-bcew::eligibility::010",
+              "quote": "The Scholar should have a separate bank account."
+            },
+            {
+              "chunk_id": "safaew-bcew::eligibility::012",
+              "quote": "More than one child of the same worker also should furnish a separate bank account number."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The Scholar should have a separate bank account.",
+              "fact": "I don't have a bank account.",
+              "fact_field": "other_facts"
+            },
+            {
+              "condition": "More than one child of the same worker also should furnish a separate bank account number.",
+              "fact": "my 11-year-old also wants one",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "pomis",
+          "scheme_name": "Post Office Monthly Income Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your age or residency status. While your child is old enough to have an account opened on their behalf, we still need to confirm your citizenship and residency.",
+          "citations": [
+            {
+              "chunk_id": "pomis::eligibility::000",
+              "quote": "The applicant must be a citizen of India."
+            },
+            {
+              "chunk_id": "pomis::eligibility::002",
+              "quote": "The applicant should be at least 18 years old."
+            },
+            {
+              "chunk_id": "pomis::eligibility::003",
+              "quote": "Note: You can open an account on behalf of a minor who is 10 years old or older."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Note: You can open an account on behalf of a minor who is 10 years old or older.",
+              "fact": "family: one child aged 11",
+              "fact_field": "family"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "mvpy",
+          "scheme_name": "Mukhyamantri Vidyarthi Pratibha Yojna",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your family income, your child's class, your category, or your residency in Delhi. Furthermore, you must provide an active bank account in the student's name, which you do not currently have.",
+          "citations": [
+            {
+              "chunk_id": "mvpy::eligibility::000",
+              "quote": "The applicant should be a resident of GNCT of Delhi."
+            },
+            {
+              "chunk_id": "mvpy::eligibility::007",
+              "quote": "Bank Account should be in the name of the student (a Joint Bank Account with parent/Guardian is also permissible), active and seeded with the Aadhaar no of the student."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Bank Account should be in the name of the student (a Joint Bank Account with parent/Guardian is also permissible), active and seeded with the Aadhaar no of the student.",
+              "fact": "I don't have a bank account.",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "ngy",
+          "scheme_name": "Nanda Gaura Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your family income, your child's gender, or your residency in Uttarakhand. You must also ensure you have an active bank account, which you do not currently have.",
+          "citations": [
+            {
+              "chunk_id": "ngy::eligibility::000",
+              "quote": "This scheme is valid only for native/permanent girls of Uttarakhand state."
+            },
+            {
+              "chunk_id": "ngy::eligibility::009",
+              "quote": "The applicant should ensure that the bank account provided by him is active."
+            },
+            {
+              "chunk_id": "ngy::eligibility::010",
+              "quote": "The annual income of the girl child's family should be up to a maximum of Rs. 72,000/- (Rs. 6,000/- monthly) in rural and urban areas."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The applicant should ensure that the bank account provided by him is active.",
+              "fact": "I don't have a bank account.",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "vtvscsgit",
+          "scheme_name": "Vocational Training For VJNT And SBC Candidates Studying In Government Industrial Training Institute",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not verify your category or your residency in Maharashtra. These details are required to determine if you can be considered for this scheme.",
+          "citations": [
+            {
+              "chunk_id": "vtvscsgit::eligibility::000",
+              "quote": "Students should belong to VJNT or SBC Category."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 12,
+              "valid": 12
+            }
+          }
+        ],
+        "created": "2026-09-22T14:23:41+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_065",
+      "language": "te",
+      "test_type": "positive",
+      "description": "నేను ఆంధ్రప్రదేశ్‌లో 33 ఏళ్ల స్వర్ణకారుడిని (బంగారు నగలు తయారుచేస్తాను). ఇది మా కుటుంబ వృత్తి, మరియు నేను ఇంతకు ముందు ఎలాంటి రుణం తీసుకోలేదు.",
+      "notes": "Telugu entry: 33-year-old goldsmith in AP, family trade, no prior similar loan — goldsmith is one of the 18 listed trades.",
+      "query": "I am a 33-year-old goldsmith (I make gold jewelry) in Andhra Pradesh. This is our family profession, and I have never taken any loan before.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: goldsmith"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Andhra Pradesh"
+        ],
+        [
+          "F3",
+          "other_facts",
+          "This is our family profession"
+        ],
+        [
+          "F4",
+          "other_facts",
+          "I have never taken any loan before"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "swlhps",
+          "scheme_name": "Scheme For Waiver Of Loans To Handloom And Powerloom Sector",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "మీరు ఆంధ్రప్రదేశ్ రాష్ట్రానికి చెందినవారు కాబట్టి రాష్ట్ర నిబంధన సరిపోయింది. అయితే, మీరు వృత్తిరీత్యా స్వర్ణకారులని పేర్కొన్నారు, కానీ ఈ పథకం నేత కార్మికుల కోసం ఉద్దేశించబడింది; అలాగే మీరు గతంలో ఎప్పుడూ రుణం తీసుకోలేదని చెప్పారు, కాబట్టి మీ అర్హతను నిర్ధారించడానికి మరిన్ని వివరాలు అవసరం.",
+          "citations": [
+            {
+              "chunk_id": "swlhps::eligibility::003",
+              "quote": "a) Individual Weavers who have directly availed loans for weaving purposes;"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The loans disbursed to Individual Weavers and Weaver Groups for weaving purposes that were outstanding on 31.03.2014 are eligible for coverage under the scheme.",
+              "fact": "I have never taken any loan before",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "atnmasfogi",
+          "scheme_name": "Annai Teresa Ninaivu Marriage Assistance Scheme for Orphan Girls-I",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "ఈ పథకం Tamil Nadu నివాసులకు మాత్రమే; మీరు Andhra Pradeshలో నివసిస్తున్నారని చెప్పారు.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "ags",
+          "scheme_name": "Arundhati Gold Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "ఈ పథకం Assam నివాసులకు మాత్రమే; మీరు Andhra Pradeshలో నివసిస్తున్నారని చెప్పారు.",
+          "citations": [
+            {
+              "chunk_id": "ags::eligibility::008",
+              "quote": "as most of the Tea Gardens in the State of Assam do not have High School facility"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "cmgcpsi",
+          "scheme_name": "Chief Minister's Girl Child Protection Scheme-I",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "ఈ పథకం Tamil Nadu నివాసులకు మాత్రమే; మీరు Andhra Pradeshలో నివసిస్తున్నారని చెప్పారు.",
+          "citations": [
+            {
+              "chunk_id": "cmgcpsi::eligibility::005",
+              "quote": "The parents/grandparents should be a native of Tamil Nadu by birth or continuous residence of not less than ten years at the time of applying to this scheme."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "jt",
+          "scheme_name": "Jagananna Thodu",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "మీరు ఆంధ్రప్రదేశ్ రాష్ట్రానికి చెందినవారు కాబట్టి రాష్ట్ర నిబంధన సరిపోయింది. అయితే, మీ వయస్సు మరియు వార్షిక ఆదాయం వంటి ఇతర అర్హత ప్రమాణాలను ఇంకా ధృవీకరించాల్సి ఉంది.",
+          "citations": [
+            {
+              "chunk_id": "jt::eligibility::000",
+              "quote": "The applicant should be a resident of the state of Andhra Pradesh."
+            },
+            {
+              "chunk_id": "jt::eligibility::002",
+              "quote": "The applicant should have a monthly income of less than ₹ 10,000/- in rural areas and less than ₹ 12,000/- in urban areas."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "మీరు ఆంధ్రప్రదేశ్ రాష్ట్రానికి చెందినవారు కాబట్టి రాష్ట్ర నిబంధన సరిపోయింది. అయితే, మీ కుటుంబ వార్షిక ఆదాయం మరియు భూమి వివరాలు వంటి ఇతర అర్హత ప్రమాణాలను ఇంకా ధృవీకరించాల్సి ఉంది.",
+          "citations": [
+            {
+              "chunk_id": "dysrhis::eligibility::002",
+              "quote": "Annual income of the Households:All households whose annual income is less than or upto Rs.5.00 Lakhs (Salary certificate evidence)"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "dls-punjab",
+          "scheme_name": "Direct Lending Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "ఈ పథకం Punjab నివాసులకు మాత్రమే; మీరు Andhra Pradeshలో నివసిస్తున్నారని చెప్పారు.",
+          "citations": [
+            {
+              "chunk_id": "dls-punjab::eligibility::001",
+              "quote": "The applicant should be a domicile / permanent resident of the state of Punjab."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "ysrkn",
+          "scheme_name": "YSR Kapu Nestham",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "ఈ పథకానికి సంబంధించి మీ వయస్సు, లింగం, కులం మరియు కుటుంబ ఆదాయం వంటి అనేక అర్హత ప్రమాణాలను ఇంకా ధృవీకరించాల్సి ఉంది.",
+          "citations": [
+            {
+              "chunk_id": "ysrkn::eligibility::001",
+              "quote": "Total family Income of the applicant should be less than Rs.10,000/- per month in Rural areas and Rs.12,000/- per month in Urban areas."
+            },
+            {
+              "chunk_id": "ysrkn::eligibility::009",
+              "quote": "The applicant should be between 45 – 60 Years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "nbcfdc-gls",
+          "scheme_name": "NBCFDC General Loan Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "మీరు స్వర్ణకారులని పేర్కొన్నారు, కానీ ఈ పథకం వెనుకబడిన తరగతులకు (OBC) చెందిన పారిశ్రామికవేత్తల కోసం ఉద్దేశించబడింది. మీ కుటుంబ వార్షిక ఆదాయం మరియు సామాజిక వర్గం వంటి వివరాలను ఇంకా ధృవీకరించాల్సి ఉంది.",
+          "citations": [
+            {
+              "chunk_id": "nbcfdc-gls::eligibility::000",
+              "quote": "The applicant must be an Entrepreneur The applicant must be from a Backward Class (OBC)."
+            },
+            {
+              "chunk_id": "nbcfdc-gls::eligibility::001",
+              "quote": "The Total Annual Family Income of the applicant must be Less than ₹ 3 Lakh per Annum."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "maddapp-i",
+          "scheme_name": "Marriage Assistance To Daughters Of Differently Abled Parents (Parinayam-I)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "ఈ పథకం Kerala నివాసులకు మాత్రమే; మీరు Andhra Pradeshలో నివసిస్తున్నారని చెప్పారు.",
+          "citations": [
+            {
+              "chunk_id": "maddapp-i::eligibility::000",
+              "quote": "The applicant should be a permanent resident of Kerala."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "te",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 8,
+              "valid": 8
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:37:33+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_067",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I am pregnant with my first child, I have a job, and I am losing wages because of the pregnancy.",
+      "notes": "Meets PMMVY's core condition directly: pregnant, employed, and experiencing wage loss due to pregnancy.",
+      "query": "I am pregnant with my first child, I have a job, and I am losing wages because of the pregnancy.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: employee"
+        ],
+        [
+          "F2",
+          "gender",
+          "gender: female"
+        ],
+        [
+          "F3",
+          "family",
+          "family: pregnant with first child"
+        ],
+        [
+          "F4",
+          "other_facts",
+          "I have a job"
+        ],
+        [
+          "F5",
+          "other_facts",
+          "I am losing wages because of the pregnancy"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "arogya-lakshmi",
+          "scheme_name": "Arogya Lakshmi",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are female, which meets the gender requirement. We still need to confirm your age, your residency in Telangana, and whether you are in your first or second trimester of pregnancy.",
+          "citations": [
+            {
+              "chunk_id": "arogya-lakshmi::eligibility::001",
+              "quote": "Residency: The pregnant woman or the family with a newborn must be a resident of Telangana."
+            },
+            {
+              "chunk_id": "arogya-lakshmi::eligibility::002",
+              "quote": "The pregnant woman must be in her first or second trimester of pregnancy to be eligible for the program."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The pregnant woman must be in her first or second trimester of pregnancy to be eligible for the program.",
+              "fact": "family: pregnant with first child",
+              "fact_field": "family"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "mamata",
+          "scheme_name": "Mamata Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are female, which meets the gender requirement. We still need to confirm your age, your residency in Odisha, and whether your current employment status affects your eligibility for maternity benefits.",
+          "citations": [
+            {
+              "chunk_id": "mamata::eligibility::000",
+              "quote": "Pregnant and lactating woman of 19 & above age group, for the first two live births except those who avail maternity benefit (who are themselves employees or wives of employees of State Govt/Central Govt/PSUs)."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "except those who avail maternity benefit (who are themselves employees or wives of employees of State Govt/Central Govt/PSUs)",
+              "fact": "I have a job",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "mbs-hbocwwb",
+          "scheme_name": "Maternity Benefit Scheme (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are female, which meets the gender requirement. We still need to confirm your residency in Haryana and whether you are a registered construction worker under the relevant board.",
+          "citations": [
+            {
+              "chunk_id": "mbs-hbocwwb::eligibility::000",
+              "quote": "The women worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "gfapscplw",
+          "scheme_name": "Grant of Financial Assistance to Poor Scheduled Caste Pregnant & Lactating Women",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are female, which meets the gender requirement. We still need to confirm your residency in Puducherry, your family income, and your social category.",
+          "citations": [
+            {
+              "chunk_id": "gfapscplw::eligibility::001",
+              "quote": "The applicant should belong to the Union Territory of Pondicherry by virtue of birth or continuous residence of not less than 3 years."
+            },
+            {
+              "chunk_id": "gfapscplw::eligibility::002",
+              "quote": "The applicant should be from Scheduled Caste."
+            },
+            {
+              "chunk_id": "gfapscplw::eligibility::005",
+              "quote": "The annual income of the applicant and spouse should not exceed ₹ 2,00,000/-."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "pmmvy",
+          "scheme_name": "Pradhan Mantri Matru Vandana Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are female, which meets the gender requirement. We still need to confirm your age, family income, social category, and whether your employment status excludes you from this scheme.",
+          "citations": [
+            {
+              "chunk_id": "pmmvy::eligibility::000",
+              "quote": "The applicant should be of at least 19 years old and a pregnant women."
+            },
+            {
+              "chunk_id": "pmmvy::exclusions::012",
+              "quote": "All pregnant women and lactating mothers in regular employment with the Central Government or State Government or Public Sector Undertaking or those who are in receipt of similar benefits under any law for the time being in force shall not be entitled to benefits under PMMVY."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "All pregnant women and lactating mothers in regular employment with the Central Government or State Government or Public Sector Undertaking or those who are in receipt of similar benefits under any law for the time being in force shall not be entitled to benefits under PMMVY.",
+              "fact": "I have a job",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 9,
+              "valid": 9
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:38:11+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_072",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I just had a baby girl and want to start saving for her future.",
+      "notes": "Well within the under-10 age limit for opening a Sukanya Samriddhi account.",
+      "query": "I just had a baby girl and want to start saving for her future.",
+      "facts": [
+        [
+          "F1",
+          "family",
+          "family: newborn baby girl"
+        ],
+        [
+          "F2",
+          "applying_for",
+          "asking for: their child"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "cmgcpsi",
+          "scheme_name": "Chief Minister's Girl Child Protection Scheme-I",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You have a newborn baby girl, but we need to confirm your annual income, your state of residence, and whether you meet the specific family and sterilization requirements.",
+          "citations": [
+            {
+              "chunk_id": "cmgcpsi::eligibility::001",
+              "quote": "The annual income of the parents of the girl child should not exceed ₹72,000/-."
+            },
+            {
+              "chunk_id": "cmgcpsi::eligibility::003",
+              "quote": "The family should have only one female child and no male child."
+            },
+            {
+              "chunk_id": "cmgcpsi::eligibility::005",
+              "quote": "The parents/grandparents should be a native of Tamil Nadu by birth or continuous residence of not less than ten years at the time of applying to this scheme."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The family should have only one female child and no male child.",
+              "fact": "asking for: their child",
+              "fact_field": "applying_for"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "bys",
+          "scheme_name": "Bhagyalaxmi Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You have a child, but we need to confirm your state of residence, your BPL status, and whether your child meets the age, education, and immunization requirements.",
+          "citations": [
+            {
+              "chunk_id": "bys::eligibility::001",
+              "quote": "Benefits from the Bhagyalakshmi scheme are available to BPL families with up to 2 female children."
+            },
+            {
+              "chunk_id": "bys::eligibility::003",
+              "quote": "Girl children must be born after 31 March 2006 in a BPL family."
+            },
+            {
+              "chunk_id": "bys::eligibility::004",
+              "quote": "A girl must have completed the eighth grade to be eligible for the maturity amount"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "Benefits from the Bhagyalakshmi scheme are available to BPL families with up to 2 female children.",
+              "fact": "asking for: their child",
+              "fact_field": "applying_for"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "lly",
+          "scheme_name": "Ladli Laxmi Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your state of residence and whether your child meets the registration and family planning requirements.",
+          "citations": [
+            {
+              "chunk_id": "lly::eligibility::001",
+              "quote": "The girl child should be registered in the local Anganwadi centre."
+            },
+            {
+              "chunk_id": "lly::eligibility::002",
+              "quote": "Parents should be natives of Madhya Pradesh."
+            },
+            {
+              "chunk_id": "lly::eligibility::004",
+              "quote": "Parents who have two or less than two children, family planning has been adopted after the birth of the second child."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "lbs",
+          "scheme_name": "Ladli Beti Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your state of residence and your annual family income to see if you meet the requirements.",
+          "citations": [
+            {
+              "chunk_id": "lbs::eligibility::001",
+              "quote": "The annual income of the parents of the girl child from all sources should be less than ₹75,000."
+            },
+            {
+              "chunk_id": "lbs::eligibility::002",
+              "quote": "The girl child and her family should be residents of Jammu & Kashmir."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "mesy",
+          "scheme_name": "Matritva, Shishu Evam Baalika Madad Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You have a child, but we need to confirm your state of residence, your occupation as a registered construction worker, and your age.",
+          "citations": [
+            {
+              "chunk_id": "mesy::eligibility::000",
+              "quote": "Beneficiary women must be a permanent resident of Uttar Pradesh."
+            },
+            {
+              "chunk_id": "mesy::eligibility::001",
+              "quote": "Beneficiary women must be a registered construction worker."
+            },
+            {
+              "chunk_id": "mesy::eligibility::004",
+              "quote": "Shishu Hitlabh (Child benefits)First girl child born in the family (up to one girl child)."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "First girl child born in the family (up to one girl child).",
+              "fact": "asking for: their child",
+              "fact_field": "applying_for"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 14,
+              "valid": 14
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:38:37+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_077",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I live in a kutcha house in rural Madhya Pradesh with no shelter of my own, essentially living on alms.",
+      "notes": "Destitute/houseless households are an automatic-inclusion category under PMAY-Gramin.",
+      "query": "I live in a kutcha house in rural Madhya Pradesh with no shelter of my own, essentially living on alms.",
+      "facts": [
+        [
+          "F1",
+          "state",
+          "state: Madhya Pradesh"
+        ],
+        [
+          "F2",
+          "residence",
+          "residence: rural"
+        ],
+        [
+          "F3",
+          "other_facts",
+          "I live in a kutcha house"
+        ],
+        [
+          "F4",
+          "other_facts",
+          "no shelter of my own"
+        ],
+        [
+          "F5",
+          "other_facts",
+          "essentially living on alms"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "bpgy",
+          "scheme_name": "Biju Pucca Ghar Yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Odisha; you said you live in Madhya Pradesh.",
+          "citations": [
+            {
+              "chunk_id": "bpgy::eligibility::000",
+              "quote": "The applicant must be a permanent resident of Odisha state."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "aos",
+          "scheme_name": "Assam Orunodoi Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Assam; you said you live in Madhya Pradesh.",
+          "citations": [
+            {
+              "chunk_id": "aos::eligibility::003",
+              "quote": "The priority has been given for the Widow Women, Separate Female, Physically Handicap Person, Unmarried Girls(age more than 35 years) etc. at the time of selection of beneficiary for Assam Orunodoi Asoni."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "pmay-g",
+          "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You live in a rural area, which matches the residency requirement. We still need to verify your income, land ownership, and your specific housing situation to see if you meet the criteria for this scheme.",
+          "citations": [
+            {
+              "chunk_id": "pmay-g::eligibility::000",
+              "quote": "The universe of eligible beneficiaries under PMAY-G will include all the houseless households living in zero, one, or two-room houses with kutcha walls and kutcha roofs"
+            },
+            {
+              "chunk_id": "pmay-g::eligibility::002",
+              "quote": "Households without shelter2. Destitute/ living on alms3."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The universe of eligible beneficiaries under PMAY-G will include all the houseless households living in zero, one, or two-room houses with kutcha walls and kutcha roofs",
+              "fact": "I live in a kutcha house",
+              "fact_field": "other_facts"
+            },
+            {
+              "condition": "Households without shelter",
+              "fact": "no shelter of my own",
+              "fact_field": "other_facts"
+            },
+            {
+              "condition": "Destitute/ living on alms",
+              "fact": "essentially living on alms",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "gssy",
+          "scheme_name": "Gopabandhu Sikhya Sahayata Yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Odisha; you said you live in Madhya Pradesh.",
+          "citations": [
+            {
+              "chunk_id": "gssy::eligibility::005",
+              "quote": "He/ She should be a Permanent Resident of Odisha."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "hs",
+          "scheme_name": "House Subsidy Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Himachal Pradesh; you said you live in Madhya Pradesh.",
+          "citations": [
+            {
+              "chunk_id": "hs::eligibility::000",
+              "quote": "The applicant should be a resident of Himachal Pradesh."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "pi",
+          "scheme_name": "Pedalandariki Illu",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Madhya Pradesh.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "maps",
+          "scheme_name": "Mukhyamantri Avivahita Pension Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a resident of Madhya Pradesh, which matches the state requirement. We still need to confirm your age, gender, and marital status to determine if you meet the eligibility criteria.",
+          "citations": [
+            {
+              "chunk_id": "maps::eligibility::000",
+              "quote": "Applicants should be a native of Madhya Pradesh State."
+            },
+            {
+              "chunk_id": "maps::eligibility::001",
+              "quote": "The applicants should be Unmarried women."
+            },
+            {
+              "chunk_id": "maps::eligibility::002",
+              "quote": "Applicant's age should be 50 years or more"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "mabay",
+          "scheme_name": "Mukhyamantri Aawasiye Bhu-Adhikaar Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a resident of Madhya Pradesh, which matches the state requirement. We still need to confirm your land ownership status and other eligibility conditions.",
+          "citations": [
+            {
+              "chunk_id": "mabay::eligibility::000",
+              "quote": "The applicant family does not have a residence to live independently."
+            },
+            {
+              "chunk_id": "mabay::eligibility::001",
+              "quote": "The applicant family has less than 5 acres of land."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The applicant family does not have a residence to live independently.",
+              "fact": "no shelter of my own",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "aks",
+          "scheme_name": "Akanksha Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a resident of Madhya Pradesh, which matches the state requirement. We still need to confirm your family income, education level, and social category to see if you meet the requirements.",
+          "citations": [
+            {
+              "chunk_id": "aks::eligibility::001",
+              "quote": "The applicant should be a native of Madhya Pradesh and a member of scheduled tribe."
+            },
+            {
+              "chunk_id": "aks::eligibility::002",
+              "quote": "The annual income of the applicant's parents/ guardians/ self from all sources is Rs. Not more than 6.00 lakh."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "clssmig",
+          "scheme_name": "Credit Linked Subsidy Scheme for Middle Income Group",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to verify your family income and confirm that you do not own a pucca house to determine if you meet the eligibility criteria.",
+          "citations": [
+            {
+              "chunk_id": "clssmig::eligibility::000",
+              "quote": "The beneficiary family should not own a pucca house (an all-weather dwelling unit) either in his/her name or in the name of any member of his/her family in any part of India."
+            },
+            {
+              "chunk_id": "clssmig::eligibility::003",
+              "quote": "Middle Income Group-I (MIG-I) - annual household income exceeding ₹6 lakhs and up to ₹12 lakhs"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The beneficiary family should not own a pucca house (an all-weather dwelling unit) either in his/her name or in the name of any member of his/her family in any part of India.",
+              "fact": "no shelter of my own",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 11,
+              "valid": 11
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:38:48+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_082",
+      "language": "en",
+      "test_type": "clarify",
+      "description": "I need a house, can you help me?",
+      "notes": "Rural vs. urban, income, family structure and prior housing benefits are all missing and directly decide eligibility.",
+      "query": "I need a house, can you help me?",
+      "facts": [],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "ghcsscp",
+          "scheme_name": "Grant of House Construction Subsidy to Scheduled Caste People",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not check your income, category, or state residency. These details, along with your citizenship and property ownership status, must be confirmed to determine if you meet the requirements.",
+          "citations": [
+            {
+              "chunk_id": "ghcsscp::eligibility::000",
+              "quote": "The applicant should be a citizen of India."
+            },
+            {
+              "chunk_id": "ghcsscp::eligibility::001",
+              "quote": "The applicant should be a native or a permanent resident of the Union Territory of Pondicherry."
+            },
+            {
+              "chunk_id": "ghcsscp::eligibility::003",
+              "quote": "The applicant should be from Scheduled Caste or from Other Economically Backward Class."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "thrgrr-sw",
+          "scheme_name": "Thatched House Repair Grant for Re-thatching & Repairs (Sainik Welfare)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not check your state residency. Your status as an ex-serviceman or dependent, your registration with the Department of Sainik Welfare, and your housing situation must also be confirmed.",
+          "citations": [
+            {
+              "chunk_id": "thrgrr-sw::eligibility::000",
+              "quote": "The applicant should be an Ex-serviceman/Widow of an Ex-serviceman/Dependent of an Ex-serviceman."
+            },
+            {
+              "chunk_id": "thrgrr-sw::eligibility::001",
+              "quote": "The applicant should be registered with the Department of Sainik Welfare, Puducherry."
+            },
+            {
+              "chunk_id": "thrgrr-sw::eligibility::003",
+              "quote": "The applicant should be living in a thatched house."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "hs",
+          "scheme_name": "House Subsidy Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not check your income, category, or state residency. Other requirements such as your residency certificate, panchayat recommendation, and current housing status must also be verified.",
+          "citations": [
+            {
+              "chunk_id": "hs::eligibility::000",
+              "quote": "The applicant should be a resident of Himachal Pradesh."
+            },
+            {
+              "chunk_id": "hs::eligibility::001",
+              "quote": "The applicant should belong to Scheduled Cast, Other Backward Classes, Minority Community, Single Women, or Handicapped."
+            },
+            {
+              "chunk_id": "hs::eligibility::002",
+              "quote": "The applicant's annual income should be less than Rs. 3.00 lakhs."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "bpgy",
+          "scheme_name": "Biju Pucca Ghar Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not check your category or state residency. Your current housing type and location within the specified mining-affected districts must also be confirmed.",
+          "citations": [
+            {
+              "chunk_id": "bpgy::eligibility::000",
+              "quote": "The applicant must be a permanent resident of Odisha state."
+            },
+            {
+              "chunk_id": "bpgy::eligibility::002",
+              "quote": "The applicant must be living in a kutcha house."
+            },
+            {
+              "chunk_id": "bpgy::eligibility::005",
+              "quote": "The Scheme is applicable to 36 Blocks of 9 mining-affected districts as mentioned below."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "dfhsscoebc",
+          "scheme_name": "Distribution of Free House Sites to Scheduled Caste/Other Economically Backward Classes",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We could not check your age, income, or state residency. Your status as a homeless person and your intention to construct a house must also be verified.",
+          "citations": [
+            {
+              "chunk_id": "dfhsscoebc::eligibility::001",
+              "quote": "The applicant should be a native or a permanent resident of the Union Territory of Pondicherry."
+            },
+            {
+              "chunk_id": "dfhsscoebc::eligibility::003",
+              "quote": "The applicant should have attained the age of 18 years."
+            },
+            {
+              "chunk_id": "dfhsscoebc::eligibility::004",
+              "quote": "The applicant should be a homeless person."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 15,
+              "valid": 15
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:38:57+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_083",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I am a construction worker in Haryana, registered with the welfare board for two years now. My daughter is getting married.",
+      "notes": "Haryana's construction workers' welfare board scheme requires at least one year of registered membership — two years comfortably qualifies.",
+      "query": "I am a construction worker in Haryana, registered with the welfare board for two years now. My daughter is getting married.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: construction worker"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Haryana"
+        ],
+        [
+          "F3",
+          "family",
+          "family: daughter getting married"
+        ],
+        [
+          "F4",
+          "registered_construction_worker",
+          "registered construction worker: yes"
+        ],
+        [
+          "F5",
+          "applying_for",
+          "asking for: their child"
+        ],
+        [
+          "F6",
+          "other_facts",
+          "registered with the welfare board for two years now"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "famc-hbocwwb",
+          "scheme_name": "Financial Assistance On Marriage Of Children (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana, which matches the basic requirements. We still need to confirm your membership duration, your daughter's marriage details, and the required documentation.",
+          "citations": [
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::001",
+              "quote": "The registered worker should have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::002",
+              "quote": "The worker should have the attested marriage card of his/her son/daughter."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker should have a minimum of one-year regular membership.",
+              "fact": "registered with the welfare board for two years now",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "fadc-hbocwwb",
+          "scheme_name": "Financial Assistance To Disabled Children (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana. We must still confirm your membership duration and whether your child meets the specific disability and dependency criteria.",
+          "citations": [
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::000",
+              "quote": "The construction worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::001",
+              "quote": "The registered worker must have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::002",
+              "quote": "The registered worker who has dependent children with 50% or more physical/mental disability is eligible to apply under the scheme."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker must have a minimum of one-year regular membership.",
+              "fact": "registered with the welfare board for two years now",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "faecrw-hbocwwb",
+          "scheme_name": "Financial Assistance For Education Of Children Of Registered Worker (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana. We still need to confirm your membership duration and the specific education details of your child.",
+          "citations": [
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::001",
+              "quote": "The registered worker should have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::002",
+              "quote": "The children of registered workers studying in Class-I to Postgraduate are eligible to apply under the scheme."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker should have a minimum of one-year regular membership.",
+              "fact": "registered with the welfare board for two years now",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "mbs-hbocwwb",
+          "scheme_name": "Maternity Benefit Scheme (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana. We still need to confirm your membership duration and verify if you meet the gender requirement for this scheme.",
+          "citations": [
+            {
+              "chunk_id": "mbs-hbocwwb::eligibility::000",
+              "quote": "The women worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "mbs-hbocwwb::eligibility::001",
+              "quote": "The registered women worker should have a minimum of one-year regular membership."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered women worker should have a minimum of one-year regular membership.",
+              "fact": "registered with the welfare board for two years now",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "darwhbocwwb",
+          "scheme_name": "Disability Assistance For Registered Worker (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana. We still need to confirm your membership duration and whether you meet the criteria regarding workplace accidents.",
+          "citations": [
+            {
+              "chunk_id": "darwhbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "darwhbocwwb::eligibility::001",
+              "quote": "The registered worker should have regular membership."
+            },
+            {
+              "chunk_id": "darwhbocwwb::eligibility::002",
+              "quote": "The registered worker who has become disabled due to an accident at the workplace during the course of employment is eligible to apply under the scheme."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker should have regular membership.",
+              "fact": "registered with the welfare board for two years now",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "famtw",
+          "scheme_name": "Financial Assistance for Marriage for the Construction Workers",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Delhi; you said you live in Haryana.",
+          "citations": [
+            {
+              "chunk_id": "famtw::eligibility::000",
+              "quote": "The applicant should be a resident of Delhi."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "maabocwwb",
+          "scheme_name": "Marriage Assistance (A.B.O.C.W.W.B)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Assam; you said you live in Haryana.",
+          "citations": [
+            {
+              "chunk_id": "maabocwwb::eligibility::000",
+              "quote": "The applicant should be a permanent resident of Assam."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "ma-pbaocwwb",
+          "scheme_name": "Marriage Assistance Scheme (PBAOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Puducherry; you said you live in Haryana.",
+          "citations": [
+            {
+              "chunk_id": "ma-pbaocwwb::eligibility::001",
+              "quote": "The applicant should be registered as a Construction Worker with the Puducherry Building and Other Construction Workers Welfare Board."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 14,
+              "valid": 14
+            }
+          }
+        ],
+        "created": "2026-09-22T14:27:03+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_084",
+      "language": "en",
+      "test_type": "exclusion",
+      "description": "I started working as a construction laborer in Haryana three months ago and just registered with the welfare board. My son is getting married next month.",
+      "notes": "Haryana's scheme requires a minimum of one year of registered membership — three months is a deliberate near-miss.",
+      "query": "I started working as a construction laborer in Haryana three months ago and just registered with the welfare board. My son is getting married next month.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: construction laborer"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Haryana"
+        ],
+        [
+          "F3",
+          "family",
+          "family: son getting married"
+        ],
+        [
+          "F4",
+          "registered_construction_worker",
+          "registered construction worker: yes"
+        ],
+        [
+          "F5",
+          "other_facts",
+          "I started working as a construction laborer in Haryana three months ago"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "famc-hbocwwb",
+          "scheme_name": "Financial Assistance On Marriage Of Children (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana, which meets the basic registration requirement. However, you must confirm that you have at least one year of regular membership and provide an attested marriage card for your son.",
+          "citations": [
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::001",
+              "quote": "The registered worker should have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::002",
+              "quote": "The worker should have the attested marriage card of his/her son/daughter."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker should have a minimum of one-year regular membership.",
+              "fact": "I started working as a construction laborer in Haryana three months ago",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "fadc-hbocwwb",
+          "scheme_name": "Financial Assistance To Disabled Children (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana, but you must confirm that you have at least one year of regular membership. Additionally, you need to provide a disability certificate for your dependent child issued by the District Medical Board.",
+          "citations": [
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::000",
+              "quote": "The construction worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::001",
+              "quote": "The registered worker must have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::003",
+              "quote": "The worker should have a disability certificate of 50% or more physical or mental disability of his/her dependent children issued by the District Medical Board."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker must have a minimum of one-year regular membership.",
+              "fact": "I started working as a construction laborer in Haryana three months ago",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "faecrw-hbocwwb",
+          "scheme_name": "Financial Assistance For Education Of Children Of Registered Worker (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana, but you must confirm that you have at least one year of regular membership. We also need to verify the education class and stage of your children to see if they qualify.",
+          "citations": [
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::001",
+              "quote": "The registered worker should have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::002",
+              "quote": "The children of registered workers studying in Class-I to Postgraduate are eligible to apply under the scheme."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker should have a minimum of one-year regular membership.",
+              "fact": "I started working as a construction laborer in Haryana three months ago",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "darwhbocwwb",
+          "scheme_name": "Disability Assistance For Registered Worker (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana, but you must confirm that you have regular membership. You also need to provide a disability certificate issued by the Government Medical Board regarding an accident at your workplace.",
+          "citations": [
+            {
+              "chunk_id": "darwhbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            },
+            {
+              "chunk_id": "darwhbocwwb::eligibility::001",
+              "quote": "The registered worker should have regular membership."
+            },
+            {
+              "chunk_id": "darwhbocwwb::eligibility::004",
+              "quote": "The disability Certificates in regard to the percentage of disability issued by the Government Medical Board."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "pbs-hbocwwb",
+          "scheme_name": "Paternity Benefit Scheme (HBOCWWB)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a registered construction worker in Haryana, but we must confirm your gender and that you have at least one year of regular membership. We also need to verify the birth details of your child.",
+          "citations": [
+            {
+              "chunk_id": "pbs-hbocwwb::eligibility::000",
+              "quote": "The applicant should be a male construction worker."
+            },
+            {
+              "chunk_id": "pbs-hbocwwb::eligibility::002",
+              "quote": "The registered worker should have a minimum of one-year regular membership."
+            },
+            {
+              "chunk_id": "pbs-hbocwwb::eligibility::007",
+              "quote": "After the birth of the child, it is necessary to attach the birth certificate along with the application."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registered worker should have a minimum of one-year regular membership.",
+              "fact": "I started working as a construction laborer in Haryana three months ago",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "famtw",
+          "scheme_name": "Financial Assistance for Marriage for the Construction Workers",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Delhi; you said you live in Haryana.",
+          "citations": [
+            {
+              "chunk_id": "famtw::eligibility::000",
+              "quote": "The applicant should be a resident of Delhi."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {
+              "S5": [
+                "S5: citation 'pbs-hbocwwb::eligibility::008' is not a chunk of this scheme"
+              ]
+            },
+            "citations": {
+              "total": 15,
+              "valid": 14
+            }
+          },
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 15,
+              "valid": 15
+            }
+          }
+        ],
+        "created": "2026-09-22T14:27:31+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_086",
+      "language": "en",
+      "test_type": "clarify",
+      "description": "I do construction work in Haryana but I've never registered with any welfare board.",
+      "notes": "Welfare board registration is the threshold requirement for these schemes — being unregistered rules this out until the worker registers.",
+      "query": "I do construction work in Haryana but I've never registered with any welfare board.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: construction worker"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Haryana"
+        ],
+        [
+          "F3",
+          "registered_construction_worker",
+          "registered construction worker: no"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "fadc-hbocwwb",
+          "scheme_name": "Financial Assistance To Disabled Children (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "fadc-hbocwwb::eligibility::000",
+              "quote": "The construction worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "darwhbocwwb",
+          "scheme_name": "Disability Assistance For Registered Worker (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "darwhbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "dprw-hbocwwb",
+          "scheme_name": "Disability Pension For Registered Worker (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "dprw-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "darw-hbocwwb",
+          "scheme_name": "Death Assistance For Registered Worker (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "darw-hbocwwb::eligibility::000",
+              "quote": "The deceased construction worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "faecrw-hbocwwb",
+          "scheme_name": "Financial Assistance For Education Of Children Of Registered Worker (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "faecrw-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "bs-hbocwwb",
+          "scheme_name": "Bicycle Scheme (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "bs-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "famc-hbocwwb",
+          "scheme_name": "Financial Assistance On Marriage Of Children (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "famc-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "pbs-hbocwwb",
+          "scheme_name": "Paternity Benefit Scheme (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "pbs-hbocwwb::eligibility::001",
+              "quote": "The male worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "mbs-hbocwwb",
+          "scheme_name": "Maternity Benefit Scheme (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "mbs-hbocwwb::eligibility::000",
+              "quote": "The women worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "gpt-hbocwwb",
+          "scheme_name": "Grant For Purchase Of Tools (HBOCWWB)",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for workers registered with the construction workers' welfare board; you said you are not registered.",
+          "citations": [
+            {
+              "chunk_id": "gpt-hbocwwb::eligibility::000",
+              "quote": "The worker should be registered under Haryana Building and Other Construction Workers Welfare Board (HBOCWWB)."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": null
+    },
+    {
+      "id": "gold_089",
+      "language": "en",
+      "test_type": "no_match",
+      "description": "I heard about something called 'Universal Farmer Bonus Yojana', can I apply for it?",
+      "notes": "This scheme name does not correspond to any real scheme — the system should not invent or guess a matching scheme.",
+      "query": "I heard about something called 'Universal Farmer Bonus Yojana', can I apply for it?",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: farmer"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "rgkny",
+          "scheme_name": "Rajiv Gandhi Kisan Nyay Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a farmer, which meets the occupation requirement. We still need to confirm if you are a resident of Chhattisgarh and if you are above 18 years of age.",
+          "citations": [
+            {
+              "chunk_id": "rgkny::eligibility::000",
+              "quote": "The applicant must be a resident of Chhattisgarh state."
+            },
+            {
+              "chunk_id": "rgkny::eligibility::002",
+              "quote": "The age of the applicant should be above 18 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "pm-kusum",
+          "scheme_name": "Pradhan Mantri Kisan Urja Suraksha Evam Utthan Mahabhiyan Scheme For Farmers.",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "You are a farmer, which meets the occupation requirement for this scheme.",
+          "citations": [
+            {
+              "chunk_id": "pm-kusum::eligibility::000",
+              "quote": "The eligible categories for KUSUM Scheme are:An individual farmer."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "slesvkspy",
+          "scheme_name": "Suraksha Laghu Evan Simant Vriddhajan Krishak Samman Pension Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a farmer, which meets the occupation requirement. We still need to confirm if you are a native of Rajasthan and if you meet the age requirements of over 55 for women or 58 for men.",
+          "citations": [
+            {
+              "chunk_id": "slesvkspy::eligibility::000",
+              "quote": "The applicant should be a native of Rajasthan State."
+            },
+            {
+              "chunk_id": "slesvkspy::eligibility::001",
+              "quote": "The female applicant's age should be more than 55 years and the male more than 58 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "cmsguy",
+          "scheme_name": "Chief Minister Samagra Gramya Unnayan Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm if you are a resident of Assam. Additionally, this scheme is not available for individual farmers and requires a group of 8 to 10 members.",
+          "citations": [
+            {
+              "chunk_id": "cmsguy::eligibility::000",
+              "quote": "The benefit of this scheme will be provided to any group of 8 to 10 members who are actual adult farmers of the same village"
+            },
+            {
+              "chunk_id": "cmsguy::exclusions::004",
+              "quote": "The scheme shall not be allowed to avail for the individual farmer"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "spytis-i",
+          "scheme_name": "Scheme for Promoting Young Talents in Science-I",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm if you are a school student in Kerala studying in Class VIII-XII. Your occupation as a farmer does not satisfy the student status requirement.",
+          "citations": [
+            {
+              "chunk_id": "spytis-i::eligibility::000",
+              "quote": "The school students (maximum of 5 students per group) studying in Class VIII-XII of Kerala State can apply under the scheme."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 8,
+              "valid": 8
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:39:44+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_093",
+      "language": "en",
+      "test_type": "exclusion",
+      "description": "I am 25, unmarried, and want to open a small savings scheme for myself.",
+      "notes": "Sukanya Samriddhi is only for a girl child under 10 opened by a guardian — this applicant is an adult opening an account for themself, so it doesn't apply; ask what kind of savings goal they have in mind.",
+      "query": "I am 25, unmarried, and want to open a small savings scheme for myself.",
+      "facts": [
+        [
+          "F1",
+          "age",
+          "age: 25"
+        ],
+        [
+          "F2",
+          "marital_status",
+          "marital status: unmarried"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "nscs",
+          "scheme_name": "National Savings Certificates (VIII-Issue) Scheme",
+          "matcher_status": "eligible",
+          "status": "eligible",
+          "reason": "You are eligible for this scheme because you meet the age requirement.",
+          "citations": [
+            {
+              "chunk_id": "nscs::eligibility::002",
+              "quote": "The minimum age of minors should be 10 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "suwps",
+          "scheme_name": "Sikkim Unmarried Women Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's age limit is 45-59; you said 25.",
+          "citations": [
+            {
+              "chunk_id": "suwps::eligibility::003",
+              "quote": "The applicant should be in the 45-59 years age group."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "25-ciss",
+          "scheme_name": "25% Capital Investment Subsidy Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You meet the age requirement for this scheme. It must still be confirmed if you are a resident of Lakshadweep and if your occupation qualifies under the scheme's criteria.",
+          "citations": [
+            {
+              "chunk_id": "25-ciss::eligibility::000",
+              "quote": "Any individual above 18 years of age including Women, ex-servicemen & physically handicapped is eligible to apply under the scheme."
+            },
+            {
+              "chunk_id": "25-ciss::eligibility::005",
+              "quote": "Note: The area of operation of the scheme is in all inhabitant islands of Lakshadweep."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "It must be confirmed if you are a resident of Andhra Pradesh and if you meet the specific income and land ownership criteria required by the scheme.",
+          "citations": [
+            {
+              "chunk_id": "dysrhis::eligibility::002",
+              "quote": "Landowners holding:Less than 12.00 Acres of wet landLess than 35.00 Acres of dry landTotal less than 35.00 Acres (Wet & Dry)Annual income of the Households:All households whose annual income is less than or upto Rs.5.00 Lakhs"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "ssy",
+          "scheme_name": "Sukanya Samriddhi Yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's maximum age is 10; you said 25.",
+          "citations": [
+            {
+              "chunk_id": "ssy::eligibility::000",
+              "quote": "the name of a girl child, who has not attained the age of ten years as of the date of opening of the account."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "pmsswwcpfp",
+          "scheme_name": "Prime Minister's Scholarship Scheme for the Wards/Widows of Central Police Force Personnel",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your unmarried status is noted for this scheme. It must still be confirmed if you meet the education level and specific course requirements.",
+          "citations": [
+            {
+              "chunk_id": "pmsswwcpfp::eligibility::012",
+              "quote": "The scheme is open for widows and unmarried wards of CPFs personnel."
+            },
+            {
+              "chunk_id": "pmsswwcpfp::eligibility::009",
+              "quote": "Courses eligible for the Scholarship:First professional degree programme in engineering, medicine, dental, veterinary, MBA, MCA, etc."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The scheme is open for widows and unmarried wards of CPFs personnel. However, marriage/re-marriage subsequently would not disqualify a person.",
+              "fact": "marital status: unmarried",
+              "fact_field": "marital_status"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "prerana",
+          "scheme_name": "Prerana (micro Credit Finance) Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You meet the age requirement for this scheme. It must still be confirmed if you are a resident of Karnataka, your family income, and your membership in a self-help group.",
+          "citations": [
+            {
+              "chunk_id": "prerana::eligibility::002",
+              "quote": "The applicant should be above 21 years of age."
+            },
+            {
+              "chunk_id": "prerana::eligibility::001",
+              "quote": "The applicant should be a resident of Karnataka."
+            },
+            {
+              "chunk_id": "prerana::eligibility::003",
+              "quote": "The family's annual income should not exceed Rs. 1,50,000 for rural and Rs. 2,00,000 for Urban applicant."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "mpps",
+          "scheme_name": "Media Person Pension Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's minimum age is 60; you said 25.",
+          "citations": [
+            {
+              "chunk_id": "mpps::eligibility::001",
+              "quote": "The age of the applicant/media person should be above 60 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 9,
+              "valid": 9
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:40:04+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_095",
+      "language": "en",
+      "test_type": "positive",
+      "description": "I want a Vishwakarma loan, but I am the only earning member and I'm also the sole registered farmer in the family already getting PM-KISAN.",
+      "notes": "Receiving PM-KISAN doesn't disqualify PM Vishwakarma by itself, but the applicant needs to actually be engaged in one of the 18 listed artisan trades — that hasn't been stated, so don't add pmv without confirming the trade.",
+      "query": "I want a Vishwakarma loan, but I am the only earning member and I'm also the sole registered farmer in the family already getting PM-KISAN.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: farmer"
+        ],
+        [
+          "F2",
+          "family",
+          "family: only earning member"
+        ],
+        [
+          "F3",
+          "prior_benefit_schemes",
+          "already received: PM-KISAN"
+        ],
+        [
+          "F4",
+          "other_facts",
+          "I am the only earning member"
+        ],
+        [
+          "F5",
+          "other_facts",
+          "I'm also the sole registered farmer in the family"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "pmv",
+          "scheme_name": "PM Vishwakarma",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your age, your specific trade, and that you are not currently availing other similar credit-based schemes. It must also be verified that you are the only family member registering for this benefit.",
+          "citations": [
+            {
+              "chunk_id": "pmv::eligibility::003",
+              "quote": "On the date of registration for the scheme, the minimum age of the applicant should be 18 years."
+            },
+            {
+              "chunk_id": "pmv::eligibility::006",
+              "quote": "The registration and benefits under the Scheme shall be restricted to one member of the family."
+            },
+            {
+              "chunk_id": "pmv::eligibility::005",
+              "quote": "The applicant should not have availed loans under similar credit-based schemes"
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The registration and benefits under the Scheme shall be restricted to one member of the family.",
+              "fact": "I am the only earning member",
+              "fact_field": "other_facts"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "mkky",
+          "scheme_name": "Mukhyamantri Kisaan Kalyaan Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "Your occupation as a farmer is confirmed, and your registration under PM-KISAN is noted. We still need to verify your residency in Madhya Pradesh and that you meet the land ownership and income criteria.",
+          "citations": [
+            {
+              "chunk_id": "mkky::eligibility::000",
+              "quote": "Applicants must be a permanent resident of Madhya Pradesh."
+            },
+            {
+              "chunk_id": "mkky::eligibility::001",
+              "quote": "Applicants must be a farmer. The applicant should be registered under PM Kisan Samman Nidhi Yojana."
+            },
+            {
+              "chunk_id": "mkky::eligibility::002",
+              "quote": "Applicant should have cultivable land in which they are doing farming."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "The applicant should be registered under PM Kisan Samman Nidhi Yojana.",
+              "fact": "already received: PM-KISAN",
+              "fact_field": "prior_benefit_schemes"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "nsklvrpbkpy",
+          "scheme_name": "Nirman Shramikon ke Liye Vyavsayik Rin Par Byaj ki Punarbharan Yojana",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your state of residence and verify if you are a registered construction worker. Your occupation also requires further clarification to match the scheme's requirements.",
+          "citations": [
+            {
+              "chunk_id": "nsklvrpbkpy::eligibility::000",
+              "quote": "Applicant must be construction worker and registered with the board are regularly depositing contributions."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "maddapp-i",
+          "scheme_name": "Marriage Assistance To Daughters Of Differently Abled Parents (Parinayam-I)",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to confirm your residency in Kerala, your family income, and your category status. Additionally, your age must be verified to meet the scheme requirements.",
+          "citations": [
+            {
+              "chunk_id": "maddapp-i::eligibility::000",
+              "quote": "The applicant should be a permanent resident of Kerala."
+            },
+            {
+              "chunk_id": "maddapp-i::eligibility::003",
+              "quote": "The combined annual family income should not exceed ₹1,00,000/-."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "We need to verify your state of residence, your annual family income, and your land holdings. These details are required to determine if you meet the eligibility criteria for this health insurance scheme.",
+          "citations": [
+            {
+              "chunk_id": "dysrhis::eligibility::002",
+              "quote": "Annual income of the Households:All households whose annual income is less than or upto Rs.5.00 Lakhs"
+            },
+            {
+              "chunk_id": "dysrhis::eligibility::002",
+              "quote": "Landowners holding:Less than 12.00 Acres of wet landLess than 35.00 Acres of dry land"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {
+              "S4": [
+                "S4: the reason speaks of your daughter, but the person said nothing about one; mention only the people in their facts"
+              ]
+            },
+            "citations": {
+              "total": 12,
+              "valid": 12
+            }
+          },
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 12,
+              "valid": 12
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:40:32+00:00",
+        "cached": true
+      }
+    },
+    {
+      "id": "gold_099",
+      "language": "en",
+      "test_type": "clarify",
+      "description": "I am a weaver in Odisha, this is our traditional family craft, and I'm 40 years old.",
+      "notes": "Handloom weaving as a standalone craft doesn't clearly match any of PM Vishwakarma's 18 named trades — ask for the exact craft/tools used before matching, rather than assuming it fits.",
+      "query": "I am a weaver in Odisha, this is our traditional family craft, and I'm 40 years old.",
+      "facts": [
+        [
+          "F1",
+          "occupation",
+          "occupation: weaver"
+        ],
+        [
+          "F2",
+          "state",
+          "state: Odisha"
+        ],
+        [
+          "F3",
+          "age",
+          "age: 40"
+        ],
+        [
+          "F4",
+          "other_facts",
+          "this is our traditional family craft"
+        ]
+      ],
+      "schemes": [
+        {
+          "rank": 1,
+          "slug": "mtc",
+          "scheme_name": "Motorisation Of Traditional Crafts",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a resident of Odisha, but it must be confirmed that you are a traditional marine active fisherman to meet the eligibility criteria.",
+          "citations": [
+            {
+              "chunk_id": "mtc::eligibility::000",
+              "quote": "The applicant must be a permanent resident of Odisha and must possess identity and residential proof including Aadhaar Card."
+            },
+            {
+              "chunk_id": "mtc::eligibility::002",
+              "quote": "The applicant must be a traditional marine active fisherman."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 2,
+          "slug": "mgtocpp",
+          "scheme_name": "\"Monthly Grant To Old Crafts Persons (Pension)\" Component of the \"Development of Handicrafts\" Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's minimum age is 60; you said 40. This scheme is only for residents of Puducherry; you said you live in Odisha.",
+          "citations": [
+            {
+              "chunk_id": "mgtocpp::eligibility::000",
+              "quote": "The applicant should be an artisan who has attained the age of 60 years."
+            },
+            {
+              "chunk_id": "mgtocpp::eligibility::001",
+              "quote": "The artisan should be a native or resident of the Union Territory of Puducherry for at least 5 years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 3,
+          "slug": "doh",
+          "scheme_name": "DEVELOPMENT OF HANDICRAFTS",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Puducherry; you said you live in Odisha.",
+          "citations": [
+            {
+              "chunk_id": "doh::eligibility::000",
+              "quote": "Should be the native of Puducherry Union Territory (or)Should be a continuous resident for the past three years."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 4,
+          "slug": "ysrnn",
+          "scheme_name": "YSR Nethanna Nestham",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Odisha.",
+          "citations": [
+            {
+              "chunk_id": "ysrnn::eligibility::000",
+              "quote": "The applicant should be a resident/domicile of the state of Andhra Pradesh."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 5,
+          "slug": "bbsy",
+          "scheme_name": "Baristha Bunakar Sahayata Yojana",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme's minimum age is 60; you said 40.",
+          "citations": [
+            {
+              "chunk_id": "bbsy::eligibility::000",
+              "quote": "Applicants should be 60 years of age and above"
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 6,
+          "slug": "cmgcpsi",
+          "scheme_name": "Chief Minister's Girl Child Protection Scheme-I",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Tamil Nadu; you said you live in Odisha.",
+          "citations": [
+            {
+              "chunk_id": "cmgcpsi::eligibility::005",
+              "quote": "The parents/grandparents should be a native of Tamil Nadu by birth or continuous residence of not less than ten years at the time of applying to this scheme."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 7,
+          "slug": "naari",
+          "scheme_name": "Swanirbhar Naari",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Assam; you said you live in Odisha.",
+          "citations": [
+            {
+              "chunk_id": "naari::eligibility::000",
+              "quote": "The weaver must be a resident of Assam."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 8,
+          "slug": "dysrhis",
+          "scheme_name": "Dr. YSR Aarogyasri Health Insurance Scheme",
+          "matcher_status": "not_eligible",
+          "status": "not_eligible",
+          "reason": "This scheme is only for residents of Andhra Pradesh; you said you live in Odisha.",
+          "citations": [],
+          "relevant_unverified": [],
+          "source": "code",
+          "fallback_reason": null
+        },
+        {
+          "rank": 9,
+          "slug": "dsctar",
+          "scheme_name": "Development Support for Coffee in Traditional Areas: Replantation",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "It must be confirmed that you are a small grower with coffee holding sizes of up to 10 Ha. to meet the eligibility criteria.",
+          "citations": [
+            {
+              "chunk_id": "dsctar::eligibility::000",
+              "quote": "Only Small growers with coffee holding sizes of up to 10 Ha. are eligible."
+            }
+          ],
+          "relevant_unverified": [],
+          "source": "llm",
+          "fallback_reason": null
+        },
+        {
+          "rank": 10,
+          "slug": "mgbby-odisha",
+          "scheme_name": "MAHATMA GANDHI BUNKAR BIMA YOJANA",
+          "matcher_status": "needs_checking",
+          "status": "needs_checking",
+          "reason": "You are a weaver in Odisha, but it must be confirmed that you are between 18 and 59 years old and meet the specific handloom income or cooperative membership requirements.",
+          "citations": [
+            {
+              "chunk_id": "mgbby-odisha::eligibility::001",
+              "quote": "All weavers, whether male or female, between the age group of 18 and 59 years are eligible to be covered under the scheme"
+            },
+            {
+              "chunk_id": "mgbby-odisha::eligibility::000",
+              "quote": "The weaver should be earning at least 50% of his income from handloom weaving."
+            },
+            {
+              "chunk_id": "mgbby-odisha::eligibility::002",
+              "quote": "The weavers belonging to the State Handloom Development Corporations/Apex/ Primary Handloom Weavers' Cooperative Societies will be covered under the Scheme."
+            }
+          ],
+          "relevant_unverified": [
+            {
+              "condition": "the benefit of scholarship is restricted to two children of the member covered",
+              "fact": "age: 40",
+              "fact_field": "age"
+            }
+          ],
+          "source": "llm",
+          "fallback_reason": null
+        }
+      ],
+      "meta": {
+        "version": "generate-v1",
+        "language": "en",
+        "attempts": [
+          {
+            "provider": "gemini",
+            "model": "gemini-3.1-flash-lite",
+            "structural_errors": [],
+            "scheme_errors": {},
+            "citations": {
+              "total": 6,
+              "valid": 6
+            }
+          }
+        ],
+        "provider_error": null,
+        "created": "2026-09-22T14:40:45+00:00",
+        "cached": true
+      }
+    }
+  ]
+}
