@@ -11,10 +11,13 @@
               and the fields the constraint schema needs (education_class,
               education_stage, residence, marital_status, disability_percent,
               is_minority, bpl_household, registered_construction_worker,
-              prior_benefit_schemes)
-            plus other_facts: short verbatim statements that could decide
-            eligibility but fit no typed field (durations, loan history,
-            registration details, employment type)
+              prior_benefit_schemes) and applying_for (self, child, spouse,
+              parent, other). age, gender and marital_status describe the
+              person and need an explicit statement about themself.
+            plus other_facts: short statements that could decide eligibility
+            but fit no typed field (durations, loan history, registration
+            details, employment type), each as {"original": verbatim input
+            text, "en": its English version, identical for English input}
 - confidence / evidence: for every non-null typed field, high|medium|low and
             the span(s) of the text it comes from
 - clarifying_question: only a fallback for a nearly empty profile (fewer than
@@ -27,9 +30,13 @@ The call goes through the provider pool from scripts/label_categories.py
 temperature 0). The answer is validated before use:
 
 - unknown keys and bad enums are rejected
-- every evidence span, other_facts entry and prior_benefit_schemes entry must
-  occur in the input (for non-English input, it may instead be a piece of the
-  translation)
+- every evidence span and prior_benefit_schemes entry must occur in the input
+  (for non-English input, it may instead be a piece of the translation); each
+  other_facts "original" must occur in the input and, for non-English input,
+  its "en" in the translation
+- age and marital_status evidence must be the person speaking about themself
+  (a first-person word, and no child or parent in the span); gender evidence
+  must be a self-description ("I am a widow", "I am pregnant")
 - numeric fields need evidence containing a number, and the value must follow
   from it using only conversions the evidence states (lakh, thousand, crore,
   monthly x12, hectares); otherwise the field must be null
@@ -37,11 +44,16 @@ temperature 0). The answer is validated before use:
   not merge the text into fewer sentences or rephrase it as a third-person
   summary, and must not add numbers, states or scheme names
 
-A rejected answer is retried once with the problems listed. If the retry also
-fails, the result has status "invalid" and an empty profile; for English input
-search_query_en is still the person's text. A problem with the clarifying
-question alone never costs the profile: the question is dropped, noted in
-"notes", and the rest is kept.
+A rejected answer is retried once with the problems listed. Problems are
+handled at the smallest scope that contains them:
+- a problem with one field (its value, evidence, confidence, or a bad
+  other_facts or prior_benefit_schemes entry) that survives the retry drops
+  only that field, noted in "notes"
+- a problem with the clarifying question drops only the question, without a
+  retry
+- a structural problem (bad JSON, unknown or missing keys) or a faulty
+  translation that survives the retry makes the result "invalid": empty
+  profile, and for English input search_query_en is still the person's text
 
 Every result is cached in data/cache/understand.jsonl, keyed by (text,
 language, prompt version), so evaluation is deterministic and never spends
@@ -62,20 +74,22 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 import label_categories as lc  # noqa: E402  provider pool shared with the labelling pipeline
 
-PROMPT_VERSION = "understand-v3"
+PROMPT_VERSION = "understand-v4"
 CACHE_PATH = ROOT / "data" / "cache" / "understand.jsonl"
 SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
 
 GOLD_KEYS = ("occupation", "state", "age", "gender", "annual_income_inr",
              "land_acres", "caste_category", "family")
 SCHEMA_KEYS = ("education_class", "education_stage", "residence", "marital_status", "disability_percent",
-               "is_minority", "bpl_household", "registered_construction_worker", "prior_benefit_schemes")
+               "is_minority", "bpl_household", "registered_construction_worker", "prior_benefit_schemes",
+               "applying_for")
 PROFILE_KEYS = GOLD_KEYS + SCHEMA_KEYS
 NUMERIC_KEYS = ("age", "annual_income_inr", "land_acres", "education_class", "disability_percent")
 BOOLEAN_KEYS = ("is_minority", "bpl_household", "registered_construction_worker")
-# Fields that say something about the person; family and prior_benefit_schemes
-# are context, so a profile holding only those is still "nearly empty".
-SUBSTANTIVE_KEYS = tuple(k for k in PROFILE_KEYS if k not in ("family", "prior_benefit_schemes"))
+# Fields that say something about the person; family, prior_benefit_schemes
+# and applying_for are context, so a profile holding only those is still
+# "nearly empty".
+SUBSTANTIVE_KEYS = tuple(k for k in PROFILE_KEYS if k not in ("family", "prior_benefit_schemes", "applying_for"))
 NEARLY_EMPTY_BELOW = 2
 
 STATES = (
@@ -92,6 +106,7 @@ ENUMS = {
     "education_stage": ("school", "higher_secondary", "diploma", "undergraduate", "postgraduate", "doctoral"),
     "residence": ("rural", "urban"),
     "marital_status": ("married", "unmarried", "widowed", "divorced", "separated", "abandoned"),
+    "applying_for": ("self", "child", "spouse", "parent", "other"),
 }
 CONFIDENCE = ("high", "medium", "low")
 LANGUAGE_NAMES = {"en": "English", "hi": "Hindi", "te": "Telugu", "ta": "Tamil", "bn": "Bengali"}
@@ -112,11 +127,11 @@ The person wrote in {language_name}:
 
 Return ONLY a JSON object with exactly these keys, no markdown: {keys}.
 {translation_rules}
-"profile": an object with exactly these eighteen keys. Every typed field is null unless the person stated it:
+"profile": an object with exactly these nineteen keys. Every typed field is null unless the person stated it:
   "occupation": short lowercase English noun phrase for their work or role, e.g. "farmer", "tenant farmer", "student", "construction worker", "street vendor".
   "state": the Indian state or union territory, written exactly as one of: {states}. Fill it when they name the state, or a city or district that clearly belongs to one state.
-  "age": the person's own age in whole years (integer), only if they state a number.
-  "gender": "female", "male" or "transgender", only when they describe themself with a gendered word (woman, widow, mother, pregnant, girl, man...). Do not infer it from a spouse or from grammatical gender.
+  "age": the person's own age in whole years (integer), only if they state it about themself. An age given for anyone else is not theirs.
+  "gender": "female", "male" or "transgender", only when they say it about themself (for example that they are a woman, a widow, or pregnant). Having a son or daughter says nothing about their gender; do not infer it from a spouse or from grammatical gender.
   "annual_income_inr": their personal or family income per year in rupees (integer), only if they state an amount. Convert only what they state: lakh (x 100000), thousand (x 1000), a monthly amount (x 12). Never estimate; never write 0 unless they say their income is zero.
   "land_acres": land they own or cultivate in acres (number), only if they state an amount; convert hectares (x 2.471). If the unit varies by region (bigha, kanal, guntha), null.
   "caste_category": "SC", "ST", "OBC", "EWS" or "General", only when stated.
@@ -124,17 +139,18 @@ Return ONLY a JSON object with exactly these keys, no markdown: {keys}.
   "education_class": the school class (integer 1 to 12) of the student they are asking about (themself, or their child if they ask for the child), only if stated.
   "education_stage": "school" (classes 1-10), "higher_secondary" (classes 11-12), "diploma" (ITI, polytechnic), "undergraduate", "postgraduate" or "doctoral", for that same student, only if stated or given by a stated class or course.
   "residence": "rural" if they say they live in a village or rural area, "urban" if they say they live in a city or town.
-  "marital_status": "married", "unmarried", "widowed", "divorced", "separated" or "abandoned": the person's own, only if stated.
+  "marital_status": "married", "unmarried", "widowed", "divorced", "separated" or "abandoned": the person's own, only when they say it about themself (for example that they are a widow, that their husband has died, or that they are unmarried).
   "disability_percent": the person's disability percentage (integer 0-100), only if they state a percentage.
   "is_minority": true if they say they are Muslim, Christian, Sikh, Buddhist, Jain or Parsi, or say they belong to a minority; false if they state a religion that is not a minority.
   "bpl_household": true if they say they are BPL, below the poverty line, or hold a BPL card; false if they say they are not BPL or hold an APL card.
   "registered_construction_worker": true if they say they are registered with a construction workers' welfare board; false if they say they are not registered. Working in construction is not registration.
   "prior_benefit_schemes": a list of the schemes they say they already receive or have received, copied as they wrote them (e.g. ["PM-KISAN"], ["Mudra loan"]). Only schemes they name; null if they name none.
-  "other_facts": a list of short statements copied word for word from {fact_source} that could decide eligibility but fit none of the fields above: how long something has lasted, loans taken or never taken, registration or membership details, type of employment (permanent, contract, government). Include negations as written. An empty list if there are none. Do not repeat what the typed fields already hold.
+  "applying_for": who they are asking about: "self", "child" (their son or daughter), "spouse", "parent" or "other"; null if unclear.
+  "other_facts": a list of short statements that could decide eligibility but fit none of the fields above: how long something has lasted, loans taken or never taken, registration or membership details, type of employment (permanent, contract, government). Each is an object {{"original": the words copied exactly from the person's text, "en": the same statement in English}}{en_rule}. Include negations as written. An empty list if there are none. Do not repeat what the typed fields already hold.
 
 "confidence": an object with one entry for every non-null typed field (not other_facts): "high" if stated plainly, "medium" if clearly implied, "low" if uncertain.
 
-"evidence": an object with one entry for every non-null typed field (not other_facts): the words the value comes from, copied character for character from {fact_source}. Use a list of strings when the value comes from separate parts of the text. For numeric fields the evidence must contain the number.
+"evidence": an object with one entry for every non-null typed field (not other_facts): the words the value comes from, copied character for character from {fact_source}. Use a list of strings when the value comes from separate parts of the text. For numeric fields the evidence must contain the number. For age, gender and marital_status, copy the whole phrase in which the person says it about themself, exactly as written, not just the number or the word (for example, from "I am a tailor from Pune, 52 years old" copy that whole phrase).
 
 "clarifying_question": null, unless the text gives almost nothing to go on (for example "I am a farmer, please help me", or "I need a house"). Then one short question, in the language they wrote in, asking what would help most to find schemes for them.
 
@@ -145,19 +161,15 @@ TRANSLATION_RULES = """
 "search_query_en": a faithful English translation of the person's text, sentence by sentence, in the same order and the same person ("I", "my"). Keep every fact, number, amount, duration, negation ("never", "not", "no") and scheme name exactly; keep amounts as they wrote them (e.g. "1.8 lakh"). Do not summarise, do not add anything (no "looking for government schemes"), do not drop anything.
 """
 
-_EMPTY_NEW = ('"education_class": null, "education_stage": null, "residence": null, "marital_status": null, '
-              '"disability_percent": null, "is_minority": null, "bpl_household": null, '
-              '"registered_construction_worker": null')
-
 EXAMPLE_EN = """Example. Person wrote: "I run a small tea stall in Pune and want a loan to expand it. I've run it for 6 years and have never taken a bank loan. I'm 34, married, my wife and I earn about 1.2 lakh a year, and we have two school-going kids."
-{"profile": {"occupation": "tea stall owner", "state": "Maharashtra", "age": 34, "gender": null, "annual_income_inr": 120000, "land_acres": null, "caste_category": null, "family": "two_school_going_children", "education_class": null, "education_stage": null, "residence": null, "marital_status": "married", "disability_percent": null, "is_minority": null, "bpl_household": null, "registered_construction_worker": null, "prior_benefit_schemes": null, "other_facts": ["I've run it for 6 years", "have never taken a bank loan"]},
- "confidence": {"occupation": "high", "state": "high", "age": "high", "annual_income_inr": "medium", "family": "high", "marital_status": "high"},
- "evidence": {"occupation": "I run a small tea stall", "state": "Pune", "age": "I'm 34", "annual_income_inr": "earn about 1.2 lakh a year", "family": "we have two school-going kids", "marital_status": "married"},
+{"profile": {"occupation": "tea stall owner", "state": "Maharashtra", "age": 34, "gender": null, "annual_income_inr": 120000, "land_acres": null, "caste_category": null, "family": "two_school_going_children", "education_class": null, "education_stage": null, "residence": null, "marital_status": "married", "disability_percent": null, "is_minority": null, "bpl_household": null, "registered_construction_worker": null, "prior_benefit_schemes": null, "applying_for": "self", "other_facts": [{"original": "I've run it for 6 years", "en": "I've run it for 6 years"}, {"original": "have never taken a bank loan", "en": "have never taken a bank loan"}]},
+ "confidence": {"occupation": "high", "state": "high", "age": "high", "annual_income_inr": "medium", "family": "high", "marital_status": "high", "applying_for": "high"},
+ "evidence": {"occupation": "I run a small tea stall", "state": "Pune", "age": "I'm 34, married", "annual_income_inr": "earn about 1.2 lakh a year", "family": "we have two school-going kids", "marital_status": "I'm 34, married", "applying_for": "want a loan to expand it"},
  "clarifying_question": null}"""
 
 EXAMPLE_TRANSLATED = """Example. Person wrote (Hindi): "मैं इंदौर में साइकिल रिपेयर की दुकान चलाता हूँ और महीने के 8 हज़ार कमाता हूँ। मेरे पास बीपीएल कार्ड है, पर मैंने पहले कभी लोन नहीं लिया।"
 {"search_query_en": "I run a bicycle repair shop in Indore and earn 8 thousand a month. I have a BPL card, but I have never taken a loan before.",
- "profile": {"occupation": "bicycle repair shop owner", "state": "Madhya Pradesh", "age": null, "gender": null, "annual_income_inr": 96000, "land_acres": null, "caste_category": null, "family": null, "education_class": null, "education_stage": null, "residence": "urban", "marital_status": null, "disability_percent": null, "is_minority": null, "bpl_household": true, "registered_construction_worker": null, "prior_benefit_schemes": null, "other_facts": ["I have never taken a loan before"]},
+ "profile": {"occupation": "bicycle repair shop owner", "state": "Madhya Pradesh", "age": null, "gender": null, "annual_income_inr": 96000, "land_acres": null, "caste_category": null, "family": null, "education_class": null, "education_stage": null, "residence": "urban", "marital_status": null, "disability_percent": null, "is_minority": null, "bpl_household": true, "registered_construction_worker": null, "prior_benefit_schemes": null, "applying_for": null, "other_facts": [{"original": "मैंने पहले कभी लोन नहीं लिया", "en": "I have never taken a loan before"}]},
  "confidence": {"occupation": "high", "state": "high", "annual_income_inr": "high", "residence": "medium", "bpl_household": "high"},
  "evidence": {"occupation": "I run a bicycle repair shop", "state": "इंदौर", "annual_income_inr": "earn 8 thousand a month", "residence": "Indore", "bpl_household": "I have a BPL card"},
  "clarifying_question": null}"""
@@ -176,6 +188,7 @@ def build_prompt(text, language):
         keys=", ".join(f'"{k}"' for k in keys),
         translation_rules=TRANSLATION_RULES if translated else "",
         fact_source="the person's text or from your English translation" if translated else "the person's text",
+        en_rule="" if translated else ' ("en" identical to "original" for English text)',
         states=", ".join(STATES),
         example=EXAMPLE_TRANSLATED if translated else EXAMPLE_EN,
     )
@@ -222,6 +235,19 @@ _SOURCE_NEGATION = {
     "ta": re.compile(r"இல்லை|இல்லாம|அல்ல"),
     "bn": re.compile(r"না|নেই|ছাড়া"),
 }
+# age and marital_status evidence must be the person speaking about themself;
+# gender evidence must be a self-description.
+_FIRST_PERSON = re.compile(r"\b(?:i|i'm|im|i've|me|my|myself)\b|मैं|मेरा|मेरी|मेरे|मुझे|నేను|నా|నాకు|నన్ను|"
+                           r"நான்|என்|எனக்கு|আমি|আমার", re.I)
+_OTHER_PERSON = re.compile(r"\b(?:sons?|daughters?|child|children|kids?|bab(?:y|ies)|mother|father|parents?|brother|"
+                           r"sister|grand\w*|husband|wife|spouse)\b|बेटा|बेटी|बच्च|माँ|मां|पिता|पति|पत्नी|भाई|बहन|"
+                           r"కొడుకు|కూతురు|బిడ్డ|పిల్ల|తల్లి|తండ్రి|భర్త|భార్య", re.I)
+_SPOUSE = re.compile(r"\b(?:husband|wife|spouse)\b|पति|पत्नी|భర్త|భార్య", re.I)
+_SELF_GENDER = re.compile(
+    r"\bI(?:'m| am| was)\s+(?:an?\s+)?(?:[\w-]+\s+){0,3}(?:woman|lady|female|girl|widow|mother|pregnant|wife|"
+    r"man|male|boy|widower|father|husband|transgender)\b"
+    r"|मैं.{0,60}(?:महिला|औरत|विधवा|गर्भवती|माँ|पुरुष|आदमी|ट्रांसजेंडर)"
+    r"|నేను.{0,60}(?:మహిళ|స్త్రీ|వితంతువు|గర్భవతి|తల్లి|పురుషుడ|మగ)", re.I)
 _SUMMARY_STYLE = re.compile(r"^\s*(?:a|an|the)\s+(?:\d+[- ]year[- ]old\s+)?(?:person|individual|user|applicant|people)\b"
                             r"|\b(?:is|are)\s+(?:looking|searching|seeking)\s+for\b", re.I)
 
@@ -303,30 +329,33 @@ def _added_scheme_names(candidate, text):
 # ---------------------------------------------------------------------------
 
 def validate(obj, text, language):
-    """Return (cleaned_result, errors, question_errors).
+    """Return (cleaned_result, errors, field_errors, question_errors).
 
-    errors reject the answer; question_errors concern only the clarifying
-    question, which is dropped instead. Harmless format slips (case,
-    snake_case, int-valued floats) are normalized."""
+    errors are structural (JSON shape, a faulty translation) and reject the
+    answer. field_errors concern one field each; that field is left null in
+    the result, so the caller can retry and, failing that, keep the rest.
+    question_errors concern only the clarifying question, which is dropped.
+    Harmless format slips (case, snake_case, int-valued floats) are
+    normalized."""
     translated = language != "en"
     top_keys = {"profile", "confidence", "evidence", "clarifying_question"}
     if translated:
         top_keys.add("search_query_en")
     if not isinstance(obj, dict):
-        return None, ["the answer is not a JSON object"], []
-    errors, question_errors = [], []
+        return None, ["the answer is not a JSON object"], [], []
+    errors, field_errors, question_errors = [], [], []
     if set(obj) - top_keys:
         errors.append(f"unknown top-level keys: {sorted(set(obj) - top_keys)}")
     if top_keys - set(obj):
         errors.append(f"missing top-level keys: {sorted(top_keys - set(obj))}")
     profile = obj.get("profile")
     if not isinstance(profile, dict):
-        return None, errors + ["profile must be an object"], []
+        return None, errors + ["profile must be an object"], [], []
     if set(profile) != set(PROFILE_KEYS) | {"other_facts"}:
         errors.append(f"profile keys must be exactly {list(PROFILE_KEYS) + ['other_facts']}; got {sorted(profile)}")
     conf, evid = obj.get("confidence"), obj.get("evidence")
     if not isinstance(conf, dict) or not isinstance(evid, dict):
-        return None, errors + ["confidence and evidence must be objects"], []
+        return None, errors + ["confidence and evidence must be objects"], [], []
     text_n = _norm(text)
 
     # -- translation (non-English only) ----------------------------------
@@ -365,27 +394,41 @@ def validate(obj, text, language):
 
     source_hint = "the person's text" + (" or your translation" if translated else "")
 
-    # -- typed profile fields -------------------------------------------
+    # -- typed profile fields: any problem leaves that field null ------------
     clean = dict.fromkeys(PROFILE_KEYS)
     for key in PROFILE_KEYS:
         v = profile.get(key)
         if v is None or (key == "prior_benefit_schemes" and v == []):
             if key in conf or key in evid:
-                errors.append(f"{key} is null but has a confidence or evidence entry")
+                field_errors.append(f"{key} is null but has a confidence or evidence entry")
             continue
         if conf.get(key) not in CONFIDENCE:
-            errors.append(f"confidence for {key} must be one of {list(CONFIDENCE)}")
+            field_errors.append(f"confidence for {key} must be one of {list(CONFIDENCE)}")
+            continue
         spans = evid.get(key)
         spans = [spans] if isinstance(spans, str) else spans
         if not isinstance(spans, list) or not spans or not all(grounded(s) for s in spans):
-            errors.append(f"evidence for {key} must be a string or list of strings copied exactly from "
-                          f"{source_hint}; got {evid.get(key)!r}")
-            spans = []
-        span_text = " ".join(s for s in spans if isinstance(s, str))
+            field_errors.append(f"evidence for {key} must be a string or list of strings copied exactly from "
+                                f"{source_hint}; got {evid.get(key)!r}")
+            continue
+        span_text = " ".join(spans)
+        if key == "age" and (not _FIRST_PERSON.search(span_text) or _OTHER_PERSON.search(span_text)):
+            field_errors.append(f"age must be the person's own: copy the whole phrase where they say it about "
+                                f"themself; got {span_text!r}")
+            continue
+        if key == "marital_status" and (
+                not _FIRST_PERSON.search(span_text) or _OTHER_PERSON.search(_SPOUSE.sub(" ", span_text))):
+            field_errors.append(f"marital_status must be the person's own: copy the whole phrase where they say it "
+                                f"about themself; got {span_text!r}")
+            continue
+        if key == "gender" and not _SELF_GENDER.search(span_text):
+            field_errors.append(f"gender needs the whole phrase in which the person describes themself; got "
+                                f"{span_text!r}. If they do not, gender must be null")
+            continue
 
         if key in ("occupation", "family"):
             if not isinstance(v, str) or not v.strip():
-                errors.append(f"{key} must be a non-empty string")
+                field_errors.append(f"{key} must be a non-empty string")
                 continue
             v = v.strip().lower()
             if key == "family":
@@ -393,7 +436,7 @@ def validate(obj, text, language):
         elif key == "state":
             match = next((s for s in STATES if isinstance(v, str) and s.casefold() == v.strip().casefold()), None)
             if not match:
-                errors.append(f"state {v!r} is not one of the listed states and union territories")
+                field_errors.append(f"state {v!r} is not one of the listed states and union territories")
                 continue
             v = match
         elif key in ENUMS:
@@ -401,38 +444,38 @@ def validate(obj, text, language):
                 v = "widowed"
             match = next((e for e in ENUMS[key] if isinstance(v, str) and e.casefold() == v.strip().casefold()), None)
             if not match:
-                errors.append(f"{key} must be one of {list(ENUMS[key])}; got {v!r}")
+                field_errors.append(f"{key} must be one of {list(ENUMS[key])}; got {v!r}")
                 continue
             v = match
         elif key in BOOLEAN_KEYS:
             if not isinstance(v, bool):
-                errors.append(f"{key} must be true, false or null; got {v!r}")
+                field_errors.append(f"{key} must be true, false or null; got {v!r}")
                 continue
         elif key == "prior_benefit_schemes":
             if not isinstance(v, list) or not all(isinstance(x, str) and x.strip() for x in v):
-                errors.append("prior_benefit_schemes must be a list of scheme names or null")
+                field_errors.append("prior_benefit_schemes must be a list of scheme names or null")
                 continue
             v = [re.sub(r"\s+", " ", x).strip() for x in v]
             ungrounded = [x for x in v if not grounded(x)]
             if ungrounded:
-                errors.append(f"prior_benefit_schemes may only list schemes named in {source_hint}: {ungrounded}")
+                field_errors.append(f"prior_benefit_schemes may only list schemes named in {source_hint}: {ungrounded}")
                 continue
         else:  # numeric
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v < 0:
-                errors.append(f"{key} must be a non-negative number; got {v!r}")
+                field_errors.append(f"{key} must be a non-negative number; got {v!r}")
                 continue
             if key != "land_acres":
                 if float(v) != int(v):
-                    errors.append(f"{key} must be a whole number; got {v!r}")
+                    field_errors.append(f"{key} must be a whole number; got {v!r}")
                     continue
                 v = int(v)
             bounds = {"age": (1, 119), "education_class": (1, 12), "disability_percent": (0, 100)}.get(key)
             if bounds and not bounds[0] <= v <= bounds[1]:
-                errors.append(f"{key} {v} is outside {bounds[0]}-{bounds[1]}")
+                field_errors.append(f"{key} {v} is outside {bounds[0]}-{bounds[1]}")
                 continue
             numbers = _numbers(span_text)
             if not numbers:
-                errors.append(f"{key} needs evidence that states a number; if none is stated, {key} must be null")
+                field_errors.append(f"{key} needs evidence that states a number; if none is stated, {key} must be null")
                 continue
             if key == "annual_income_inr":
                 multipliers = [1] + [m for rx, m in _UNITS.values() if rx.search(span_text)]
@@ -443,28 +486,38 @@ def validate(obj, text, language):
             else:
                 ratios = (1,)
             if not _derivable(float(v), numbers, ratios):
-                errors.append(f"{key}={v} does not follow from the number in its evidence {span_text!r} "
-                              f"(only conversions the evidence states are allowed)")
+                field_errors.append(f"{key}={v} does not follow from the number in its evidence {span_text!r} "
+                                    f"(only conversions the evidence states are allowed)")
                 continue
         clean[key] = v
     for key in set(conf) | set(evid):
         if key not in PROFILE_KEYS:
-            errors.append(f"confidence/evidence has an unknown key {key!r}")
+            field_errors.append(f"confidence/evidence has an unknown key {key!r}")
 
-    # -- other_facts ------------------------------------------------------
-    facts = profile.get("other_facts")
-    if facts is None:
-        facts = []
-    if not isinstance(facts, list) or not all(isinstance(f, str) and f.strip() for f in facts):
-        errors.append("other_facts must be a list of strings (empty if there are none)")
-        facts = []
-    else:
-        facts = [re.sub(r"\s+", " ", f).strip() for f in facts]
-        if len(facts) > MAX_OTHER_FACTS:
-            errors.append(f"other_facts has more than {MAX_OTHER_FACTS} entries")
-        ungrounded = [f for f in facts if not grounded(f)]
-        if ungrounded:
-            errors.append(f"other_facts entries must be copied word for word from {source_hint}: {ungrounded[:3]}")
+    # -- other_facts: bad entries are dropped ----------------------------------
+    raw_facts = profile.get("other_facts")
+    raw_facts = [] if raw_facts is None else raw_facts
+    facts = []
+    if not isinstance(raw_facts, list):
+        field_errors.append('other_facts must be a list of {"original": ..., "en": ...} objects (empty if none)')
+        raw_facts = []
+    for f in raw_facts:
+        if not (isinstance(f, dict) and set(f) == {"original", "en"}
+                and all(isinstance(f[k], str) and f[k].strip() for k in ("original", "en"))):
+            field_errors.append(f'other_facts entries must be {{"original": ..., "en": ...}} objects; got {f!r}')
+            continue
+        original = re.sub(r"\s+", " ", f["original"]).strip()
+        en = re.sub(r"\s+", " ", f["en"]).strip() if translated else original   # identical for English
+        if not _norm(original) or _norm(original) not in text_n:
+            field_errors.append(f'other_facts "original" must be copied word for word from the person\'s text: {original!r}')
+            continue
+        if translated and (_INDIC_RE.search(en) or not (query_n and _norm(en) in query_n)):
+            field_errors.append(f'other_facts "en" must be copied from your English translation: {en!r}')
+            continue
+        facts.append({"original": original, "en": en})
+    if len(facts) > MAX_OTHER_FACTS:
+        field_errors.append(f"other_facts has more than {MAX_OTHER_FACTS} entries; kept the first {MAX_OTHER_FACTS}")
+        facts = facts[:MAX_OTHER_FACTS]
 
     # -- states named in the translation ----------------------------------
     if query:
@@ -494,7 +547,7 @@ def validate(obj, text, language):
         "evidence": {k: evid[k] for k in PROFILE_KEYS if clean[k] is not None and k in evid},
         "clarifying_question": question,
     }
-    return result, errors, question_errors
+    return result, errors, field_errors, question_errors
 
 
 def _parse(raw):
@@ -583,20 +636,25 @@ def understand(text, language, version=None):
         raise UnderstandError(f"{version} is retired and has no cached result for this text")
 
     base = build_prompt(text, language)
-    prompt, attempts, errors, question_errors, result = base, [], [], [], None
+    prompt, attempts, result = base, [], None
+    errors, field_errors, question_errors = [], [], []
     for _ in (1, 2):
         raw, provider, model = _generate(prompt)
         obj, parse_error = _parse(raw)
         if obj is None:
-            result, errors, question_errors = None, [parse_error], []
+            result, errors, field_errors, question_errors = None, [parse_error], [], []
         else:
-            result, errors, question_errors = validate(obj, text, language)
-        attempts.append({"provider": provider, "model": model, "errors": errors, "question_errors": question_errors})
-        if not errors:                      # question problems alone never trigger a retry
+            result, errors, field_errors, question_errors = validate(obj, text, language)
+        attempts.append({"provider": provider, "model": model, "errors": errors, "field_errors": field_errors,
+                         "question_errors": question_errors})
+        if not errors and not field_errors:     # question problems alone never trigger a retry
             break
-        prompt = base + RETRY_SUFFIX.format(errors="\n".join(f"- {e}" for e in errors + question_errors))
+        prompt = base + RETRY_SUFFIX.format(
+            errors="\n".join(f"- {e}" for e in errors + field_errors + question_errors))
 
-    notes = [f"clarifying_question dropped: {e}" for e in question_errors] if not errors else []
+    # After the retry, field problems cost only their field and question problems only the question.
+    notes = [] if errors else ([f"field dropped: {e}" for e in field_errors]
+                               + [f"clarifying_question dropped: {e}" for e in question_errors])
     if errors:
         result = {"search_query_en": text if language == "en" else None,
                   "profile": {**dict.fromkeys(PROFILE_KEYS), "other_facts": []},
@@ -621,21 +679,32 @@ FIELD_DESCRIPTIONS = {
     "is_minority": "whether they belong to a religious minority", "bpl_household": "whether they have a BPL card",
     "registered_construction_worker": "whether they are registered with a construction workers' welfare board",
 }
+# When the field is filled but too vague to match (e.g. an occupation no
+# scheme's wording reaches), ask for it more precisely instead.
+REFINE_DESCRIPTIONS = {
+    "occupation": "what kind of work they do, more precisely: the exact trade, craft or job (they have only told us "
+                  "in general terms)",
+    "annual_income_inr": "whether the income they mentioned is their whole family's income per year",
+    "land_acres": "how many acres of that land they own in their own name",
+    "education_stage": "exactly which course or class the student is in",
+}
 PHRASE_PROMPT = """Write one short, polite question in {language_name} asking a person applying for government welfare schemes {what}.
 Return ONLY a JSON object: {{"question": "<the question, ending with ?>"}}"""
 
 
-def phrase_question(field, language):
+def phrase_question(field, language, refine=False):
     """Word the matcher's chosen field as one question in the person's
-    language. One small LLM call, cached like understand()."""
-    if field not in FIELD_DESCRIPTIONS:
-        raise ValueError(f"no description for field {field!r}")
+    language; refine=True asks for a vague stated value more precisely. One
+    small LLM call, cached like understand()."""
+    descriptions = REFINE_DESCRIPTIONS if refine else FIELD_DESCRIPTIONS
+    if field not in descriptions:
+        raise ValueError(f"no {'refine ' if refine else ''}description for field {field!r}")
     version = f"phrase-{PROMPT_VERSION}"
-    key = cache_key(f"field:{field}", language, version)
+    key = cache_key(f"field:{field}{':refine' if refine else ''}", language, version)
     hit = _cache().get(key)
     if hit:
         return hit["result"]["question"]
-    prompt = PHRASE_PROMPT.format(language_name=LANGUAGE_NAMES.get(language, language), what=FIELD_DESCRIPTIONS[field])
+    prompt = PHRASE_PROMPT.format(language_name=LANGUAGE_NAMES.get(language, language), what=descriptions[field])
     question, provider = None, None
     for _ in (1, 2):
         raw, provider, _model = _generate(prompt)
@@ -647,7 +716,7 @@ def phrase_question(field, language):
             break
     if question is None:
         raise UnderstandError(f"could not phrase a question for {field!r} in {language}")
-    _store({"key": key, "text": f"field:{field}", "language": language, "prompt_version": version,
+    _store({"key": key, "text": f"field:{field}{':refine' if refine else ''}", "language": language, "prompt_version": version,
             "result": {"question": question}, "meta": {"provider": provider}})
     return question
 
