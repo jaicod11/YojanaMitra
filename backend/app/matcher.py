@@ -54,6 +54,12 @@ attribute changed verdicts in evaluation; all are on by default):
   residual conditions is at least RESIDUAL_TOUCH_THRESHOLD is attached to the
   result and turns eligible into needs_checking. It never produces
   not_eligible.
+- bocw_gate: construction-board registration, and an occupation passed
+  through it (bocw_occupation), are gate conditions: they admit a person to
+  the board's schemes but say nothing about the scheme's own conditions. When
+  a scheme's only passed conditions about the person are gate conditions and
+  it has residual conditions, eligible becomes needs_checking with
+  GATE_ONLY_REASON, and the residuals are returned as own_conditions.
 
 Status: not_eligible if any typed condition fails; needs_checking if none
 fails and a decisive condition is unknown (or a v2 rule above downgrades an
@@ -79,7 +85,8 @@ ROOT = Path(__file__).resolve().parents[2]
 CONSTRAINTS_DIR = ROOT / "data" / "interim" / "constraints"
 SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
 
-RULES = ("applying_for", "priority", "multi_branch", "bocw_occupation", "person_level_pass", "residual_touch")
+RULES = ("applying_for", "priority", "multi_branch", "bocw_occupation", "person_level_pass", "residual_touch",
+         "bocw_gate")
 
 # Calibrated on the corpus's 781 distinct constraint occupation strings
 # (2026-09-22): exact synonyms score 0.85+ ("farmer engaged in agriculture"
@@ -88,13 +95,16 @@ RULES = ("applying_for", "priority", "multi_branch", "bocw_occupation", "person_
 # students" 0.769, "construction worker" vs a bare "Worker" 0.849).
 OCCUPATION_THRESHOLD = 0.85
 # Chosen from the 977 (other_fact, residual) pairs of the dev split's top-10
-# and target schemes (understand-v4, 2026-09-22). Genuine touches scored
-# 0.442-0.776 and unrelated pairs reach 0.499, so similarity cannot separate
-# them below about 0.50. 0.48 is the lowest value that still discriminates
-# (it touches 72% of candidates that have other_facts, against 96% at 0.40)
-# and sits just under the lowest reachable genuine touch: three months of
-# work vs a one-year membership rule (0.493). A lower value costs little,
-# because the only effect is eligible -> needs_checking.
+# and target schemes (understand-v4, 2026-09-22); the pairs and the reasoning
+# are in data/eval/residual_touch_calibration.json. Similarity does not
+# separate genuine from unrelated pairs: the reviewed genuine touches score
+# 0.442-0.776, and unrelated pairs reach 0.650. The threshold therefore sets how
+# many candidates are downgraded, and it leans low because the only effect is
+# eligible -> needs_checking. 0.48 touches 72% of candidates that have
+# other_facts (96% at 0.40) and sits just under a genuine touch on a dev
+# exclusion: three months of work vs a one-year membership rule (gold_084,
+# 0.493). Because it was chosen with that score in view, gold_084's dev result
+# does not validate the rule.
 RESIDUAL_TOUCH_THRESHOLD = 0.48
 # A field must block at least the weight of the second-ranked candidate
 # (1/2) before it is worth a question.
@@ -104,6 +114,7 @@ CONFIDENT = ("high", "medium")
 CASTE_CATEGORIES = ("SC", "ST", "OBC", "EWS", "General")
 ON_BEHALF = ("child", "spouse", "parent", "other")
 NOTHING_ABOUT_YOU = "nothing about you could be checked automatically"
+GATE_ONLY_REASON = "You're registered, but this scheme's own conditions must be confirmed"
 
 _PRIORITY = re.compile(r"\bprior(?:ity|ities|itis\w*|itiz\w*)\b|\bprefer(?:ence|ences|ential|red)\b|\breservation\b|"
                        r"first be assigned", re.I)
@@ -259,14 +270,16 @@ class _Context:
 
 
 def _condition(field, result, constraint, ctx=None, key=None, span=None, note=None, decisive=True,
-               ask=None, ask_kind=None):
+               ask=None, ask_kind=None, gate=False):
     """ask/ask_kind: the profile field a question could settle, and whether it
     is "missing" (not stated or low confidence) or "refine" (stated but too
-    vague or ambiguous to use)."""
+    vague or ambiguous to use). gate: a board-registration condition (see
+    the bocw_gate rule)."""
     return {"field": field, "result": result, "decisive": decisive, "constraint": constraint,
             "profile_value": ctx.value(key) if ctx and key else None,
             "confidence": ctx.conf(key) if ctx and key else None,
-            "source_span": span, "note": note, "ask_field": ask, "ask_kind": ask_kind if ask else None}
+            "source_span": span, "note": note, "ask_field": ask, "ask_kind": ask_kind if ask else None,
+            "gate": gate}
 
 
 def _unusable(field, key, ctx, span, constraint):
@@ -344,7 +357,7 @@ def _check_category(listed, ctx, span, can_fail):
                 undetermined.append(field)
     shown = {k: ctx.value(k) for k in ("caste_category", "is_minority", "disability_percent") if ctx.value(k) is not None}
     base = {"field": "category", "decisive": True, "constraint": listed, "profile_value": shown or None,
-            "confidence": None, "source_span": span, "ask_field": None, "ask_kind": None}
+            "confidence": None, "source_span": span, "ask_field": None, "ask_kind": None, "gate": False}
     if any(known):
         return {**base, "result": "pass", "note": None}
     if undetermined:
@@ -370,7 +383,8 @@ def _check_occupation(listed, ctx, span, bocw_registered):
     key = "occupation"
     if bocw_registered:
         return _condition("occupation", "pass", listed, ctx, key, span,
-                          "the scheme requires construction-board registration and the person says they are registered")
+                          "the scheme requires construction-board registration and the person says they are registered",
+                          gate=True)
     if not ctx.usable(key):
         return _unusable("occupation", key, ctx, span, listed)
     sims = [(o, _similarity(ctx.value(key), o)) for o in listed]
@@ -388,7 +402,8 @@ def _check_stage(stage_text, ctx, span):
     if stage is None and ctx.value("education_class") is not None:
         stage = "school" if ctx.value("education_class") <= 10 else "higher_secondary"
     base = {"field": "education_stage", "decisive": True, "constraint": stage_text, "profile_value": stage,
-            "confidence": ctx.conf("education_stage") or ctx.conf("education_class"), "source_span": span}
+            "confidence": ctx.conf("education_stage") or ctx.conf("education_class"), "source_span": span,
+            "gate": False}
     if admitted is None:
         return {**base, "result": "unknown", "note": "the stage text does not map to profile stages",
                 "ask_field": None, "ask_kind": None}
@@ -416,7 +431,8 @@ def evaluate_scheme(slug, ctx):
     rules = ctx.rules
     meta = scheme_meta(slug)
     out = {"slug": slug, **meta, "status": None, "reason": None, "conditions": [], "preferences": [],
-           "unverified_conditions": [], "to_confirm": [], "residual_touches": [], "blocking_fields": {}, "note": None}
+           "unverified_conditions": [], "to_confirm": [], "residual_touches": [], "own_conditions": [],
+           "blocking_fields": {}, "note": None}
     rec = load_record(slug)
     if rec is None or rec.get("extraction_failed"):
         out["status"] = "needs_checking"
@@ -475,8 +491,8 @@ def evaluate_scheme(slug, ctx):
         conds.append(_check_value("bpl_household", "bpl_household", {True}, ctx, span("bpl_household"), True))
     bocw = c["requires_bocw_registration"] is True
     if bocw:
-        conds.append(_check_value("registered_construction_worker", "registered_construction_worker", {True}, ctx,
-                                  span("requires_bocw_registration"), True))
+        conds.append({**_check_value("registered_construction_worker", "registered_construction_worker", {True}, ctx,
+                                     span("requires_bocw_registration"), True), "gate": True})
     if c["occupation"] and not list_field_is_preference("occupation", c["occupation"]):
         bocw_registered = ("bocw_occupation" in rules and bocw and ctx.usable("registered_construction_worker")
                            and ctx.value("registered_construction_worker") is True)
@@ -509,8 +525,12 @@ def evaluate_scheme(slug, ctx):
             x["field"] for x in decisive if x["result"] == "unknown")
     else:
         out["status"], out["reason"] = "eligible", "every checked condition passes"
-        if "person_level_pass" in rules and not any(x["result"] == "pass" and x["field"] != "state" for x in decisive):
+        person_passes = [x for x in decisive if x["result"] == "pass" and x["field"] != "state"]
+        if "person_level_pass" in rules and not person_passes:
             out["status"], out["reason"] = "needs_checking", NOTHING_ABOUT_YOU
+        elif "bocw_gate" in rules and person_passes and all(x["gate"] for x in person_passes) and residuals:
+            out["status"], out["reason"] = "needs_checking", GATE_ONLY_REASON
+            out["own_conditions"] = residuals
     if "residual_touch" in rules:
         out["residual_touches"] = _residual_touches(residuals, ctx)
         if out["residual_touches"] and out["status"] == "eligible":

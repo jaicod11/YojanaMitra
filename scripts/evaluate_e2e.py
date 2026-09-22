@@ -23,12 +23,13 @@ when retrieval missed them.
 Also reports profile extraction on the gold set's seven scored fields and the
 fill rate of the fields added to the profile after the gold set was made.
 
---compare takes an earlier e2e result (matcher v1 on understand-v3) and adds
-a side-by-side of the metrics and a list of every verdict that changed, with
-the step that changed it. Each row is replayed cumulatively: the v1 profile
-with no v2 rules (which must reproduce the earlier run), then the current
-profile, then each matcher rule in turn (matcher.RULES order). A verdict is
-credited to the first step at which it changed.
+--compare takes an earlier e2e result and adds a side-by-side of the metrics
+and a list of every verdict that changed, with the step that changed it. Each
+row is replayed cumulatively: the earlier run's profile with the earlier run's
+matcher rules (which must reproduce the earlier run; a run without recorded
+rules is matcher v1, no rules), then the current profile with those rules,
+then each matcher rule the earlier run lacked, in matcher.RULES order. A
+verdict is credited to the first step at which it changed.
 
 Results go to data/eval/e2e_<split>_<timestamp>.json. Tuning may only look at
 dev; test is run once, at the end (data/gold/README.md).
@@ -82,10 +83,22 @@ def compute_metrics(results):
     }
 
 
-def attribution_steps(v1_version, current_version):
-    steps = [("v1", v1_version, ()), (current_version, current_version, ())]
-    for i, rule in enumerate(matcher.RULES):
-        steps.append((f"+{rule}", current_version, matcher.RULES[:i + 1]))
+def run_rules(run):
+    """The matcher rules an e2e result was produced with (none for matcher v1)."""
+    return tuple((run.get("matcher") or {}).get("rules") or ())
+
+
+def run_label(version, rules):
+    return f"{version}, matcher " + ("v1" if not rules else f"rules {', '.join(rules)}")
+
+
+def attribution_steps(old_version, old_rules, current_version):
+    steps = [("old", old_version, old_rules), (current_version, current_version, old_rules)]
+    rules = old_rules
+    for rule in matcher.RULES:
+        if rule not in old_rules:
+            rules = tuple(r for r in matcher.RULES if r in rules or r == rule)
+            steps.append((f"+{rule}", current_version, rules))
     return steps
 
 
@@ -101,6 +114,7 @@ def main():
         ap.error("the test split is run once, at the end (see data/gold/README.md); pass --final to run it")
     version = version_name(args.understand_version or PROMPT_VERSION)
     old = json.loads(args.compare.read_text(encoding="utf-8")) if args.compare else None
+    old_rules = run_rules(old) if old else ()
 
     gold = [json.loads(line) for line in open(GOLD_PATH, encoding="utf-8") if line.strip()]
     rows = [r for r in gold if not r.get("skip_scoring") and r["split"] == args.split]
@@ -145,7 +159,8 @@ def main():
             direct = match(profile, facts, [slug], u["confidence"], u["evidence"])[0]
             entry["targets"].append({"slug": slug, "retrieved_rank": retrieved.get(slug), **{
                 k: direct[k] for k in ("status", "reason", "conditions", "preferences", "residual_touches",
-                                       "unverified_conditions", "to_confirm", "blocking_fields", "note")}})
+                                       "own_conditions", "unverified_conditions", "to_confirm", "blocking_fields",
+                                       "note")}})
 
         # -- attribution: replay the row through cumulative steps ----------
         if old:
@@ -154,13 +169,13 @@ def main():
             old_status.update({t["slug"]: t["status"] for t in old_row["targets"]})
             tracked = list(dict.fromkeys([c["slug"] for c in entry["candidates"]] + list(old_status) + targets))
             chains = {slug: [] for slug in tracked}
-            for label, v, rules in attribution_steps(old["understand_prompt_version"], version):
+            for label, v, rules in attribution_steps(old["understand_prompt_version"], old_rules, version):
                 uu = u if v == version else understood(r, v)
                 for res in match(uu["profile"], uu["profile"].get("other_facts", []), tracked, uu["confidence"],
                                  uu["evidence"], rules=rules):
                     chains[res["slug"]].append((label, res["status"]))
             entry["verdict_chains"] = {
-                slug: {"old": old_status.get(slug), "replayed_v1": chain[0][1], "new": chain[-1][1],
+                slug: {"old": old_status.get(slug), "replayed_old": chain[0][1], "new": chain[-1][1],
                        "in_old_top": slug in {c["slug"] for c in old_row["candidates"]},
                        "in_new_top": slug in retrieved, "steps": chain}
                 for slug, chain in chains.items()}
@@ -185,17 +200,17 @@ def main():
                 f"top-{args.top} candidates: {m['candidate_status']}"]
     print()
     if old:
-        print(f"{'':12s}v1 ({old['understand_prompt_version']}, matcher v1)")
+        print(f"{'':12s}before ({run_label(old['understand_prompt_version'], old_rules)})")
         old_metrics = {**old["metrics"], "candidate_status": {
             s: old["metrics"]["candidate_status"].get(s, 0) for s in STATUSES}}
         for line in metric_lines(old_metrics):
             print(f"{'':12s}{line}")
-        print(f"{'':12s}v2 ({version}, matcher v2)")
+        print(f"{'':12s}after ({run_label(version, matcher.RULES)})")
     for line in metric_lines(metrics):
         print(f"{'':12s}{line}")
 
     print("\nprofile extraction (gold's seven scored fields; occupation approximate)"
-          + (f" — v1 then v2" if old else ""))
+          + (f" — before -> after" if old else ""))
     for key in SCORED_KEYS:
         f = extraction["fields"][key]
         was = old["profile_extraction"]["fields"][key] if old else None
@@ -209,7 +224,7 @@ def main():
     for k, f in fill.items():
         print(f"  {k:32s} {f['filled']:2d}/{f['rows']}  {f['values']}")
 
-    print("\nclarify rows" + (" (v1 selection -> v2 selection)" if old else ""))
+    print("\nclarify rows" + (" (selection before -> after)" if old else ""))
     for e in results:
         if e["test_type"] != "clarify":
             continue
@@ -226,9 +241,9 @@ def main():
         mismatches = []
         for e in results:
             for slug, ch in e["verdict_chains"].items():
-                if ch["old"] is not None and ch["old"] != ch["replayed_v1"]:
-                    mismatches.append((e["id"], slug, ch["old"], ch["replayed_v1"]))
-                base = ch["old"] if ch["old"] is not None else ch["replayed_v1"]
+                if ch["old"] is not None and ch["old"] != ch["replayed_old"]:
+                    mismatches.append((e["id"], slug, ch["old"], ch["replayed_old"]))
+                base = ch["old"] if ch["old"] is not None else ch["replayed_old"]
                 if base == ch["new"]:
                     continue
                 statuses = [s for _, s in ch["steps"]]
@@ -238,8 +253,8 @@ def main():
                                    for i, (label, s) in enumerate(ch["steps"]) if i == 0 or s != statuses[i - 1])
                 where = ("target" if slug in {t["slug"] for t in e["targets"]} else "top-10")
                 print(f"  {e['id']} {slug:22s} ({where}) {base} -> {ch['new']}   first changed by {first}   [{path}]")
-        print(f"  replay check: v1 statuses reproduced for every scheme in the old run"
-              if not mismatches else f"  REPLAY MISMATCHES (old run vs replayed v1): {mismatches}")
+        print(f"  replay check: the old run's statuses reproduced for every scheme in it"
+              if not mismatches else f"  REPLAY MISMATCHES (old run vs replayed old step): {mismatches}")
 
     print("\ntraces (target scheme per row)")
     for e in results:
@@ -262,6 +277,8 @@ def main():
                 print(f"    preference (not checked) {p['field']}={p['value']}: {p['source_span'][:90]}")
             for tt in t["residual_touches"]:
                 print(f"    residual touch {tt['similarity']}: {tt['other_fact'][:50]!r} ~ {tt['residual'][:70]!r}")
+            for oc in t["own_conditions"]:
+                print(f"    own condition to confirm: {oc[:100]!r}")
             if t["to_confirm"]:
                 print(f"    to confirm: {t['to_confirm']}")
             print(f"    unverified conditions: {len(t['unverified_conditions'])}")

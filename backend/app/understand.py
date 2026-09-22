@@ -19,7 +19,9 @@
             details, employment type), each as {"original": verbatim input
             text, "en": its English version, identical for English input}
 - confidence / evidence: for every non-null typed field, high|medium|low and
-            the span(s) of the text it comes from
+            the span(s) of the text it comes from. For non-English input,
+            age, gender and marital_status also carry the English version of
+            their span (evidence_en), copied from the translation
 - clarifying_question: only a fallback for a nearly empty profile (fewer than
             two substantive fields, e.g. "I am a farmer, please help me").
             Choosing what to ask is otherwise the matcher's job
@@ -36,7 +38,10 @@ temperature 0). The answer is validated before use:
   its "en" in the translation
 - age and marital_status evidence must be the person speaking about themself
   (a first-person word, and no child or parent in the span); gender evidence
-  must be a self-description ("I am a widow", "I am pregnant")
+  must be a self-description ("I am a widow", "I am pregnant"). These checks
+  always read English: for non-English input they run on the span's English
+  version in the translation, not on the original, because Telugu and other
+  languages can mark the first person with a verb ending alone
 - numeric fields need evidence containing a number, and the value must follow
   from it using only conversions the evidence states (lakh, thousand, crore,
   monthly x12, hectares); otherwise the field must be null
@@ -74,7 +79,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 import label_categories as lc  # noqa: E402  provider pool shared with the labelling pipeline
 
-PROMPT_VERSION = "understand-v4"
+PROMPT_VERSION = "understand-v4.1"
 CACHE_PATH = ROOT / "data" / "cache" / "understand.jsonl"
 SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
 
@@ -150,7 +155,7 @@ Return ONLY a JSON object with exactly these keys, no markdown: {keys}.
 
 "confidence": an object with one entry for every non-null typed field (not other_facts): "high" if stated plainly, "medium" if clearly implied, "low" if uncertain.
 
-"evidence": an object with one entry for every non-null typed field (not other_facts): the words the value comes from, copied character for character from {fact_source}. Use a list of strings when the value comes from separate parts of the text. For numeric fields the evidence must contain the number. For age, gender and marital_status, copy the whole phrase in which the person says it about themself, exactly as written, not just the number or the word (for example, from "I am a tailor from Pune, 52 years old" copy that whole phrase).
+"evidence": an object with one entry for every non-null typed field (not other_facts): the words the value comes from, copied character for character from {fact_source}. Use a list of strings when the value comes from separate parts of the text. For numeric fields the evidence must contain the number. For age, gender and marital_status, copy the whole phrase in which the person says it about themself, exactly as written, not just the number or the word (for example, from "I am a tailor from Pune, 52 years old" copy that whole phrase).{self_evidence_rule}
 
 "clarifying_question": null, unless the text gives almost nothing to go on (for example "I am a farmer, please help me", or "I need a house"). Then one short question, in the language they wrote in, asking what would help most to find schemes for them.
 
@@ -167,12 +172,14 @@ EXAMPLE_EN = """Example. Person wrote: "I run a small tea stall in Pune and want
  "evidence": {"occupation": "I run a small tea stall", "state": "Pune", "age": "I'm 34, married", "annual_income_inr": "earn about 1.2 lakh a year", "family": "we have two school-going kids", "marital_status": "I'm 34, married", "applying_for": "want a loan to expand it"},
  "clarifying_question": null}"""
 
-EXAMPLE_TRANSLATED = """Example. Person wrote (Hindi): "मैं इंदौर में साइकिल रिपेयर की दुकान चलाता हूँ और महीने के 8 हज़ार कमाता हूँ। मेरे पास बीपीएल कार्ड है, पर मैंने पहले कभी लोन नहीं लिया।"
-{"search_query_en": "I run a bicycle repair shop in Indore and earn 8 thousand a month. I have a BPL card, but I have never taken a loan before.",
- "profile": {"occupation": "bicycle repair shop owner", "state": "Madhya Pradesh", "age": null, "gender": null, "annual_income_inr": 96000, "land_acres": null, "caste_category": null, "family": null, "education_class": null, "education_stage": null, "residence": "urban", "marital_status": null, "disability_percent": null, "is_minority": null, "bpl_household": true, "registered_construction_worker": null, "prior_benefit_schemes": null, "applying_for": null, "other_facts": [{"original": "मैंने पहले कभी लोन नहीं लिया", "en": "I have never taken a loan before"}]},
- "confidence": {"occupation": "high", "state": "high", "annual_income_inr": "high", "residence": "medium", "bpl_household": "high"},
- "evidence": {"occupation": "I run a bicycle repair shop", "state": "इंदौर", "annual_income_inr": "earn 8 thousand a month", "residence": "Indore", "bpl_household": "I have a BPL card"},
+EXAMPLE_TRANSLATED = """Example. Person wrote (Hindi): "मैं 41 साल का हूँ और इंदौर में साइकिल रिपेयर की दुकान चलाता हूँ, महीने के 8 हज़ार कमाता हूँ। मेरे पास बीपीएल कार्ड है, पर मैंने पहले कभी लोन नहीं लिया।"
+{"search_query_en": "I am 41 years old and run a bicycle repair shop in Indore, and earn 8 thousand a month. I have a BPL card, but I have never taken a loan before.",
+ "profile": {"occupation": "bicycle repair shop owner", "state": "Madhya Pradesh", "age": 41, "gender": null, "annual_income_inr": 96000, "land_acres": null, "caste_category": null, "family": null, "education_class": null, "education_stage": null, "residence": "urban", "marital_status": null, "disability_percent": null, "is_minority": null, "bpl_household": true, "registered_construction_worker": null, "prior_benefit_schemes": null, "applying_for": null, "other_facts": [{"original": "मैंने पहले कभी लोन नहीं लिया", "en": "I have never taken a loan before"}]},
+ "confidence": {"occupation": "high", "state": "high", "age": "high", "annual_income_inr": "high", "residence": "medium", "bpl_household": "high"},
+ "evidence": {"occupation": "run a bicycle repair shop", "state": "इंदौर", "age": {"original": "मैं 41 साल का हूँ", "en": "I am 41 years old"}, "annual_income_inr": "earn 8 thousand a month", "residence": "Indore", "bpl_household": "I have a BPL card"},
  "clarifying_question": null}"""
+
+SELF_EVIDENCE_RULE = """ For these three fields, give the evidence as an object {"original": the phrase copied from the person's text, "en": the same phrase copied from your English translation}."""
 
 RETRY_SUFFIX = """
 Your previous answer was rejected for these reasons:
@@ -189,6 +196,7 @@ def build_prompt(text, language):
         translation_rules=TRANSLATION_RULES if translated else "",
         fact_source="the person's text or from your English translation" if translated else "the person's text",
         en_rule="" if translated else ' ("en" identical to "original" for English text)',
+        self_evidence_rule=SELF_EVIDENCE_RULE if translated else "",
         states=", ".join(STATES),
         example=EXAMPLE_TRANSLATED if translated else EXAMPLE_EN,
     )
@@ -236,18 +244,16 @@ _SOURCE_NEGATION = {
     "bn": re.compile(r"না|নেই|ছাড়া"),
 }
 # age and marital_status evidence must be the person speaking about themself;
-# gender evidence must be a self-description.
-_FIRST_PERSON = re.compile(r"\b(?:i|i'm|im|i've|me|my|myself)\b|मैं|मेरा|मेरी|मेरे|मुझे|నేను|నా|నాకు|నన్ను|"
-                           r"நான்|என்|எனக்கு|আমি|আমার", re.I)
+# gender evidence must be a self-description. All three read English: the
+# span itself for English input, its English version otherwise.
+SELF_KEYS = ("age", "gender", "marital_status")
+_FIRST_PERSON = re.compile(r"\b(?:i|i'm|im|i've|me|my|myself)\b", re.I)
 _OTHER_PERSON = re.compile(r"\b(?:sons?|daughters?|child|children|kids?|bab(?:y|ies)|mother|father|parents?|brother|"
-                           r"sister|grand\w*|husband|wife|spouse)\b|बेटा|बेटी|बच्च|माँ|मां|पिता|पति|पत्नी|भाई|बहन|"
-                           r"కొడుకు|కూతురు|బిడ్డ|పిల్ల|తల్లి|తండ్రి|భర్త|భార్య", re.I)
-_SPOUSE = re.compile(r"\b(?:husband|wife|spouse)\b|पति|पत्नी|భర్త|భార్య", re.I)
+                           r"sister|grand\w*|husband|wife|spouse)\b", re.I)
+_SPOUSE = re.compile(r"\b(?:husband|wife|spouse)\b", re.I)
 _SELF_GENDER = re.compile(
     r"\bI(?:'m| am| was)\s+(?:an?\s+)?(?:[\w-]+\s+){0,3}(?:woman|lady|female|girl|widow|mother|pregnant|wife|"
-    r"man|male|boy|widower|father|husband|transgender)\b"
-    r"|मैं.{0,60}(?:महिला|औरत|विधवा|गर्भवती|माँ|पुरुष|आदमी|ट्रांसजेंडर)"
-    r"|నేను.{0,60}(?:మహిళ|స్త్రీ|వితంతువు|గర్భవతి|తల్లి|పురుషుడ|మగ)", re.I)
+    r"man|male|boy|widower|father|husband|transgender)\b", re.I)
 _SUMMARY_STYLE = re.compile(r"^\s*(?:a|an|the)\s+(?:\d+[- ]year[- ]old\s+)?(?:person|individual|user|applicant|people)\b"
                             r"|\b(?:is|are)\s+(?:looking|searching|seeking)\s+for\b", re.I)
 
@@ -396,6 +402,7 @@ def validate(obj, text, language):
 
     # -- typed profile fields: any problem leaves that field null ------------
     clean = dict.fromkeys(PROFILE_KEYS)
+    evid_out, evid_en = {}, {}
     for key in PROFILE_KEYS:
         v = profile.get(key)
         if v is None or (key == "prior_benefit_schemes" and v == []):
@@ -405,25 +412,48 @@ def validate(obj, text, language):
         if conf.get(key) not in CONFIDENCE:
             field_errors.append(f"confidence for {key} must be one of {list(CONFIDENCE)}")
             continue
-        spans = evid.get(key)
-        spans = [spans] if isinstance(spans, str) else spans
-        if not isinstance(spans, list) or not spans or not all(grounded(s) for s in spans):
-            field_errors.append(f"evidence for {key} must be a string or list of strings copied exactly from "
-                                f"{source_hint}; got {evid.get(key)!r}")
-            continue
+        ev = evid.get(key)
+        self_check = key in SELF_KEYS
+        if translated and self_check and isinstance(ev, dict):
+            # {"original": from the text, "en": the same phrase in the translation}
+            if set(ev) != {"original", "en"} or not all(isinstance(ev[k], str) and ev[k].strip() for k in ev):
+                field_errors.append(f'evidence for {key} must be {{"original": ..., "en": ...}}; got {ev!r}')
+                continue
+            if not _norm(ev["original"]) or _norm(ev["original"]) not in text_n:
+                field_errors.append(f'evidence for {key}: "original" must be copied exactly from the person\'s text; '
+                                    f'got {ev["original"]!r}')
+                continue
+            if _INDIC_RE.search(ev["en"]) or not (query_n and _norm(ev["en"]) in query_n):
+                field_errors.append(f'evidence for {key}: "en" must be copied exactly from your English translation; '
+                                    f'got {ev["en"]!r}')
+                continue
+            spans, check_text = [ev["original"].strip()], ev["en"].strip()
+        else:
+            spans = [ev] if isinstance(ev, str) else ev
+            if not isinstance(spans, list) or not spans or not all(grounded(s) for s in spans):
+                field_errors.append(f"evidence for {key} must be a string or list of strings copied exactly from "
+                                    f"{source_hint}; got {ev!r}")
+                continue
+            check_text = " ".join(spans)
+            if translated and self_check and _INDIC_RE.search(check_text):
+                field_errors.append(f'evidence for {key} must be {{"original": the phrase from the person\'s text, '
+                                    f'"en": the same phrase from your English translation}}; got {ev!r}')
+                continue
         span_text = " ".join(spans)
-        if key == "age" and (not _FIRST_PERSON.search(span_text) or _OTHER_PERSON.search(span_text)):
+        # The self-description checks read English: check_text is the span
+        # itself, or for non-English input its English version.
+        if key == "age" and (not _FIRST_PERSON.search(check_text) or _OTHER_PERSON.search(check_text)):
             field_errors.append(f"age must be the person's own: copy the whole phrase where they say it about "
-                                f"themself; got {span_text!r}")
+                                f"themself; got {check_text!r}")
             continue
         if key == "marital_status" and (
-                not _FIRST_PERSON.search(span_text) or _OTHER_PERSON.search(_SPOUSE.sub(" ", span_text))):
+                not _FIRST_PERSON.search(check_text) or _OTHER_PERSON.search(_SPOUSE.sub(" ", check_text))):
             field_errors.append(f"marital_status must be the person's own: copy the whole phrase where they say it "
-                                f"about themself; got {span_text!r}")
+                                f"about themself; got {check_text!r}")
             continue
-        if key == "gender" and not _SELF_GENDER.search(span_text):
+        if key == "gender" and not _SELF_GENDER.search(check_text):
             field_errors.append(f"gender needs the whole phrase in which the person describes themself; got "
-                                f"{span_text!r}. If they do not, gender must be null")
+                                f"{check_text!r}. If they do not, gender must be null")
             continue
 
         if key in ("occupation", "family"):
@@ -473,7 +503,7 @@ def validate(obj, text, language):
             if bounds and not bounds[0] <= v <= bounds[1]:
                 field_errors.append(f"{key} {v} is outside {bounds[0]}-{bounds[1]}")
                 continue
-            numbers = _numbers(span_text)
+            numbers = _numbers(span_text) + (_numbers(check_text) if check_text != span_text else [])
             if not numbers:
                 field_errors.append(f"{key} needs evidence that states a number; if none is stated, {key} must be null")
                 continue
@@ -490,6 +520,9 @@ def validate(obj, text, language):
                                     f"(only conversions the evidence states are allowed)")
                 continue
         clean[key] = v
+        evid_out[key] = spans[0] if isinstance(ev, dict) else ev
+        if translated and self_check:
+            evid_en[key] = check_text
     for key in set(conf) | set(evid):
         if key not in PROFILE_KEYS:
             field_errors.append(f"confidence/evidence has an unknown key {key!r}")
@@ -544,9 +577,11 @@ def validate(obj, text, language):
         "search_query_en": query if translated else text,
         "profile": {**clean, "other_facts": facts},
         "confidence": {k: conf[k] for k in PROFILE_KEYS if clean[k] is not None and k in conf},
-        "evidence": {k: evid[k] for k in PROFILE_KEYS if clean[k] is not None and k in evid},
+        "evidence": evid_out,
         "clarifying_question": question,
     }
+    if translated:
+        result["evidence_en"] = evid_en
     return result, errors, field_errors, question_errors
 
 
