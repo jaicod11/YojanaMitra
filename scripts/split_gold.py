@@ -2,10 +2,11 @@
 
 Scoreable rows (no skip_scoring) get "dev" or "test": about DEV_SIZE rows go
 to dev, allocated across test_types in proportion (largest remainder) and
-drawn with a fixed seed within each type. Then, for each language with no dev
-row, one seeded swap exchanges a test row in that language for an English dev
-row of the same test_type, so dev covers every language and the per-type
-counts stay the same. skip_scoring rows get "none".
+drawn with a fixed seed within each type. Then, for each language with no
+positive dev row, one seeded swap exchanges a positive test row in that
+language for an English positive dev row, so dev has a query in every
+language that should retrieve a real scheme, and the per-type counts stay the
+same. skip_scoring rows get "none".
 Deterministic: rerunning reproduces the same split. Changes no other field.
 """
 import json
@@ -43,15 +44,15 @@ def main():
     for t in sorted(by_type):
         dev.update(rng.sample(sorted(by_type[t]), alloc[t]))
 
-    # Language coverage: swap one row into dev for each language dev lacks.
+    # Language coverage: dev needs, in every language, a positive row (one
+    # that should retrieve a real scheme). Swap one in where it is missing.
     lang = {r["id"]: r["language"] for r in scoreable}
     ttype = {r["id"]: r["test_type"] for r in scoreable}
+    positive = {i for i in lang if ttype[i] == "positive"}
     swaps = []
-    for language in sorted(set(lang.values()) - {lang[i] for i in dev}):
-        candidates = sorted(i for i in lang if lang[i] == language and i not in dev
-                            and any(lang[d] == "en" and ttype[d] == ttype[i] for d in dev))
-        incoming = rng.choice(candidates)
-        outgoing = rng.choice(sorted(d for d in dev if lang[d] == "en" and ttype[d] == ttype[incoming]))
+    for language in sorted({lang[i] for i in positive} - {lang[i] for i in dev & positive}):
+        incoming = rng.choice(sorted(i for i in positive - dev if lang[i] == language))
+        outgoing = rng.choice(sorted(d for d in dev & positive if lang[d] == "en"))
         dev = (dev - {outgoing}) | {incoming}
         swaps.append((language, incoming, outgoing, ttype[incoming]))
 

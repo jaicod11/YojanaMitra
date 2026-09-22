@@ -68,13 +68,21 @@ allocated across types in proportion (largest remainder), then drawn with a
 fixed seed within each type. `scripts/split_gold.py` reproduces the split
 exactly. The two `skip_scoring` rows get `none`.
 
-The stratified draw put no Telugu row in dev, so the script then makes one
-seeded swap for each language dev lacks: a test row in that language trades
-places with an English dev row of the same `test_type`, which leaves the
-per-type counts unchanged. On 2026-09-22 (before anything had read the
-split) this swapped **gold_102** (Telugu, `no_match`) into dev and
-**gold_089** (English, `no_match`) into test. Dev is now 18 English rows,
-1 Telugu row and 1 Hindi row.
+The stratified draw put no Telugu row in dev. So the script then makes one
+seeded swap for each language that has no *positive* row in dev, meaning no
+query that should retrieve a real scheme. A positive test row in that
+language trades places with an English positive dev row, which leaves the
+per-type counts unchanged. This swaps **gold_065** (Telugu, `positive`, a
+goldsmith expecting `pmv`) into dev and **gold_005** (English, `positive`)
+into test. Dev is 18 English rows, 1 Telugu row and 1 Hindi row, and its
+positive rows are 8 English, 1 Hindi (gold_053) and 1 Telugu.
+
+An earlier version of the rule swapped on any `test_type` and picked
+gold_102 (Telugu, `no_match`) for dev in place of gold_089. That row asks
+about an invented scheme, so it can't show whether Telugu queries retrieve
+real schemes. The rule was changed to positive rows only on 2026-09-22,
+before any evaluation had read the split, and gold_089 and gold_102 returned
+to their stratified-draw splits (dev and test).
 
 ## `verification`
 
