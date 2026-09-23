@@ -1,8 +1,15 @@
 """End-to-end evaluation of the generation step on a gold split:
-understand -> hybrid retrieval (top 10) -> match -> explain.
+understand -> hybrid retrieval (top 10) -> match -> explain -> finalize.
 
     python scripts/evaluate_generate.py                        # dev
+    python scripts/evaluate_generate.py --limit 2 --out /tmp/x.json   # smoke test
     python scripts/evaluate_generate.py --split test --final   # once, at the end
+
+Every result goes through app.postprocess.collect() and finalize(), the same
+calls POST /match makes, so what is measured is what the API returns: final
+statuses (after any stricter-bound downgrade), final reasons and caveats, in
+display order. Model-specific counts (fallbacks, validation problems,
+relevance flags) still come from explain()'s own entries.
 
 Reports
 - hallucinated eligibility: reasons that claim eligibility while the scheme's
@@ -35,6 +42,8 @@ sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from app import generate  # noqa: E402
 from app.generate import GENERATE_VERSION, claims_eligibility, explain, scheme_chunks  # noqa: E402
+from app.main import scheme_record  # noqa: E402
+from app.postprocess import collect, finalize  # noqa: E402
 from app.matcher import match  # noqa: E402
 from app.retrieval import default_retriever, file_sha256  # noqa: E402
 from app.understand import PROMPT_VERSION, UnderstandError, understand  # noqa: E402
@@ -54,17 +63,30 @@ def invented_names(description):
     return [m.strip() for m in re.findall(r"['‘’\"“”]([^'‘’\"“”]{4,80})['‘’\"“”]", description)]
 
 
+def returned_entry(entry):
+    """One result as /match returns it, with explain()'s own fields kept for
+    the model-specific counts. source is "llm" or "fallback" (explain()),
+    "code" (not_eligible) or "template" (outside the five explain() covers)."""
+    m, e = entry["match"], entry["explanation"]
+    return {"rank": m["rank"], "slug": m["slug"], "scheme_name": m["scheme_name"], "matcher_status": m["status"],
+            "status": entry["status"], "reason": entry["reason"], "citations": entry["citations"],
+            "caveats": entry["caveats"], "relevant_unverified": e["relevant_unverified"] if e else [],
+            "source": e["source"] if e else "template", "fallback_reason": e["fallback_reason"] if e else None}
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--split", choices=["dev", "test"], default="dev")
     ap.add_argument("--final", action="store_true", help="required to run the test split")
     ap.add_argument("--top", type=int, default=10, help="candidates retrieved and matched per row")
+    ap.add_argument("--limit", type=int, help="only the first N rows (smoke tests)")
+    ap.add_argument("--out", type=Path, help="where to write the result (default data/eval/generate_<split>_<ts>.json)")
     args = ap.parse_args()
     if args.split == "test" and not args.final:
         ap.error("the test split is run once, at the end (see data/gold/README.md); pass --final to run it")
 
     gold = [json.loads(line) for line in open(GOLD_PATH, encoding="utf-8") if line.strip()]
-    rows = [r for r in gold if not r.get("skip_scoring") and r["split"] == args.split]
+    rows = [r for r in gold if not r.get("skip_scoring") and r["split"] == args.split][:args.limit]
     print(f"{args.split}: {len(rows)} rows, {PROMPT_VERSION}, {GENERATE_VERSION}, hybrid top {args.top}, "
           f"explains the top {generate.TOP_N} not marked not_eligible")
     retriever = default_retriever()
@@ -80,6 +102,8 @@ def main():
         matched = match(profile, facts, retriever.search(query, k=args.top, mode="hybrid"), u["confidence"],
                         u["evidence"])
         out = explain(profile, facts, matched, r["language"])
+        items = collect(matched, out, r["language"], lambda slug: scheme_record(slug).get("eligibility_text"))
+        final = finalize(items, profile, facts, confidence=u["confidence"], language=r["language"])
         meta = out["_meta"]
         calls = ("no call" if meta is None else "cached" if meta["cached"] else
                  "no provider answered" if meta.get("provider_error") and not meta["attempts"] else
@@ -87,14 +111,16 @@ def main():
         print(f"  {i:2d}/{len(rows)} {r['id']} [{r['language']}] {calls}")
         results.append({"id": r["id"], "language": r["language"], "test_type": r["test_type"],
                         "description": r["description"], "notes": r["notes"], "query": query,
-                        "facts": generate.person_facts(profile, facts), "schemes": out["schemes"], "meta": meta})
+                        "facts": generate.person_facts(profile, facts),
+                        "schemes": [returned_entry(entry) for entry in final], "meta": meta})
 
     # -- metrics ------------------------------------------------------------
-    explained = [(e, s) for e in results for s in e["schemes"] if s["source"] != "code"]
-    code = [(e, s) for e in results for s in e["schemes"] if s["source"] == "code"]
+    returned = [(e, s) for e in results for s in e["schemes"]]
+    explained = [(e, s) for e, s in returned if s["source"] in ("llm", "fallback")]
+    code = [(e, s) for e, s in returned if s["source"] == "code"]
     hallucinated = [(e["id"], s["slug"], s["status"], claims_eligibility(s["reason"], e["language"]))
-                    for e, s in explained if s["status"] != "eligible" and claims_eligibility(s["reason"], e["language"])]
-    hallucinated_vs_matcher = [(e["id"], s["slug"]) for e, s in explained
+                    for e, s in returned if s["status"] != "eligible" and claims_eligibility(s["reason"], e["language"])]
+    hallucinated_vs_matcher = [(e["id"], s["slug"]) for e, s in returned
                                if s["matcher_status"] != "eligible" and claims_eligibility(s["reason"], e["language"])]
     caught = [(e["id"], sid, err) for e in results if e["meta"] for a in e["meta"]["attempts"]
               for sid, errs in a["scheme_errors"].items() for err in errs if "must not say they qualify" in err]
@@ -119,7 +145,7 @@ def main():
 
     flags = [(e["id"], s["slug"], s["matcher_status"], s["status"], f) for e, s in explained
              for f in s["relevant_unverified"]]
-    downgraded = [(e["id"], s["slug"]) for e, s in explained
+    downgraded = [(e["id"], s["slug"]) for e, s in returned
                   if s["matcher_status"] == "eligible" and s["status"] == "needs_checking"]
     no_match = []
     for e in results:
@@ -133,7 +159,9 @@ def main():
                     no_match.append((e["id"], name, s["slug"], s["reason"]))
 
     metrics = {
-        "rows": len(results), "llm_calls": sum(len(e["meta"]["attempts"]) for e in results if e["meta"]),
+        "rows": len(results), "results_returned": len(returned),
+        "template_reasons": sum(s["source"] == "template" for _, s in returned),
+        "llm_calls": sum(len(e["meta"]["attempts"]) for e in results if e["meta"]),
         "rows_without_call": sum(e["meta"] is None for e in results),
         "schemes_explained": len(explained), "not_eligible_code_reasons": len(code),
         "hallucinated_eligibility": len(hallucinated), "hallucinated_vs_matcher_status": len(hallucinated_vs_matcher),
@@ -200,6 +228,8 @@ def main():
                 print(f"      flag: {f['fact']!r} ~ {f['condition'][:100]!r}")
             for c in s["citations"]:
                 print(f"      cite {c['chunk_id']}: {c['quote'][:160]!r}")
+            for c in s["caveats"]:
+                print(f"      caveat: {c[:160]!r}")
 
     out = {
         "split": args.split, "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -209,10 +239,10 @@ def main():
         "metrics": metrics, "hallucinated": hallucinated, "caught": caught, "fallbacks": fallbacks,
         "validation_problems": dict(error_kinds), "flags": flags, "no_match_hits": no_match, "rows": results,
     }
-    EVAL_DIR.mkdir(parents=True, exist_ok=True)
-    path = EVAL_DIR / f"generate_{args.split}_{datetime.now():%Y%m%d-%H%M%S}.json"
+    path = args.out or EVAL_DIR / f"generate_{args.split}_{datetime.now():%Y%m%d-%H%M%S}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
-    print(f"\nsaved {path.relative_to(ROOT)}")
+    print(f"\nsaved {path}")
 
 
 if __name__ == "__main__":

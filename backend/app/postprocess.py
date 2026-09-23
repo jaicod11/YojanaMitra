@@ -8,8 +8,9 @@ produced for one query and returns the same entries with
   something stricter than what was checked. Downgrade only: a status can move
   eligible -> needs_checking and never the other way, and nothing here ever
   produces not_eligible.
-- reason: the generated text, plus the first surviving caveat and a count of
-  the rest
+- reason: the generated text plus a count of the conditions still to
+  confirm; for a scheme downgraded by a stricter bound, a code-written reason
+  that names that condition instead (see downgrade_reason)
 - caveats: every unchecked condition of the scheme that states a requirement
   the matcher has not already checked
 
@@ -28,23 +29,49 @@ import re
 
 from app.generate import _CHECKED_KEYS as CONDITION_FIELDS    # what a passed condition covers
 from app.generate import _digit_numbers as digit_numbers
-from app.generate import fallback_reason
+from app.generate import _inr, _join, _label, _lang, _num, _passed, fallback_reason
 
 STATUS_ORDER = {"eligible": 0, "needs_checking": 1, "not_eligible": 2}
-# An eligible scheme whose conditions are not all checked says so, quoting the
-# first unverified one.
-CAVEAT = {"en": "This may not fit you: {condition}",
-          "hi": "यह आपके लिए शायद ठीक न बैठे: {condition}",
-          "te": "ఇది మీకు సరిపోకపోవచ్చు: {condition}"}
 CAVEAT_CHARS = 160
-# "... and 2 more conditions to check", after the quoted one.
-MORE_CONDITIONS = {"en": "And {n} more condition{s} to check.",
-                   "hi": "और {n} और शर्तें जाँचनी हैं।",
-                   "te": "మరో {n} షరతులు తనిఖీ చేయాలి."}
-# Used when the quote fails the grounding check and is dropped.
-ONLY_COUNT = {"en": "{n} condition{s} of this scheme still have to be checked.",
-              "hi": "इस योजना की {n} शर्तें अभी जाँचनी बाकी हैं।",
-              "te": "ఈ పథకం {n} షరతులు ఇంకా తనిఖీ చేయాలి."}
+# A scheme with unchecked conditions says how many; the conditions themselves
+# are in "caveats". {noun} is singular or plural for n.
+NOUN = {"en": ("condition", "conditions"), "hi": ("शर्त", "शर्तों"), "te": ("షరతు", "షరతులు")}
+COUNT = {"en": "{n} {noun} of this scheme still to confirm.",
+         "hi": "इस योजना की {n} {noun} की पुष्टि अभी बाकी है।",
+         "te": "ఈ పథకంలో {n} {noun} ఇంకా నిర్ధారించాలి."}
+COUNT_OTHER = {"en": "{n} other {noun} of this scheme still to confirm.",
+               "hi": "इस योजना की {n} और {noun} की पुष्टि अभी बाकी है।",
+               "te": "ఈ పథకంలో మరో {n} {noun} ఇంకా నిర్ధారించాలి."}
+# A scheme downgraded by a stricter bound names that condition: with the
+# person's own value when they gave one (rule d, or an unreadable bound), and
+# as a plain requirement when they did not (rule c). Neither says they fail.
+SAID_VALUE = {
+    "en": {"age": "You said your age is {v}", "annual_income_inr": "You said your income is ₹{v} a year",
+           "land_acres": "You said you have {v} acres of land", "disability_percent": "You said your disability is {v}%"},
+    "hi": {"age": "आपने अपनी आयु {v} वर्ष बताई है", "annual_income_inr": "आपने अपनी वार्षिक आय ₹{v} बताई है",
+           "land_acres": "आपने {v} एकड़ ज़मीन बताई है", "disability_percent": "आपने अपनी विकलांगता {v}% बताई है"},
+    "te": {"age": "మీరు మీ వయస్సు {v} సంవత్సరాలు అని చెప్పారు",
+           "annual_income_inr": "మీరు మీ వార్షిక ఆదాయం ₹{v} అని చెప్పారు",
+           "land_acres": "మీకు {v} ఎకరాల భూమి ఉందని చెప్పారు", "disability_percent": "మీరు మీ వైకల్యం {v}% అని చెప్పారు"},
+}
+OWN_TEXT = {"en": "{said}; this scheme's own text says: {quote}",
+            "hi": "{said}; इस योजना के अपने पाठ में लिखा है: {quote}",
+            "te": "{said}; ఈ పథకం సొంత పాఠం ఇలా చెబుతోంది: {quote}"}
+REQUIRES = {"en": "This scheme requires: {quote} That couldn't be checked from what you told us.",
+            "hi": "यह योजना माँगती है: {quote} आपकी बताई जानकारी से इसकी जाँच नहीं हो सकी।",
+            "te": "ఈ పథకానికి ఇది అవసరం: {quote} మీరు చెప్పిన వివరాలతో దీన్ని తనిఖీ చేయలేకపోయాము."}
+# When the condition's text fails the grounding check it is named, not quoted.
+OWN_TEXT_UNQUOTED = {"en": "{said}; this scheme's own text sets its own {label} condition, which has to be confirmed.",
+                     "hi": "{said}; इस योजना के पाठ में {label} की अपनी शर्त है, जिसकी पुष्टि ज़रूरी है।",
+                     "te": "{said}; ఈ పథకం పాఠంలో {label}కు సొంత షరతు ఉంది, దాన్ని నిర్ధారించాలి."}
+REQUIRES_UNQUOTED = {"en": "This scheme has a {label} condition that couldn't be checked from what you told us.",
+                     "hi": "इस योजना में {label} की एक शर्त है, जिसकी जाँच आपकी बताई जानकारी से नहीं हो सकी।",
+                     "te": "ఈ పథకంలో {label}కు ఒక షరతు ఉంది, మీరు చెప్పిన వివరాలతో దాన్ని తనిఖీ చేయలేకపోయాము."}
+CHECKED = {"en": "Checked: {passed}.", "hi": "जाँची गई शर्तें: {passed}।", "te": "తనిఖీ చేసినవి: {passed}."}
+TRIGGER_LABEL = {"en": {"age": "age", "income": "income", "land": "land", "category": "disability"},
+                 "hi": {"age": "आयु", "income": "आय", "land": "ज़मीन", "category": "विकलांगता"},
+                 "te": {"age": "వయస్సు", "income": "ఆదాయం", "land": "భూమి", "category": "వైకల్యం"}}
+_LEADING_JUNK = re.compile(r"^[\s:;,.\-–—\"'“”‘’]+")
 _CONDITION_LEAD = re.compile(r"^(?:note\s*\d*\s*[:.\-]\s*|\d{1,2}[.)]\s*|[a-z][.)]\s*)", re.I)
 # Residual conditions include descriptions and objectives; only a sentence
 # that states a requirement is worth showing as a caveat.
@@ -207,10 +234,12 @@ def _is_settled(residual, field, profile, confidence):
 
 
 def caveats_for(result, profile, confidence):
-    """([conditions to show], downgrade) for one scheme: the unverified
-    conditions that state a requirement nothing has checked, and whether one
-    of them is a stricter bound that the person's answers do not settle."""
-    shown, downgrade = [], False
+    """([conditions to show], trigger) for one scheme: the unverified
+    conditions that state a requirement nothing has checked, and the first of
+    them that is a stricter bound the person's answers do not settle (None if
+    there is none). trigger is {"residual", "field", "key", "value"}; value is
+    the person's own answer when they gave a confident one."""
+    shown, trigger = [], None
     for residual in result["unverified_conditions"]:
         if not is_requirement(residual):
             continue
@@ -220,15 +249,19 @@ def caveats_for(result, profile, confidence):
         if kind == "stricter":
             if _is_settled(residual, field, profile, confidence):
                 continue                 # (b) the person's value meets it
-            if field in NUMERIC_KINDS:   # (c) unknown or unreadable, (d) violated
-                downgrade = True
+            if field in NUMERIC_KINDS and trigger is None:   # (c) unknown or unreadable, (d) violated
+                key = NUMERIC_KINDS[field]
+                known = profile.get(key) is not None and (confidence or {}).get(key) in CONFIDENT
+                trigger = {"residual": residual, "field": field, "key": key,
+                           "value": profile.get(key) if known else None}
         shown.append(residual)
-    return shown, downgrade
+    return shown, trigger
 
 
 def quotable(condition):
-    """The condition as it would be quoted: no leading numbering, truncated."""
-    text = _CONDITION_LEAD.sub("", re.sub(r"\s+", " ", condition or "").strip())
+    """The condition as it would be quoted: no leading numbering, punctuation,
+    colons or quote marks, and truncated."""
+    text = _LEADING_JUNK.sub("", _CONDITION_LEAD.sub("", re.sub(r"\s+", " ", condition or "").strip()))
     return text[:CAVEAT_CHARS].rsplit(" ", 1)[0].rstrip(" .,;:") + "…" if len(text) > CAVEAT_CHARS else text
 
 
@@ -239,35 +272,73 @@ def is_grounded(quote, sources):
     return bool(needle) and any(needle in re.sub(r"\s+", " ", source or "") for source in sources)
 
 
-def caveat(condition, language):
-    """"This may not fit you: <the scheme's first unchecked condition>"."""
-    return CAVEAT[language if language in CAVEAT else "en"].format(condition=quotable(condition))
+def count_sentence(n, language, other=False):
+    """"N condition(s) of this scheme still to confirm." (or "N other ...")."""
+    lang = _lang(language)
+    noun = NOUN[lang][0 if n == 1 else 1]
+    return (COUNT_OTHER if other else COUNT)[lang].format(n=n, noun=noun)
 
 
-def _caveat_sentences(shown, language, sources):
-    """The caveat sentence and the count of the rest, as text to append."""
-    lang = language if language in CAVEAT else "en"
-    quote = quotable(shown[0])
-    if is_grounded(quote, sources):
-        parts = [CAVEAT[lang].format(condition=quote)]
-        if len(shown) > 1:
-            parts.append(MORE_CONDITIONS[lang].format(n=len(shown) - 1, s="" if len(shown) == 2 else "s"))
-    else:                                # the quote does not appear in the scheme text
-        parts = [ONLY_COUNT[lang].format(n=len(shown), s="" if len(shown) == 1 else "s")]
+def _value_text(key, value):
+    return _inr(value) if key == "annual_income_inr" else _num(value)
+
+
+def _as_sentence(quote):
+    return quote if quote.endswith((".", "…", "।", "?", "!")) else quote + "."
+
+
+def downgrade_reason(result, trigger, others, language, sources):
+    """The reason for a scheme a stricter bound moved to needs_checking,
+    written in code: the condition that did it (quoted when it is grounded in
+    the scheme's text), the checks that did pass except that field, and a
+    count of the other conditions still to confirm."""
+    lang = _lang(language)
+    quote = quotable(trigger["residual"])
+    label = TRIGGER_LABEL[lang][trigger["field"]]
+    grounded = is_grounded(quote, sources)
+    if trigger["value"] is not None:
+        said = SAID_VALUE[lang][trigger["key"]].format(v=_value_text(trigger["key"], trigger["value"]))
+        first = (OWN_TEXT[lang].format(said=said, quote=_as_sentence(quote)) if grounded
+                 else OWN_TEXT_UNQUOTED[lang].format(said=said, label=label))
+    else:
+        first = (REQUIRES[lang].format(quote=_as_sentence(quote)) if grounded
+                 else REQUIRES_UNQUOTED[lang].format(label=label))
+    parts = [first]
+    checked = [_label(c, lang) for c in _passed(result) if c["field"] != trigger["field"]]
+    if checked:
+        parts.append(CHECKED[lang].format(passed=_join(checked, lang)))
+    if others:
+        parts.append(count_sentence(others, language, other=True))
     return " ".join(parts)
 
 
 def sort_key(result, status, rank):
-    """Within a status group, the more of the person's own situation a verdict
-    rests on, the higher it ranks: first schemes with a condition about the
-    person that was actually checked (state and board registration are not:
+    """Within a status group, schemes where a condition about the person was
+    actually checked come first (state and board registration are not:
     registration is a gate into a board's schemes, not a check of this
-    scheme), then the fewest conditions left unverified, then the most checks
-    passed, then retrieval order."""
+    scheme), then retrieval order."""
     passes = [c for c in result["conditions"] if c["decisive"] and c["result"] == "pass"]
     personal = [c for c in passes if c["field"] != "state" and not c.get("gate")]
-    return (STATUS_ORDER.get(status, 3), 0 if personal else 1,
-            len(result["unverified_conditions"]), -len(personal), rank)
+    return (STATUS_ORDER.get(status, 3), 0 if personal else 1, rank)
+
+
+def collect(matched, explained, language, eligibility_text=None):
+    """The entries finalize() takes, one per matched scheme in matcher order:
+    explain()'s text where it covered the scheme, generate.py's code template
+    for the rest. eligibility_text(slug) supplies the scheme text quotes are
+    checked against. The API and evaluation both build their input here."""
+    explanations = {e["slug"]: e for e in explained["schemes"]}
+    items = []
+    for m in matched:
+        e = explanations.get(m["slug"])
+        if e is None:                                # outside the five explain() covers
+            reason, citations = fallback_reason(m, language)
+            status = m["status"]
+        else:
+            reason, citations, status = e["reason"], e["citations"], e["status"]
+        items.append({"match": m, "explanation": e, "status": status, "reason": reason, "citations": citations,
+                      "eligibility_text": eligibility_text(m["slug"]) if eligibility_text else None})
+    return items
 
 
 def finalize(results, profile, other_facts=(), *, confidence=None, language="en"):
@@ -290,18 +361,16 @@ def finalize(results, profile, other_facts=(), *, confidence=None, language="en"
         # Caveats are listed for anything still in play; only an eligible
         # scheme can be downgraded by one (nothing here moves a status up, or
         # to not_eligible).
-        caveats, downgrade = ([], False) if status == "not_eligible" else caveats_for(m, profile, confidence)
-        downgrade = downgrade and status == "eligible"
-        if downgrade:
-            # eligible -> needs_checking only, and the text is rebuilt the way
-            # other code-written reasons are, so no "you meet the ..." is left.
+        caveats, trigger = ([], None) if status == "not_eligible" else caveats_for(m, profile, confidence)
+        if trigger and status == "eligible":
+            # eligible -> needs_checking only. The generated text claimed the
+            # checks passed, so the reason is rewritten in code around the
+            # condition that caused the downgrade.
             status = "needs_checking"
-            reason, _ = fallback_reason({**m, "status": status}, language)
-        if caveats and (status == "eligible" or downgrade):
-            # The generated needs_checking text already says what to confirm,
-            # so only an eligible or freshly downgraded reason gets the line.
             sources = list(m["unverified_conditions"]) + [item.get("eligibility_text") or ""]
-            reason = f"{reason} {_caveat_sentences(caveats, language, sources)}"
+            reason = downgrade_reason(m, trigger, len(caveats) - 1, language, sources)
+        elif caveats:
+            reason = f"{reason} {count_sentence(len(caveats), language)}"
         finalized.append((sort_key(m, status, m["rank"]),
                           {**item, "status": status, "reason": reason, "caveats": caveats}))
     return [entry for _, entry in sorted(finalized, key=lambda pair: pair[0])]

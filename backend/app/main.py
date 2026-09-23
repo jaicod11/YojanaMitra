@@ -25,8 +25,8 @@ Everything this module adds sits outside the frozen components
   showing other schemes
 - matched_clause: the clause the explanation cites, or the chunk retrieval
   matched on
-- results beyond the five explain() covers get its code-written template, so
-  every result has a reason
+- results beyond the five explain() covers get generate.py's code-written
+  template, so every result has a reason (app/postprocess.collect)
 
 Degraded mode: if no LLM provider answers, understand() and explain() fail
 over to an empty profile and the code-written templates, so /match still
@@ -47,8 +47,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app import generate
-from app.generate import explain, fallback_reason
-from app.postprocess import finalize
+from app.generate import explain
+from app.postprocess import collect, finalize
 from app.matcher import match, select_clarifying_field
 from app.retrieval import default_retriever
 from app.understand import PROFILE_KEYS, UnderstandError, phrase_question, understand
@@ -257,21 +257,10 @@ def match_schemes(request: MatchRequest):
             except (UnderstandError, ValueError):
                 question = None
 
-    explanations = {e["slug"]: e for e in explained["schemes"]}
     evidence = {h["slug"]: h["evidence"]["text"] for h in hits}
-    explained_results = []
-    for m in matched:
-        e = explanations.get(m["slug"])
-        if e is None:                                # outside the five explain() covers
-            reason, citations = fallback_reason(m, language)
-            status = m["status"]
-        else:
-            reason, citations, status = e["reason"], e["citations"], e["status"]
-        explained_results.append({"match": m, "status": status, "reason": reason, "citations": citations,
-                                  "eligibility_text": scheme_record(m["slug"]).get("eligibility_text")})
-
+    items = collect(matched, explained, language, lambda slug: scheme_record(slug).get("eligibility_text"))
     results = []
-    for entry in finalize(explained_results, profile, facts, confidence=u["confidence"], language=language):
+    for entry in finalize(items, profile, facts, confidence=u["confidence"], language=language):
         m, record = entry["match"], scheme_record(entry["match"]["slug"])
         results.append(Result(
             slug=m["slug"], scheme_name=m["scheme_name"] or record.get("scheme_name"), level=m["level"],
