@@ -27,11 +27,20 @@ Everything this module adds sits outside the frozen components
   matched on
 - results beyond the five explain() covers get generate.py's code-written
   template, so every result has a reason (app/postprocess.collect)
+- caveats_verbatim / unverified_verbatim flag, entry by entry, whether a
+  condition appears verbatim in the scheme's eligibility_text (extraction
+  asks for verbatim residuals but does not enforce it). The matcher's fixed
+  "requires a dependent" line is not scheme text: it is left out of
+  unverified_conditions and reported as requires_dependent_note instead
+
+CORS: the browser calls POST /match directly, so the frontend's origin must be
+listed in ALLOWED_ORIGINS (see .env.example).
 
 Degraded mode: if no LLM provider answers, understand() and explain() fail
 over to an empty profile and the code-written templates, so /match still
 returns the matched schemes with reasons.
 """
+import inspect
 import json
 import os
 import re
@@ -42,13 +51,15 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app import generate
+from app import matcher as matcher_module
 from app.generate import explain
-from app.postprocess import collect, finalize
+from app.postprocess import collect, finalize, is_grounded
 from app.matcher import match, select_clarifying_field
 from app.retrieval import default_retriever
 from app.understand import PROFILE_KEYS, UnderstandError, phrase_question, understand
@@ -59,16 +70,24 @@ TOP_K = 10
 MAX_QUERY_CHARS = 2000
 LANGUAGES = ("en", "hi", "te", "ta", "bn")
 
-# CORS: local dev servers plus the deployed frontend. Replace the placeholder
-# with the Lovable site's domain, or set ALLOWED_ORIGINS to a comma-separated
-# list to override the whole list.
-LOVABLE_ORIGIN = "https://your-project.lovable.app"        # <-- placeholder
-DEFAULT_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://localhost:8080",
-                   "http://127.0.0.1:3000", "http://127.0.0.1:5173", "http://127.0.0.1:8080",
-                   LOVABLE_ORIGIN]
-ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()] or DEFAULT_ORIGINS
-# Lovable preview deployments get a per-branch subdomain.
-ALLOWED_ORIGIN_REGEX = os.getenv("ALLOWED_ORIGIN_REGEX", r"https://.*\.lovable\.app")
+# ALLOWED_ORIGINS may be set in the environment or in the repo-root .env; a
+# variable already set in the environment wins.
+load_dotenv(ROOT / ".env")
+# CORS: exact origins only, comma-separated in ALLOWED_ORIGINS. The default is
+# the Lovable dev server on this machine. At deploy time, add the deployed
+# frontend's origin, e.g.
+#   ALLOWED_ORIGINS=http://localhost:8080,https://<deployed-frontend-domain>   # <-- fill in at deploy time
+DEFAULT_ORIGINS = "http://localhost:8080"
+ALLOWED_ORIGINS = [o.strip().rstrip("/") for o in os.getenv("ALLOWED_ORIGINS", DEFAULT_ORIGINS).split(",")
+                   if o.strip()]
+if any("*" in o for o in ALLOWED_ORIGINS):
+    raise ValueError("ALLOWED_ORIGINS must list exact origins; wildcards are not allowed")
+
+# matcher.py adds this fixed sentence to unverified_conditions when a scheme
+# requires a dependent. It is not scheme text, so it is reported as a flag
+# instead. Fail at startup if matcher.py's wording ever drifts from this copy.
+DEPENDENT_NOTE = "the scheme requires a dependent (see the scheme text)"
+assert DEPENDENT_NOTE in inspect.getsource(matcher_module.evaluate_scheme), "matcher.py's dependent note changed"
 
 # bge-m3 and the FAISS index are shared mutable state; retrieval and matching
 # (which embeds occupations and other_facts) run one at a time.
@@ -188,7 +207,10 @@ class Result(BaseModel):
     reason: str
     matched_clause: str | None
     unverified_conditions: list[str]
+    unverified_verbatim: list[bool]
     caveats: list[str]
+    caveats_verbatim: list[bool]
+    requires_dependent_note: bool
     documents: list[str]
     apply_url: str | None
     last_updated: str | None
@@ -215,8 +237,8 @@ async def lifespan(app):
 
 
 app = FastAPI(title="YojanaMitra API", version="1.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_origin_regex=ALLOWED_ORIGIN_REGEX,
-                   allow_methods=["GET", "POST"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_methods=["POST", "OPTIONS"],
+                   allow_headers=["Content-Type"], allow_credentials=False)
 
 
 @app.get("/health")
@@ -262,11 +284,17 @@ def match_schemes(request: MatchRequest):
     results = []
     for entry in finalize(items, profile, facts, confidence=u["confidence"], language=language):
         m, record = entry["match"], scheme_record(entry["match"]["slug"])
+        scheme_text = [record.get("eligibility_text") or ""]
+        unverified = [x for x in m["unverified_conditions"] if x != DEPENDENT_NOTE]
         results.append(Result(
             slug=m["slug"], scheme_name=m["scheme_name"] or record.get("scheme_name"), level=m["level"],
             status=entry["status"], reason=entry["reason"],
             matched_clause=(entry["citations"][0]["quote"] if entry["citations"] else evidence.get(m["slug"])),
-            unverified_conditions=m["unverified_conditions"], caveats=entry["caveats"],
+            unverified_conditions=unverified,
+            unverified_verbatim=[is_grounded(x, scheme_text) for x in unverified],
+            caveats=entry["caveats"],
+            caveats_verbatim=[is_grounded(x, scheme_text) for x in entry["caveats"]],
+            requires_dependent_note=DEPENDENT_NOTE in m["unverified_conditions"],
             documents=split_documents(record.get("documents_text")),
             apply_url=record.get("source_url"), last_updated=record.get("last_updated"),
             source_url=record.get("source_url"),
