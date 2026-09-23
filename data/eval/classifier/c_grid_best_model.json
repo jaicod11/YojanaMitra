@@ -1,0 +1,260 @@
+{
+  "seed": 42,
+  "model": "bge-m3 + LogisticRegression (balanced)",
+  "design": "nested CV as in train_eval.py: outer StratifiedKFold(5, shuffle, seed 42), inner StratifiedKFold(3, shuffle, seed 42), macro-F1 scoring, LogisticRegression(max_iter=5000, class_weight='balanced') on the stored bge-m3 overview vectors",
+  "runs": [
+    {
+      "grid": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "C_per_fold": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "at_top_of_grid": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7419,
+          "std": 0.026
+        },
+        "weighted_f1": {
+          "mean": 0.8312,
+          "std": 0.0137
+        },
+        "accuracy": {
+          "mean": 0.8301,
+          "std": 0.0118
+        }
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "C": 10.0,
+          "macro_f1": 0.709901291688954,
+          "weighted_f1": 0.8130414485935799,
+          "accuracy": 0.8115942028985508
+        },
+        {
+          "fold": 1,
+          "C": 10.0,
+          "macro_f1": 0.788076060302086,
+          "weighted_f1": 0.8343995466514946,
+          "accuracy": 0.8305084745762712
+        },
+        {
+          "fold": 2,
+          "C": 10.0,
+          "macro_f1": 0.7349947541621779,
+          "weighted_f1": 0.83656804056771,
+          "accuracy": 0.8353510895883777
+        },
+        {
+          "fold": 3,
+          "C": 10.0,
+          "macro_f1": 0.7469124982058172,
+          "weighted_f1": 0.8521963756376524,
+          "accuracy": 0.847457627118644
+        },
+        {
+          "fold": 4,
+          "C": 10.0,
+          "macro_f1": 0.7293981095060496,
+          "weighted_f1": 0.8200057035797585,
+          "accuracy": 0.8256658595641646
+        }
+      ],
+      "convergence_warnings": 0,
+      "inner_cv_macro_f1_by_C": {
+        "per_outer_fold": [
+          [
+            0.5811,
+            0.6952,
+            0.7102
+          ],
+          [
+            0.5886,
+            0.6704,
+            0.7081
+          ],
+          [
+            0.5941,
+            0.6809,
+            0.7227
+          ],
+          [
+            0.6006,
+            0.6882,
+            0.7174
+          ],
+          [
+            0.5794,
+            0.6633,
+            0.7143
+          ]
+        ],
+        "mean_over_outer_folds": {
+          "0.1": 0.5888,
+          "1.0": 0.6796,
+          "10.0": 0.7145
+        }
+      }
+    },
+    {
+      "grid": [
+        0.1,
+        1.0,
+        10.0,
+        30.0,
+        100.0,
+        300.0,
+        1000.0
+      ],
+      "C_per_fold": [
+        30.0,
+        10.0,
+        100.0,
+        10.0,
+        30.0
+      ],
+      "at_top_of_grid": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7482,
+          "std": 0.0224
+        },
+        "weighted_f1": {
+          "mean": 0.8349,
+          "std": 0.0102
+        },
+        "accuracy": {
+          "mean": 0.8345,
+          "std": 0.0084
+        }
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "C": 30.0,
+          "macro_f1": 0.71941873403165,
+          "weighted_f1": 0.8245409485688562,
+          "accuracy": 0.8236714975845411
+        },
+        {
+          "fold": 1,
+          "C": 10.0,
+          "macro_f1": 0.788076060302086,
+          "weighted_f1": 0.8343995466514946,
+          "accuracy": 0.8305084745762712
+        },
+        {
+          "fold": 2,
+          "C": 100.0,
+          "macro_f1": 0.7383752583119864,
+          "weighted_f1": 0.8387886845085617,
+          "accuracy": 0.8401937046004843
+        },
+        {
+          "fold": 3,
+          "C": 10.0,
+          "macro_f1": 0.7469124982058172,
+          "weighted_f1": 0.8521963756376524,
+          "accuracy": 0.847457627118644
+        },
+        {
+          "fold": 4,
+          "C": 30.0,
+          "macro_f1": 0.747997705704737,
+          "weighted_f1": 0.8247751188406931,
+          "accuracy": 0.8305084745762712
+        }
+      ],
+      "convergence_warnings": 0,
+      "inner_cv_macro_f1_by_C": {
+        "per_outer_fold": [
+          [
+            0.5811,
+            0.6952,
+            0.7102,
+            0.7217,
+            0.7126,
+            0.7187,
+            0.709
+          ],
+          [
+            0.5886,
+            0.6704,
+            0.7081,
+            0.7031,
+            0.6918,
+            0.6817,
+            0.6939
+          ],
+          [
+            0.5941,
+            0.6809,
+            0.7227,
+            0.7243,
+            0.7255,
+            0.719,
+            0.691
+          ],
+          [
+            0.6006,
+            0.6882,
+            0.7174,
+            0.7097,
+            0.7063,
+            0.6958,
+            0.6726
+          ],
+          [
+            0.5794,
+            0.6633,
+            0.7143,
+            0.7197,
+            0.7077,
+            0.6968,
+            0.6903
+          ]
+        ],
+        "mean_over_outer_folds": {
+          "0.1": 0.5888,
+          "1.0": 0.6796,
+          "10.0": 0.7145,
+          "30.0": 0.7157,
+          "100.0": 0.7088,
+          "300.0": 0.7024,
+          "1000.0": 0.6914
+        }
+      }
+    }
+  ],
+  "final_grid": [
+    0.1,
+    1.0,
+    10.0,
+    30.0,
+    100.0,
+    300.0,
+    1000.0
+  ],
+  "settles_in_interior": true,
+  "note": "The first run is the original grid, re-run to check it reproduces the reported numbers. Only this model is re-tuned; every other row of comparison.csv keeps the original grid."
+}

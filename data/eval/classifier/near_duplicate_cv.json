@@ -1,0 +1,815 @@
+{
+  "seed": 42,
+  "model": "bge-m3 + LogisticRegression (balanced), C=10.0 (the value the nested CV chose in all five original folds), max_iter=5000, on the stored bge-m3 overview vectors",
+  "near_duplicate_groups": {
+    "definition": "connected components of the scheme pairs with bge-m3 cosine >= 0.95",
+    "pairs": 76,
+    "groups": [
+      {
+        "slugs": [
+          "naospasa-bac",
+          "naospasa-beidowagpasa",
+          "naospasa-bircarsadu",
+          "naospasa-bnpiocpasa",
+          "naospasa-bpjmbpasa",
+          "naospasa-bri",
+          "naospasa-oai"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 7
+        }
+      },
+      {
+        "slugs": [
+          "nassvsbdppsfsc",
+          "nassvsbira",
+          "nassvsbisscag",
+          "nassvsbpsopwwsc",
+          "nassvsbpubsopwwsc",
+          "nassvsbulbpsfsc",
+          "nassvsla"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 7
+        }
+      },
+      {
+        "slugs": [
+          "sogateakia",
+          "sogateakma",
+          "sogateakna",
+          "sogateaksa",
+          "sogateakva"
+        ],
+        "labels": {
+          "Sports & Culture": 5
+        }
+      },
+      {
+        "slugs": [
+          "bpsabcpsg",
+          "bpsalapsg",
+          "bpsaopsgy"
+        ],
+        "labels": {
+          "Sports & Culture": 3
+        }
+      },
+      {
+        "slugs": [
+          "isss-oap",
+          "isss-pot",
+          "isss-ppcp"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 3
+        }
+      },
+      {
+        "slugs": [
+          "sseg10scp",
+          "ssegu10gcp",
+          "ssegu10stw"
+        ],
+        "labels": {
+          "Agriculture, Rural & Environment": 2,
+          "Women & Child": 1
+        }
+      },
+      {
+        "slugs": [
+          "ssieemaf",
+          "ssiemafsc",
+          "ssiemafst"
+        ],
+        "labels": {
+          "Agriculture, Rural & Environment": 3
+        }
+      },
+      {
+        "slugs": [
+          "atesgephmesthrt3",
+          "atesgephmschrt4"
+        ],
+        "labels": {
+          "Agriculture, Rural & Environment": 2
+        }
+      },
+      {
+        "slugs": [
+          "atnmasfogi",
+          "atnmasfogii"
+        ],
+        "labels": {
+          "Women & Child": 2
+        }
+      },
+      {
+        "slugs": [
+          "cmgcpsi",
+          "cmgcpsii"
+        ],
+        "labels": {
+          "Women & Child": 2
+        }
+      },
+      {
+        "slugs": [
+          "ddanwrasi",
+          "ddanwrasii"
+        ],
+        "labels": {
+          "Women & Child": 1,
+          "Social Welfare & Empowerment": 1
+        }
+      },
+      {
+        "slugs": [
+          "dmrnicmasi",
+          "dmrnicmasii"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 2
+        }
+      },
+      {
+        "slugs": [
+          "dpgsslamgsc",
+          "dpgsslampgdsc"
+        ],
+        "labels": {
+          "Business & Entrepreneurship": 2
+        }
+      },
+      {
+        "slugs": [
+          "e-yuvasbirace-yuvafugs",
+          "e-yuvasbiraciffpga"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "evrmnmasfdopwsi",
+          "evrmnmasfdopwsii"
+        ],
+        "labels": {
+          "Women & Child": 2
+        }
+      },
+      {
+        "slugs": [
+          "gimbdapnp",
+          "gimdap"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 2
+        }
+      },
+      {
+        "slugs": [
+          "htaschrt4",
+          "htasthrt3"
+        ],
+        "labels": {
+          "Agriculture, Rural & Environment": 2
+        }
+      },
+      {
+        "slugs": [
+          "icar-pms-scstc",
+          "icar-pmsssstc"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "ignoapstn",
+          "ignwpstn"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 1,
+          "Women & Child": 1
+        }
+      },
+      {
+        "slugs": [
+          "ignwps-sikkim",
+          "ignwpsmp"
+        ],
+        "labels": {
+          "Women & Child": 2
+        }
+      },
+      {
+        "slugs": [
+          "igstcif-pdif",
+          "igstcifphdief"
+        ],
+        "labels": {
+          "Science, IT & Communications": 2
+        }
+      },
+      {
+        "slugs": [
+          "naepwdnaieepwddklsn",
+          "naepwdnaieepwddklspa"
+        ],
+        "labels": {
+          "Social Welfare & Empowerment": 2
+        }
+      },
+      {
+        "slugs": [
+          "nsc-se",
+          "nsc-sl"
+        ],
+        "labels": {
+          "Science, IT & Communications": 2
+        }
+      },
+      {
+        "slugs": [
+          "nts-pg",
+          "nts-ug"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "pm-yasasvitcceobcebcdnts",
+          "pm-yasasvitcseobcebcdnts"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "psgs-deg",
+          "psgs-dip"
+        ],
+        "labels": {
+          "Women & Child": 2
+        }
+      },
+      {
+        "slugs": [
+          "ptascsss1112gs",
+          "ptascsss1112ss"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "sak-deg",
+          "sak-dip"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "scasc",
+          "scast"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "scpmsc",
+          "stpmsc"
+        ],
+        "labels": {
+          "Education & Learning": 2
+        }
+      },
+      {
+        "slugs": [
+          "sisfs-fi",
+          "sisfs-fs"
+        ],
+        "labels": {
+          "Business & Entrepreneurship": 2
+        }
+      },
+      {
+        "slugs": [
+          "sps",
+          "spsvsgs"
+        ],
+        "labels": {
+          "Women & Child": 2
+        }
+      },
+      {
+        "slugs": [
+          "sspftsc",
+          "ssst-pts"
+        ],
+        "labels": {
+          "Skills & Employment": 2
+        }
+      },
+      {
+        "slugs": [
+          "tnfcr",
+          "tnscr"
+        ],
+        "labels": {
+          "Sports & Culture": 2
+        }
+      }
+    ],
+    "schemes_in_a_group": 85,
+    "singletons": 1981,
+    "group_ids_total": 2015,
+    "group_size_distribution": {
+      "2": 27,
+      "3": 4,
+      "5": 1,
+      "7": 2
+    },
+    "groups_with_mixed_labels": 3
+  },
+  "stratification_check": {
+    "rule": "every class in every test fold, and each class within one scheme of an exact fifth of its size in every fold",
+    "stratified_group_kfold_adequate": true,
+    "design_used": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)",
+    "per_fold_class_support": {
+      "StratifiedKFold (original)": {
+        "Education & Learning": [
+          88,
+          88,
+          89,
+          88,
+          88
+        ],
+        "Social Welfare & Empowerment": [
+          77,
+          78,
+          78,
+          78,
+          77
+        ],
+        "Women & Child": [
+          53,
+          53,
+          53,
+          54,
+          53
+        ],
+        "Agriculture, Rural & Environment": [
+          51,
+          50,
+          50,
+          50,
+          50
+        ],
+        "Business & Entrepreneurship": [
+          46,
+          46,
+          45,
+          45,
+          45
+        ],
+        "Skills & Employment": [
+          25,
+          25,
+          25,
+          25,
+          26
+        ],
+        "Sports & Culture": [
+          19,
+          20,
+          20,
+          20,
+          19
+        ],
+        "Health & Wellness": [
+          19,
+          19,
+          19,
+          19,
+          19
+        ],
+        "Science, IT & Communications": [
+          9,
+          9,
+          8,
+          8,
+          9
+        ],
+        "Housing & Shelter": [
+          7,
+          7,
+          7,
+          8,
+          8
+        ],
+        "Banking, Financial Services & Insurance": [
+          7,
+          7,
+          8,
+          7,
+          7
+        ],
+        "Transport & Infrastructure": [
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "Utility & Sanitation": [
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "Travel & Tourism": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "Public Safety, Law & Justice": [
+          2,
+          1,
+          1,
+          1,
+          2
+        ]
+      },
+      "StratifiedGroupKFold": {
+        "Education & Learning": [
+          88,
+          88,
+          88,
+          89,
+          88
+        ],
+        "Social Welfare & Empowerment": [
+          78,
+          78,
+          77,
+          78,
+          77
+        ],
+        "Women & Child": [
+          53,
+          53,
+          54,
+          53,
+          53
+        ],
+        "Agriculture, Rural & Environment": [
+          50,
+          51,
+          50,
+          50,
+          50
+        ],
+        "Business & Entrepreneurship": [
+          46,
+          45,
+          45,
+          45,
+          46
+        ],
+        "Skills & Employment": [
+          25,
+          25,
+          25,
+          26,
+          25
+        ],
+        "Sports & Culture": [
+          20,
+          19,
+          20,
+          19,
+          20
+        ],
+        "Health & Wellness": [
+          19,
+          19,
+          19,
+          19,
+          19
+        ],
+        "Science, IT & Communications": [
+          9,
+          9,
+          8,
+          8,
+          9
+        ],
+        "Housing & Shelter": [
+          8,
+          8,
+          7,
+          7,
+          7
+        ],
+        "Banking, Financial Services & Insurance": [
+          7,
+          7,
+          7,
+          8,
+          7
+        ],
+        "Transport & Infrastructure": [
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "Utility & Sanitation": [
+          3,
+          3,
+          4,
+          3,
+          3
+        ],
+        "Travel & Tourism": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "Public Safety, Law & Justice": [
+          1,
+          2,
+          1,
+          2,
+          1
+        ]
+      }
+    },
+    "fold_sizes": {
+      "StratifiedKFold (original)": [
+        414,
+        413,
+        413,
+        413,
+        413
+      ],
+      "StratifiedGroupKFold": [
+        414,
+        414,
+        412,
+        414,
+        412
+      ]
+    }
+  },
+  "results": [
+    {
+      "treatment": "Original stratified CV (reported)",
+      "folds": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+      "schemes": 2066,
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7419,
+          "std": 0.026
+        },
+        "weighted_f1": {
+          "mean": 0.8312,
+          "std": 0.0137
+        },
+        "accuracy": {
+          "mean": 0.8301,
+          "std": 0.0118
+        }
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "macro_f1": 0.709901291688954,
+          "weighted_f1": 0.8130414485935799,
+          "accuracy": 0.8115942028985508
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.788076060302086,
+          "weighted_f1": 0.8343995466514946,
+          "accuracy": 0.8305084745762712
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.7349947541621779,
+          "weighted_f1": 0.83656804056771,
+          "accuracy": 0.8353510895883777
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.7469124982058172,
+          "weighted_f1": 0.8521963756376524,
+          "accuracy": 0.847457627118644
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.7293981095060496,
+          "weighted_f1": 0.8200057035797585,
+          "accuracy": 0.8256658595641646
+        }
+      ]
+    },
+    {
+      "treatment": "Group-aware CV",
+      "folds": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)",
+      "schemes": 2066,
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7421,
+          "std": 0.0225
+        },
+        "weighted_f1": {
+          "mean": 0.8312,
+          "std": 0.014
+        },
+        "accuracy": {
+          "mean": 0.8296,
+          "std": 0.0129
+        }
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "macro_f1": 0.7272162555259349,
+          "weighted_f1": 0.8132191511851758,
+          "accuracy": 0.8140096618357487
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.7691161087955857,
+          "weighted_f1": 0.8493421330525442,
+          "accuracy": 0.8454106280193237
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.7284279914612477,
+          "weighted_f1": 0.8307221709161461,
+          "accuracy": 0.8300970873786407
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.7163953769357232,
+          "weighted_f1": 0.8183999708636467,
+          "accuracy": 0.8164251207729468
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.7692569441341425,
+          "weighted_f1": 0.8441204797149606,
+          "accuracy": 0.8422330097087378
+        }
+      ]
+    },
+    {
+      "treatment": "Near-duplicates dropped (first slug of each group kept)",
+      "folds": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42) on the remaining schemes",
+      "schemes": 2015,
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7484,
+          "std": 0.0326
+        },
+        "weighted_f1": {
+          "mean": 0.8334,
+          "std": 0.0173
+        },
+        "accuracy": {
+          "mean": 0.8313,
+          "std": 0.0177
+        }
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "macro_f1": 0.757887040154776,
+          "weighted_f1": 0.8398788765138936,
+          "accuracy": 0.8387096774193549
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.6907833688521605,
+          "weighted_f1": 0.8053886776151572,
+          "accuracy": 0.8014888337468983
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.739815938469886,
+          "weighted_f1": 0.8294278655288336,
+          "accuracy": 0.8287841191066998
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.7873404037677195,
+          "weighted_f1": 0.8589409266673094,
+          "accuracy": 0.8560794044665012
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.7661023478202658,
+          "weighted_f1": 0.8331210830822485,
+          "accuracy": 0.8312655086848635
+        }
+      ]
+    }
+  ],
+  "reproduces_reported_numbers": true,
+  "accuracy_on_the_grouped_schemes": {
+    "schemes": 85,
+    "original_stratified_cv": 0.8824,
+    "group_aware_cv": 0.7529
+  },
+  "accuracy_on_the_other_schemes": {
+    "schemes": 1981,
+    "original_stratified_cv": 0.8279,
+    "group_aware_cv": 0.8329
+  },
+  "dropped": {
+    "schemes": 51,
+    "by_class": {
+      "Social Welfare & Empowerment": 18,
+      "Women & Child": 8,
+      "Education & Learning": 8,
+      "Sports & Culture": 7,
+      "Agriculture, Rural & Environment": 5,
+      "Business & Entrepreneurship": 2,
+      "Science, IT & Communications": 2,
+      "Skills & Employment": 1
+    },
+    "slugs": [
+      "atesgephmschrt4",
+      "atnmasfogii",
+      "bpsalapsg",
+      "bpsaopsgy",
+      "cmgcpsii",
+      "ddanwrasii",
+      "dmrnicmasii",
+      "dpgsslampgdsc",
+      "e-yuvasbiraciffpga",
+      "evrmnmasfdopwsii",
+      "gimdap",
+      "htasthrt3",
+      "icar-pmsssstc",
+      "ignwpsmp",
+      "ignwpstn",
+      "igstcifphdief",
+      "isss-pot",
+      "isss-ppcp",
+      "naepwdnaieepwddklspa",
+      "naospasa-beidowagpasa",
+      "naospasa-bircarsadu",
+      "naospasa-bnpiocpasa",
+      "naospasa-bpjmbpasa",
+      "naospasa-bri",
+      "naospasa-oai",
+      "nassvsbira",
+      "nassvsbisscag",
+      "nassvsbpsopwwsc",
+      "nassvsbpubsopwwsc",
+      "nassvsbulbpsfsc",
+      "nassvsla",
+      "nsc-sl",
+      "nts-ug",
+      "pm-yasasvitcseobcebcdnts",
+      "psgs-dip",
+      "ptascsss1112ss",
+      "sak-dip",
+      "scast",
+      "sisfs-fs",
+      "sogateakma",
+      "sogateakna",
+      "sogateaksa",
+      "sogateakva",
+      "spsvsgs",
+      "ssegu10gcp",
+      "ssegu10stw",
+      "ssiemafsc",
+      "ssiemafst",
+      "ssst-pts",
+      "stpmsc",
+      "tnscr"
+    ]
+  }
+}

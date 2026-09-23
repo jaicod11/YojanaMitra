@@ -6,7 +6,8 @@ project's data and writes its own outputs, and nothing in the matching
 pipeline uses it.
 
 - **Code:** `scripts/classifier/` (`common.py`, `eda.py`, `plots.py`,
-  `train_eval.py`, `label_ceiling.py`, `run_all.py`)
+  `train_eval.py`, `label_ceiling.py`, `group_cv.py`, `c_grid.py`,
+  `run_all.py`)
 - **Outputs:** `data/eval/classifier/` (metrics as JSON and CSV, out-of-fold
   predictions, figures, the saved final model)
 - **Run end to end:** `python scripts/classifier/run_all.py` takes about 5
@@ -32,9 +33,15 @@ labelling model is recorded per scheme:
 | openai/gpt-oss-120b via Groq | 327 |
 | gemini-3.6-flash | 77 |
 
-The Groq count is 327 after a later relabelling pass over Social Welfare
-schemes, and 375 before it (`predictions.json.bak-pre-swe-merge-2026-09-21`).
-The figure of 462 does not appear in the stored provenance.
+**Corrections to the handoff figures.** Two figures given in the project
+handoff are stale; this report uses the counts in the data:
+- **Classes with fewer than 25 schemes: four, not five.** They are Transport
+  (20), Utility (16), Travel (15) and Public Safety (7). The next smallest,
+  Banking, has 36.
+- **Groq-labelled schemes: 327, not 462.** 327 is the count in the current
+  `predictions.json`. It was 375 before the relabelling pass over Social
+  Welfare schemes (`predictions.json.bak-pre-swe-merge-2026-09-21`). Neither
+  file has 462.
 
 ### Class distribution
 
@@ -123,7 +130,10 @@ Dirichlet prior, each class against the rest, unigrams:
   description and benefits and differ only in name; each group has one label.
 - The stored bge-m3 vectors find **76 near-duplicate pairs** (cosine ≥ 0.95)
   involving 85 schemes, mostly the same scheme offered in several states or
-  under several sub-names; 72 of the 76 pairs have the same label.
+  under several sub-names; 72 of the 76 pairs have the same label. Joined
+  transitively (connected components), the pairs form **34 groups**: 27 pairs,
+  4 of three schemes, 1 of five and 2 of seven. Three groups mix labels. Their
+  effect on the score is measured under [Near-duplicates](#near-duplicates-group-aware-cv).
 
 **2D projection.** The first two principal components explain only 8.8% of
 the variance. Education, Agriculture and Business still occupy distinct
@@ -164,7 +174,7 @@ LogisticRegression at C=1:
 | Run-on words split ("Aadhaar CardLandholding", "shops.Provides" → separate words) | 2,193 fields; a sample of the splits was checked by hand and all were genuine run-ons from the scrape |
 | Whitespace collapsed | 5 fields |
 | Empty text | Nothing dropped: no record lacks a name or description; the 20 with no benefits text use name + description |
-| Deduplication | Nothing dropped (see Duplicates). The near-duplicates are distinct schemes; they are kept and make the CV scores somewhat optimistic |
+| Deduplication | Nothing dropped (see Duplicates). The near-duplicates are distinct schemes, so they are kept. Group-aware CV shows they do not inflate the headline score (see [Near-duplicates](#near-duplicates-group-aware-cv)) |
 | Lowercasing | Done by the TF-IDF vectorizer inside each pipeline. The stored text keeps case, as the embeddings were computed on cased text |
 
 **Rows before cleaning: 2,066. Rows after: 2,066.** No class lost any rows.
@@ -197,7 +207,8 @@ spread shows how stable each score is. Every model uses the same five folds.
   myScheme pages.
 - **EDA-only statistics.** The PCA, the term statistics and the near-duplicate
   search were computed on all data, for description only. No evaluated model
-  uses them.
+  uses them. The near-duplicate groups also define the folds of the
+  group-aware check; they use no labels and never enter a model.
 
 **Tuning, the only tuning done:**
 - **What:** C ∈ {0.1, 1, 10} for the LogisticRegression and LinearSVC models.
@@ -206,9 +217,11 @@ spread shows how stable each score is. Every model uses the same five folds.
 - **Fixed in advance, not tuned:** the TF-IDF settings (word 1–2-grams,
   `sublinear_tf`, `min_df=2`, `max_df=0.95`, accents stripped) and the random
   forest (500 trees, default settings).
-- **Grid edge:** the inner CV chose C=10, the top of the grid, in most folds.
-  The grid was fixed before the run and not widened afterwards, so the linear
-  models may be slightly under their best.
+- **Grid edge:** four of the six tuned models chose C=10, the top of the grid,
+  in all five folds: TF-IDF + LogisticRegression, TF-IDF + LinearSVC, and
+  bge-m3 + LogisticRegression with and without balancing. For the best model
+  the grid was widened afterwards (see [C grid](#c-grid-for-the-best-model)).
+  The other three were not re-tuned, so they may be slightly under their best.
 
 ## Results
 
@@ -239,6 +252,86 @@ lead over the unbalanced bge-m3 model (0.037) is about 1.4 fold standard
 deviations; its lead over the best TF-IDF model (0.054) is larger than the
 fold spread.
 
+### Near-duplicates: group-aware CV
+
+Under plain stratified CV, a scheme can be tested while its near-twin (one of
+the 34 near-duplicate groups, 85 schemes) sits in the training folds. The best
+model was re-scored three ways, all with C=10, the value its nested CV chose
+in every original fold. With C fixed at 10 the original folds reproduce the
+reported numbers exactly (`scripts/classifier/group_cv.py`,
+`near_duplicate_cv.json`).
+
+| Treatment | Schemes | Macro-F1 | Weighted-F1 | Accuracy |
+|---|---:|---|---|---|
+| Original stratified CV (as reported) | 2,066 | 0.742 ± 0.026 | 0.831 ± 0.014 | 0.830 ± 0.012 |
+| Group-aware CV: near-duplicates never split across folds | 2,066 | 0.742 ± 0.023 | 0.831 ± 0.014 | 0.830 ± 0.013 |
+| Near-duplicates dropped, one per group kept | 2,015 | 0.748 ± 0.033 | 0.833 ± 0.017 | 0.831 ± 0.018 |
+
+- **Design.** The group-aware run uses `StratifiedGroupKFold(n_splits=5,
+  shuffle=True, random_state=42)`. Each near-duplicate group has one group id,
+  and each other scheme has its own.
+- **Stratification held, so no fallback was needed.** Every class is in every
+  test fold, and every class is within one scheme of an exact fifth of its size
+  per fold. That is the same balance as the original split; Public Safety, for
+  example, is split 1/2/1/2/1. `GroupKFold` was therefore not needed. Both
+  designs' per-fold class support is in `near_duplicate_cv.json`.
+- **The leak is real but too small to move the headline.** On the 85 grouped
+  schemes, accuracy falls from 0.882 to 0.753 once near-twins share a fold.
+  That is about 11 schemes that were right only because a twin was in
+  training. It is 0.5% of the corpus, and reassigning folds moves the other
+  1,981 schemes by as much the other way (0.828 → 0.833). Macro-F1 goes from
+  0.7419 to 0.7421.
+- **Dropping the duplicates** removes 51 schemes: Social Welfare 18, Women &
+  Child 8, Education 8, Sports 7, Agriculture 5, others 5. This changes the
+  dataset, not only the split, so that row is not strictly comparable. It
+  falls within the fold spread of the other two.
+
+### C grid for the best model
+
+The original grid {0.1, 1, 10} was cut off: bge-m3 + LogisticRegression
+(balanced) chose C=10 in every fold. The same nested CV was re-run for that
+model alone, with the same outer and inner folds and macro-F1 scoring, over
+C ∈ {0.1, 1, 10, 30, 100, 300, 1000} (`scripts/classifier/c_grid.py`,
+`c_grid_best_model.json`).
+
+| Outer fold | 0 | 1 | 2 | 3 | 4 |
+|---|---:|---:|---:|---:|---:|
+| C chosen, original grid | 10 | 10 | 10 | 10 | 10 |
+| C chosen, wider grid | 30 | 10 | 100 | 10 | 30 |
+| Macro-F1, original grid | 0.710 | 0.788 | 0.735 | 0.747 | 0.729 |
+| Macro-F1, wider grid | 0.719 | 0.788 | 0.738 | 0.747 | 0.748 |
+
+- **C settles inside the grid.** No fold picks 1,000, so the grid did not need
+  a second extension. Mean inner-CV macro-F1 by C:
+
+  | C | 0.1 | 1 | 10 | 30 | 100 | 300 | 1,000 |
+  |---|---|---|---|---|---|---|---|
+  | Inner-CV macro-F1 | 0.589 | 0.680 | 0.715 | 0.716 | 0.709 | 0.702 | 0.691 |
+
+  The curve is flat between 10 and 30, so C=10 was already close to the best
+  value.
+- **New score:** macro-F1 **0.748 ± 0.022**, weighted-F1 0.835 ± 0.010,
+  accuracy 0.835 ± 0.008. That is +0.006 macro-F1, about a quarter of the fold
+  spread. No fit raised a convergence warning.
+- **No other model was re-tuned.** Three other rows also chose the top C in
+  every fold (see Evaluation design) and keep the original grid.
+
+### Headline number
+
+**The headline is macro-F1 0.742 ± 0.026.** It comes from bge-m3 +
+LogisticRegression (balanced), under stratified 5-fold CV with the original C
+grid. Why this number:
+- **Group-aware CV gives the same value** (0.7421 vs 0.7419), so
+  near-duplicates do not inflate it.
+- **The wider C grid adds only 0.006,** within the fold spread. The original
+  grid also keeps the best model on the same terms as the other rows of the
+  comparison table, which were not re-tuned.
+- **It matches the analysis below.** The per-class table, confusion matrices,
+  error sample and label-ceiling comparison all come from this run's
+  out-of-fold predictions.
+
+Read it as slightly conservative: the best-tuned figure is 0.748 ± 0.022.
+
 ### Per-class results for the best model
 
 Out-of-fold predictions pooled over the five folds:
@@ -261,12 +354,22 @@ Out-of-fold predictions pooled over the five folds:
 | Travel & Tourism | 0.737 | 0.933 | 0.824 | 15 |
 | Public Safety, Law & Justice | 0.250 | 0.143 | 0.182 | 7 |
 
-- **The weakest classes are small and cut across others.** Public Safety has
-  1 of 7 right: its schemes are accident and victim compensation, which reads
-  like social welfare. Banking & Insurance lands at 0.53 recall, its schemes
-  being split among Business, Social Welfare and Agriculture.
+- **Banking & Insurance** lands at 0.53 recall, its schemes being split among
+  Business, Social Welfare and Agriculture.
 - **Balanced weights over-predict some small classes.** Science, IT and
   Transport have precision well under recall.
+
+**Public Safety, Law & Justice (n = 7, F1 0.18) is a finding about the
+corpus, not a model defect to fix.** Only 7 of 2,066 schemes carry the label,
+so each training fold holds five or six and each test fold one or two. Its
+schemes are accident and victim compensation, worded much like Social Welfare,
+which has 388. One more correct prediction would double its recall. No
+classifier learns a category from five examples that read like a class fifty
+times larger. The score measures how thinly the scraped corpus covers the
+category. Macro-F1 was chosen so that such a class counts: this one costs
+about 0.04 macro-F1 compared with a class at the others' median F1 (0.84).
+Oversampling would hide the gap, and merging would change the 15-class
+taxonomy. Only more Public Safety schemes would close it.
 
 ### Confusions
 
@@ -381,7 +484,8 @@ cannot be read as accuracy on the true myScheme taxonomy.
 
 `data/eval/classifier/models/best_model.joblib` (69 KB) holds the best
 configuration refitted on all 2,066 schemes, with C re-chosen by the same
-inner CV; no reported number uses it. Its input is the bge-m3 embedding
+inner CV over the original grid; no reported number uses it. The wider grid
+was not applied to it. Its input is the bge-m3 embedding
 (normalised, 1,024 dimensions) of "scheme name. description", which the
 retrieval index already stores for every scheme's overview chunk. A new
 scheme would need that text embedded with the same model.
