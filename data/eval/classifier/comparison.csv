@@ -1,0 +1,10 @@
+model,macro_f1_mean,macro_f1_std,weighted_f1_mean,weighted_f1_std,accuracy_mean,accuracy_std,C_per_fold
+Majority class,0.0235,0.0001,0.0751,0.0007,0.2135,0.001,
+TF-IDF + LogisticRegression,0.5766,0.0286,0.776,0.0091,0.7928,0.0068,10.0 10.0 10.0 10.0 10.0
+TF-IDF + LogisticRegression (balanced),0.6576,0.037,0.7807,0.0241,0.7807,0.0335,1.0 1.0 10.0 0.1 10.0
+TF-IDF + LinearSVC,0.6627,0.0229,0.8036,0.0096,0.8117,0.0066,10.0 10.0 10.0 10.0 10.0
+TF-IDF + LinearSVC (balanced),0.6883,0.0207,0.8128,0.0142,0.817,0.0134,1.0 1.0 1.0 0.1 1.0
+TF-IDF + RandomForest,0.4535,0.0354,0.704,0.0132,0.741,0.0084,
+TF-IDF + RandomForest (balanced),0.6507,0.0301,0.7721,0.0103,0.7773,0.0099,
+bge-m3 + LogisticRegression,0.7046,0.0217,0.8309,0.0145,0.8383,0.0133,10.0 10.0 10.0 10.0 10.0
+bge-m3 + LogisticRegression (balanced),0.7419,0.026,0.8312,0.0137,0.8301,0.0118,10.0 10.0 10.0 10.0 10.0

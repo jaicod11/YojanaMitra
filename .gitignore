@@ -8,3 +8,7 @@ __pycache__/
 data/index/
 data/processed/chunks.jsonl
 data/cache/
+# frontend (frontend/.env is already covered by the .env rule above)
+frontend/node_modules/
+frontend/.env.local
+frontend/dist/

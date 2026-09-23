@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "bhsstg",
+    "true_silver": "Housing & Shelter",
+    "predicted": "Education & Learning",
+    "label_model": "openai/gpt-oss-120b",
+    "scheme_name": "Boarding House Stipend Scheme (Tripura Govt.)",
+    "snippet": "Boarding House Stipend Scheme (Tripura Govt.). The scheme of \"Boarding House Stipend\" was introduced by the Tribal Welfare Department, Directorate of Tribal Welfare, Govt. of Tripura to improve educational scenario among Scheduled Tribes people. Objectives:i. To provide accommodation to the ST boys and girls in the hos"
+  },
+  {
+    "slug": "big",
+    "true_silver": "Business & Entrepreneurship",
+    "predicted": "Science, IT & Communications",
+    "label_model": "openai/gpt-oss-120b",
+    "scheme_name": "Biotechnology Ignition Grant Scheme",
+    "snippet": "Biotechnology Ignition Grant Scheme. The \"Biotechnology Ignition Grant Scheme (BIG)\" is a flagship scheme of the Biotechnology Industry Research Assistance Council (BIRAC), (a not-for-profit Section 8, Schedule B, Public Sector Enterprise, set up by the Department of Biotechnology (DBT), Government of India), which rec"
+  },
+  {
+    "slug": "bmssy",
+    "true_silver": "Social Welfare & Empowerment",
+    "predicted": "Business & Entrepreneurship",
+    "label_model": "openai/gpt-oss-120b",
+    "scheme_name": "Bina Mulya Samajik Suraksha Yojana",
+    "snippet": "Bina Mulya Samajik Suraksha Yojana. The BM-SSY is a significant step towards providing social security to the unorganised workers of West Bengal. The scheme has the potential to improve the lives of millions of workers and their families. The scheme covers all unorganized workers, including construction workers, transp"
+  },
+  {
+    "slug": "eapfdap",
+    "true_silver": "Business & Entrepreneurship",
+    "predicted": "Health & Wellness",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "Establishing Aavin Parlour for Differently Abled Persons",
+    "snippet": "Establishing Aavin Parlour for Differently Abled Persons. The 'Establishing Aavin Parlour for Differently Abled Persons' scheme was launched by the Department for the Welfare of Differently Abled Persons, Government of Tamil Nadu. The scheme aims to create self- employment avenues for differently abled persons, the gov"
+  },
+  {
+    "slug": "isec",
+    "true_silver": "Business & Entrepreneurship",
+    "predicted": "Education & Learning",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "Interest Subsidy Eligibility Certificate (isec) Scheme",
+    "snippet": "Interest Subsidy Eligibility Certificate (isec) Scheme. The Interest Subsidy."
+  },
+  {
+    "slug": "isss-wid",
+    "true_silver": "Women & Child",
+    "predicted": "Social Welfare & Empowerment",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "Integrated Social Security Scheme - Women In Distress",
+    "snippet": "Integrated Social Security Scheme - Women In Distress. Launched in 1995, ISSS (Integrated Social Security Scheme) is a State Sponsored Scheme by the Social Welfare Department of the Govt. of Jammu and Kashmir where financial assistance is provided to Old Age Persons, Widows, Divorcees, Women in Distress, Transgenders, "
+  },
+  {
+    "slug": "nwa",
+    "true_silver": "Agriculture, Rural & Environment",
+    "predicted": "Sports & Culture",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "National Water Awards",
+    "snippet": "National Water Awards. National Water Awards under the Department of Water Resources, River Developmen,t and Ganga Rejuvenation Encourage the various stakeholder including Civil Societies, Gram Panchayats, Urban Local Bodies, Water User Associations, Institutions, Corporate Sector, Individuals etc.to adoptg innovative "
+  },
+  {
+    "slug": "pmfby",
+    "true_silver": "Agriculture, Rural & Environment",
+    "predicted": "Banking, Financial Services & Insurance",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "Pradhan Mantri Fasal Bima Yojna",
+    "snippet": "Pradhan Mantri Fasal Bima Yojna. Objective: The PMFBY works on the One Nation, One Crop, One Premium. To provide insurance coverage and financial support to the farmers in the event of failure of any of the notified crops as a result of natural calamities, pests & diseases. To stabilize the income of farmers to ensure "
+  },
+  {
+    "slug": "rmewf-education",
+    "true_silver": "Education & Learning",
+    "predicted": "Social Welfare & Empowerment",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "RMEWF-Financial Assistance For Education Of Children & Widows Of Ex-Servicemen",
+    "snippet": "RMEWF-Financial Assistance For Education Of Children & Widows Of Ex-Servicemen. A scheme to provide financial assistance to Ex-Servicemen and their widows for helping them in educating their child (for maximum two children) up to graduation and also for widows to pursue Post Graduation degree. Aim of this scheme is to "
+  },
+  {
+    "slug": "slswe",
+    "true_silver": "Women & Child",
+    "predicted": "Business & Entrepreneurship",
+    "label_model": "gemini-3.1-flash-lite",
+    "scheme_name": "Soft Loan Scheme for Women Entrepreneurs",
+    "snippet": "Soft Loan Scheme for Women Entrepreneurs. The scheme \"Soft Loan Scheme for Women Entrepreneurs\" was started under Kerala Startup Mission (KSUM) to support women startups with a soft loan of an amount limited to ₹15 Lakhs as working capital for implementing works and projects received from the Govt. departments and the "
+  }
+]

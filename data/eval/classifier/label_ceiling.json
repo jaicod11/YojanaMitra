@@ -1,0 +1,201 @@
+{
+  "best_model": "bge-m3 + LogisticRegression (balanced)",
+  "round2_blind_verification": {
+    "schemes": 100,
+    "sampling": {
+      "purpose": "Round 2: verify the config that produced most of the corpus.",
+      "pool_filter": {
+        "provider": "gemini",
+        "model": "gemini-3.1-flash-lite",
+        "mode": "brief",
+        "batch_size": 10
+      },
+      "pool_size": 1604,
+      "stratified_by": "predicted category (floor of 4 each)",
+      "seed": 42
+    },
+    "current_silver_label_models": {
+      "gemini-3.1-flash-lite": 100
+    },
+    "raw": {
+      "model_vs_hand": 0.82,
+      "silver_vs_hand": 0.89,
+      "model_vs_silver": 0.87
+    },
+    "reweighted_by_sampling_stratum": {
+      "model_vs_hand": 0.8398,
+      "silver_vs_hand": 0.8889,
+      "model_vs_silver": 0.903
+    },
+    "breakdown": {
+      "model right, silver right": 79,
+      "model wrong, silver right": 10,
+      "model wrong, silver wrong": 8,
+      "model right, silver wrong": 3
+    },
+    "model_wrong_where_silver_wrong_same_way": 8,
+    "disagreements": [
+      {
+        "slug": "dpgsslamgsc",
+        "hand": "Business & Entrepreneurship",
+        "silver": "Business & Entrepreneurship",
+        "model": "Education & Learning"
+      },
+      {
+        "slug": "edsc-st-wistem",
+        "hand": "Business & Entrepreneurship",
+        "silver": "Business & Entrepreneurship",
+        "model": "Women & Child"
+      },
+      {
+        "slug": "ffes",
+        "hand": "Business & Entrepreneurship",
+        "silver": "Agriculture, Rural & Environment",
+        "model": "Agriculture, Rural & Environment"
+      },
+      {
+        "slug": "fspip",
+        "hand": "Skills & Employment",
+        "silver": "Skills & Employment",
+        "model": "Education & Learning"
+      },
+      {
+        "slug": "gghas",
+        "hand": "Social Welfare & Empowerment",
+        "silver": "Social Welfare & Empowerment",
+        "model": "Housing & Shelter"
+      },
+      {
+        "slug": "gobardhan",
+        "hand": "Agriculture, Rural & Environment",
+        "silver": "Utility & Sanitation",
+        "model": "Utility & Sanitation"
+      },
+      {
+        "slug": "gspv",
+        "hand": "Transport & Infrastructure",
+        "silver": "Transport & Infrastructure",
+        "model": "Agriculture, Rural & Environment"
+      },
+      {
+        "slug": "hag-sw",
+        "hand": "Social Welfare & Empowerment",
+        "silver": "Health & Wellness",
+        "model": "Health & Wellness"
+      },
+      {
+        "slug": "icroaip",
+        "hand": "Education & Learning",
+        "silver": "Skills & Employment",
+        "model": "Skills & Employment"
+      },
+      {
+        "slug": "jc",
+        "hand": "Social Welfare & Empowerment",
+        "silver": "Business & Entrepreneurship",
+        "model": "Social Welfare & Empowerment"
+      },
+      {
+        "slug": "jssk",
+        "hand": "Health & Wellness",
+        "silver": "Women & Child",
+        "model": "Women & Child"
+      },
+      {
+        "slug": "kcc",
+        "hand": "Banking, Financial Services & Insurance",
+        "silver": "Banking, Financial Services & Insurance",
+        "model": "Agriculture, Rural & Environment"
+      },
+      {
+        "slug": "kps",
+        "hand": "Public Safety, Law & Justice",
+        "silver": "Public Safety, Law & Justice",
+        "model": "Sports & Culture"
+      },
+      {
+        "slug": "lpaiis",
+        "hand": "Education & Learning",
+        "silver": "Education & Learning",
+        "model": "Skills & Employment"
+      },
+      {
+        "slug": "mmgsy",
+        "hand": "Women & Child",
+        "silver": "Utility & Sanitation",
+        "model": "Utility & Sanitation"
+      },
+      {
+        "slug": "pdunwfs",
+        "hand": "Sports & Culture",
+        "silver": "Social Welfare & Empowerment",
+        "model": "Social Welfare & Empowerment"
+      },
+      {
+        "slug": "sgfaarsaaowdfrs",
+        "hand": "Public Safety, Law & Justice",
+        "silver": "Transport & Infrastructure",
+        "model": "Public Safety, Law & Justice"
+      },
+      {
+        "slug": "sgs",
+        "hand": "Public Safety, Law & Justice",
+        "silver": "Public Safety, Law & Justice",
+        "model": "Social Welfare & Empowerment"
+      },
+      {
+        "slug": "sphhsy",
+        "hand": "Health & Wellness",
+        "silver": "Social Welfare & Empowerment",
+        "model": "Health & Wellness"
+      },
+      {
+        "slug": "sse40rbudp",
+        "hand": "Business & Entrepreneurship",
+        "silver": "Agriculture, Rural & Environment",
+        "model": "Agriculture, Rural & Environment"
+      },
+      {
+        "slug": "tmvcs",
+        "hand": "Public Safety, Law & Justice",
+        "silver": "Public Safety, Law & Justice",
+        "model": "Social Welfare & Empowerment"
+      }
+    ]
+  },
+  "round1_verification": {
+    "schemes": 30,
+    "current_silver_label_models": {
+      "gemini-3.6-flash": 16,
+      "gemini-3.1-flash-lite": 3,
+      "openai/gpt-oss-120b": 11
+    },
+    "model_vs_hand": 0.8,
+    "silver_vs_hand": 0.9,
+    "note": "Round 1 checked an earlier labelling run; its schemes were excluded from round 2."
+  },
+  "agreement_with_silver_by_label_model": {
+    "gemini-3.1-flash-lite": {
+      "schemes": 1662,
+      "model_vs_silver_accuracy": 0.8291,
+      "largest_class_share": 0.2196,
+      "largest_class": "Education & Learning",
+      "hand_verified_in_round2": 100
+    },
+    "gemini-3.6-flash": {
+      "schemes": 77,
+      "model_vs_silver_accuracy": 0.8831,
+      "largest_class_share": 0.1688,
+      "largest_class": "Women & Child",
+      "hand_verified_in_round2": 0
+    },
+    "openai/gpt-oss-120b": {
+      "schemes": 327,
+      "model_vs_silver_accuracy": 0.8226,
+      "largest_class_share": 0.208,
+      "largest_class": "Education & Learning",
+      "hand_verified_in_round2": 0
+    }
+  },
+  "overall_model_vs_silver_accuracy": 0.8301
+}

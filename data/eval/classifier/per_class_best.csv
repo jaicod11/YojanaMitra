@@ -1,0 +1,16 @@
+category,precision,recall,f1,support
+Education & Learning,0.9153,0.8571,0.8852,441
+Social Welfare & Empowerment,0.882,0.8093,0.8441,388
+Women & Child,0.8024,0.7481,0.7743,266
+"Agriculture, Rural & Environment",0.8973,0.9402,0.9183,251
+Business & Entrepreneurship,0.8685,0.815,0.8409,227
+Skills & Employment,0.671,0.8254,0.7402,126
+Sports & Culture,0.8365,0.8878,0.8614,98
+Health & Wellness,0.8058,0.8737,0.8384,95
+"Science, IT & Communications",0.5143,0.8372,0.6372,43
+Housing & Shelter,0.8421,0.8649,0.8533,37
+"Banking, Financial Services & Insurance",0.5135,0.5278,0.5205,36
+Transport & Infrastructure,0.5,0.7,0.5833,20
+Utility & Sanitation,0.8667,0.8125,0.8387,16
+Travel & Tourism,0.7368,0.9333,0.8235,15
+"Public Safety, Law & Justice",0.25,0.1429,0.1818,7

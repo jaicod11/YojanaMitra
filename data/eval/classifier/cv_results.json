@@ -1,0 +1,816 @@
+{
+  "seed": 42,
+  "folds": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+  "tuning": "C in [0.1, 1.0, 10.0] for LogisticRegression / LinearSVC models, by inner StratifiedKFold(3) on each outer training fold (scoring: macro-F1); nothing else tuned",
+  "tfidf": "TfidfVectorizer(lowercase, strip_accents='unicode', ngram_range=(1, 2), min_df=2, max_df=0.95, sublinear_tf=True), fitted inside each fold",
+  "models": [
+    {
+      "name": "Majority class",
+      "input": "text",
+      "tuned_C_per_fold": [],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.023373173970783534,
+          "weighted_f1": 0.07452316338510692,
+          "accuracy": 0.21256038647342995
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.023419827012641385,
+          "weighted_f1": 0.07485271587575454,
+          "accuracy": 0.21307506053268765
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.023638778220451528,
+          "weighted_f1": 0.07641106277070894,
+          "accuracy": 0.21549636803874092
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.023419827012641385,
+          "weighted_f1": 0.07485271587575454,
+          "accuracy": 0.21307506053268765
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.023419827012641385,
+          "weighted_f1": 0.07485271587575454,
+          "accuracy": 0.21307506053268765
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.0235,
+          "std": 0.0001
+        },
+        "weighted_f1": {
+          "mean": 0.0751,
+          "std": 0.0007
+        },
+        "accuracy": {
+          "mean": 0.2135,
+          "std": 0.001
+        }
+      },
+      "seconds": 0.0
+    },
+    {
+      "name": "TF-IDF + LogisticRegression",
+      "input": "text",
+      "tuned_C_per_fold": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.5417409465713814,
+          "weighted_f1": 0.7631246084483704,
+          "accuracy": 0.782608695652174
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.5597131999370912,
+          "weighted_f1": 0.7772587387482877,
+          "accuracy": 0.7941888619854721
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.614664176248319,
+          "weighted_f1": 0.7804209930964512,
+          "accuracy": 0.7917675544794189
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.6063172412631312,
+          "weighted_f1": 0.7896188142184734,
+          "accuracy": 0.8038740920096852
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.5607789562689163,
+          "weighted_f1": 0.7697454002944556,
+          "accuracy": 0.7917675544794189
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.5766,
+          "std": 0.0286
+        },
+        "weighted_f1": {
+          "mean": 0.776,
+          "std": 0.0091
+        },
+        "accuracy": {
+          "mean": 0.7928,
+          "std": 0.0068
+        }
+      },
+      "seconds": 94.9
+    },
+    {
+      "name": "TF-IDF + LogisticRegression (balanced)",
+      "input": "text",
+      "tuned_C_per_fold": [
+        1.0,
+        1.0,
+        10.0,
+        0.1,
+        10.0
+      ],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.6405654052776814,
+          "weighted_f1": 0.7697638793829349,
+          "accuracy": 0.7729468599033816
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.681890438663538,
+          "weighted_f1": 0.7849421715956454,
+          "accuracy": 0.784503631961259
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.7091249907747279,
+          "weighted_f1": 0.8113806884724376,
+          "accuracy": 0.8159806295399515
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.6001214129502447,
+          "weighted_f1": 0.740952818385292,
+          "accuracy": 0.7215496368038741
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.6564671073821283,
+          "weighted_f1": 0.7966140799301861,
+          "accuracy": 0.8087167070217918
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.6576,
+          "std": 0.037
+        },
+        "weighted_f1": {
+          "mean": 0.7807,
+          "std": 0.0241
+        },
+        "accuracy": {
+          "mean": 0.7807,
+          "std": 0.0335
+        }
+      },
+      "seconds": 60.0
+    },
+    {
+      "name": "TF-IDF + LinearSVC",
+      "input": "text",
+      "tuned_C_per_fold": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.6644455345825516,
+          "weighted_f1": 0.8046247863048162,
+          "accuracy": 0.8140096618357487
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.6460217764979004,
+          "weighted_f1": 0.8052789850979041,
+          "accuracy": 0.8135593220338984
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.7043702030406942,
+          "weighted_f1": 0.8139726096098712,
+          "accuracy": 0.8184019370460048
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.6605128209512166,
+          "weighted_f1": 0.8083679856609901,
+          "accuracy": 0.8135593220338984
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.638345522692639,
+          "weighted_f1": 0.785588172736674,
+          "accuracy": 0.7990314769975787
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.6627,
+          "std": 0.0229
+        },
+        "weighted_f1": {
+          "mean": 0.8036,
+          "std": 0.0096
+        },
+        "accuracy": {
+          "mean": 0.8117,
+          "std": 0.0066
+        }
+      },
+      "seconds": 25.7
+    },
+    {
+      "name": "TF-IDF + LinearSVC (balanced)",
+      "input": "text",
+      "tuned_C_per_fold": [
+        1.0,
+        1.0,
+        1.0,
+        0.1,
+        1.0
+      ],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.6790755847609288,
+          "weighted_f1": 0.8121019644883196,
+          "accuracy": 0.8188405797101449
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.7202397293266277,
+          "weighted_f1": 0.8368277718860391,
+          "accuracy": 0.8401937046004843
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.6971029028387288,
+          "weighted_f1": 0.8143198115280951,
+          "accuracy": 0.8184019370460048
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.687553971290404,
+          "weighted_f1": 0.8081836207820882,
+          "accuracy": 0.8062953995157385
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.6574297974962681,
+          "weighted_f1": 0.7925413248270778,
+          "accuracy": 0.801452784503632
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.6883,
+          "std": 0.0207
+        },
+        "weighted_f1": {
+          "mean": 0.8128,
+          "std": 0.0142
+        },
+        "accuracy": {
+          "mean": 0.817,
+          "std": 0.0134
+        }
+      },
+      "seconds": 22.1
+    },
+    {
+      "name": "TF-IDF + RandomForest",
+      "input": "text",
+      "tuned_C_per_fold": [],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.4643768512587172,
+          "weighted_f1": 0.7189674676446531,
+          "accuracy": 0.751207729468599
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.42839910422802047,
+          "weighted_f1": 0.7014912841225781,
+          "accuracy": 0.7433414043583535
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.4597761241337081,
+          "weighted_f1": 0.7059666261475852,
+          "accuracy": 0.738498789346247
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.5097204667086682,
+          "weighted_f1": 0.713104074266301,
+          "accuracy": 0.7457627118644068
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.40539163060974404,
+          "weighted_f1": 0.6804977185233272,
+          "accuracy": 0.7263922518159807
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.4535,
+          "std": 0.0354
+        },
+        "weighted_f1": {
+          "mean": 0.704,
+          "std": 0.0132
+        },
+        "accuracy": {
+          "mean": 0.741,
+          "std": 0.0084
+        }
+      },
+      "seconds": 12.8
+    },
+    {
+      "name": "TF-IDF + RandomForest (balanced)",
+      "input": "text",
+      "tuned_C_per_fold": [],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.6723178862148307,
+          "weighted_f1": 0.7856081567083921,
+          "accuracy": 0.7898550724637681
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.652910524794891,
+          "weighted_f1": 0.7600536924499601,
+          "accuracy": 0.7627118644067796
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.6935757041399203,
+          "weighted_f1": 0.7830762579401698,
+          "accuracy": 0.7869249394673123
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.6169481392416549,
+          "weighted_f1": 0.7673482263785038,
+          "accuracy": 0.7723970944309927
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.6178134160076963,
+          "weighted_f1": 0.7646344307221299,
+          "accuracy": 0.774818401937046
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.6507,
+          "std": 0.0301
+        },
+        "weighted_f1": {
+          "mean": 0.7721,
+          "std": 0.0103
+        },
+        "accuracy": {
+          "mean": 0.7773,
+          "std": 0.0099
+        }
+      },
+      "seconds": 11.7
+    },
+    {
+      "name": "bge-m3 + LogisticRegression",
+      "input": "embedding",
+      "tuned_C_per_fold": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.7262034568512646,
+          "weighted_f1": 0.82257323332772,
+          "accuracy": 0.8285024154589372
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.6930955740660804,
+          "weighted_f1": 0.8262007615967089,
+          "accuracy": 0.8329297820823245
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.733489269270198,
+          "weighted_f1": 0.8428962391086715,
+          "accuracy": 0.847457627118644
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.6937773531097657,
+          "weighted_f1": 0.8515705823900892,
+          "accuracy": 0.8595641646489104
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.6763810374093057,
+          "weighted_f1": 0.8111197424189291,
+          "accuracy": 0.8232445520581114
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7046,
+          "std": 0.0217
+        },
+        "weighted_f1": {
+          "mean": 0.8309,
+          "std": 0.0145
+        },
+        "accuracy": {
+          "mean": 0.8383,
+          "std": 0.0133
+        }
+      },
+      "seconds": 3.8
+    },
+    {
+      "name": "bge-m3 + LogisticRegression (balanced)",
+      "input": "embedding",
+      "tuned_C_per_fold": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "folds": [
+        {
+          "fold": 0,
+          "macro_f1": 0.709901291688954,
+          "weighted_f1": 0.8130414485935799,
+          "accuracy": 0.8115942028985508
+        },
+        {
+          "fold": 1,
+          "macro_f1": 0.788076060302086,
+          "weighted_f1": 0.8343995466514946,
+          "accuracy": 0.8305084745762712
+        },
+        {
+          "fold": 2,
+          "macro_f1": 0.7349947541621779,
+          "weighted_f1": 0.83656804056771,
+          "accuracy": 0.8353510895883777
+        },
+        {
+          "fold": 3,
+          "macro_f1": 0.7469124982058172,
+          "weighted_f1": 0.8521963756376524,
+          "accuracy": 0.847457627118644
+        },
+        {
+          "fold": 4,
+          "macro_f1": 0.7293981095060496,
+          "weighted_f1": 0.8200057035797585,
+          "accuracy": 0.8256658595641646
+        }
+      ],
+      "summary": {
+        "macro_f1": {
+          "mean": 0.7419,
+          "std": 0.026
+        },
+        "weighted_f1": {
+          "mean": 0.8312,
+          "std": 0.0137
+        },
+        "accuracy": {
+          "mean": 0.8301,
+          "std": 0.0118
+        }
+      },
+      "seconds": 2.5
+    }
+  ],
+  "best_model": "bge-m3 + LogisticRegression (balanced)",
+  "best_model_selection_note": "Chosen by mean macro-F1 on the same folds that are reported, among 8 candidates; the gap to the runner-up should be read with that in mind.",
+  "per_class_best": [
+    {
+      "category": "Education & Learning",
+      "precision": 0.9153,
+      "recall": 0.8571,
+      "f1": 0.8852,
+      "support": 441
+    },
+    {
+      "category": "Social Welfare & Empowerment",
+      "precision": 0.882,
+      "recall": 0.8093,
+      "f1": 0.8441,
+      "support": 388
+    },
+    {
+      "category": "Women & Child",
+      "precision": 0.8024,
+      "recall": 0.7481,
+      "f1": 0.7743,
+      "support": 266
+    },
+    {
+      "category": "Agriculture, Rural & Environment",
+      "precision": 0.8973,
+      "recall": 0.9402,
+      "f1": 0.9183,
+      "support": 251
+    },
+    {
+      "category": "Business & Entrepreneurship",
+      "precision": 0.8685,
+      "recall": 0.815,
+      "f1": 0.8409,
+      "support": 227
+    },
+    {
+      "category": "Skills & Employment",
+      "precision": 0.671,
+      "recall": 0.8254,
+      "f1": 0.7402,
+      "support": 126
+    },
+    {
+      "category": "Sports & Culture",
+      "precision": 0.8365,
+      "recall": 0.8878,
+      "f1": 0.8614,
+      "support": 98
+    },
+    {
+      "category": "Health & Wellness",
+      "precision": 0.8058,
+      "recall": 0.8737,
+      "f1": 0.8384,
+      "support": 95
+    },
+    {
+      "category": "Science, IT & Communications",
+      "precision": 0.5143,
+      "recall": 0.8372,
+      "f1": 0.6372,
+      "support": 43
+    },
+    {
+      "category": "Housing & Shelter",
+      "precision": 0.8421,
+      "recall": 0.8649,
+      "f1": 0.8533,
+      "support": 37
+    },
+    {
+      "category": "Banking, Financial Services & Insurance",
+      "precision": 0.5135,
+      "recall": 0.5278,
+      "f1": 0.5205,
+      "support": 36
+    },
+    {
+      "category": "Transport & Infrastructure",
+      "precision": 0.5,
+      "recall": 0.7,
+      "f1": 0.5833,
+      "support": 20
+    },
+    {
+      "category": "Utility & Sanitation",
+      "precision": 0.8667,
+      "recall": 0.8125,
+      "f1": 0.8387,
+      "support": 16
+    },
+    {
+      "category": "Travel & Tourism",
+      "precision": 0.7368,
+      "recall": 0.9333,
+      "f1": 0.8235,
+      "support": 15
+    },
+    {
+      "category": "Public Safety, Law & Justice",
+      "precision": 0.25,
+      "recall": 0.1429,
+      "f1": 0.1818,
+      "support": 7
+    }
+  ],
+  "largest_confusions": [
+    [
+      "Social Welfare & Empowerment",
+      "Women & Child",
+      26,
+      0.067
+    ],
+    [
+      "Education & Learning",
+      "Skills & Employment",
+      24,
+      0.0544
+    ],
+    [
+      "Education & Learning",
+      "Science, IT & Communications",
+      19,
+      0.0431
+    ],
+    [
+      "Women & Child",
+      "Social Welfare & Empowerment",
+      19,
+      0.0714
+    ],
+    [
+      "Women & Child",
+      "Education & Learning",
+      18,
+      0.0677
+    ],
+    [
+      "Education & Learning",
+      "Women & Child",
+      10,
+      0.0227
+    ],
+    [
+      "Social Welfare & Empowerment",
+      "Health & Wellness",
+      10,
+      0.0258
+    ],
+    [
+      "Business & Entrepreneurship",
+      "Skills & Employment",
+      9,
+      0.0396
+    ],
+    [
+      "Social Welfare & Empowerment",
+      "Skills & Employment",
+      8,
+      0.0206
+    ],
+    [
+      "Social Welfare & Empowerment",
+      "Transport & Infrastructure",
+      7,
+      0.018
+    ],
+    [
+      "Skills & Employment",
+      "Education & Learning",
+      7,
+      0.0556
+    ],
+    [
+      "Social Welfare & Empowerment",
+      "Business & Entrepreneurship",
+      6,
+      0.0155
+    ],
+    [
+      "Social Welfare & Empowerment",
+      "Sports & Culture",
+      6,
+      0.0155
+    ],
+    [
+      "Women & Child",
+      "Health & Wellness",
+      6,
+      0.0226
+    ],
+    [
+      "Women & Child",
+      "Science, IT & Communications",
+      6,
+      0.0226
+    ]
+  ],
+  "education_vs_social_welfare": {
+    "education_predicted_as_social_welfare": 1,
+    "social_welfare_predicted_as_education": 0
+  },
+  "errors_sample": [
+    {
+      "slug": "bhsstg",
+      "true_silver": "Housing & Shelter",
+      "predicted": "Education & Learning",
+      "label_model": "openai/gpt-oss-120b",
+      "scheme_name": "Boarding House Stipend Scheme (Tripura Govt.)",
+      "snippet": "Boarding House Stipend Scheme (Tripura Govt.). The scheme of \"Boarding House Stipend\" was introduced by the Tribal Welfare Department, Directorate of Tribal Welfare, Govt. of Tripura to improve educational scenario among Scheduled Tribes people. Objectives:i. To provide accommodation to the ST boys and girls in the hos"
+    },
+    {
+      "slug": "big",
+      "true_silver": "Business & Entrepreneurship",
+      "predicted": "Science, IT & Communications",
+      "label_model": "openai/gpt-oss-120b",
+      "scheme_name": "Biotechnology Ignition Grant Scheme",
+      "snippet": "Biotechnology Ignition Grant Scheme. The \"Biotechnology Ignition Grant Scheme (BIG)\" is a flagship scheme of the Biotechnology Industry Research Assistance Council (BIRAC), (a not-for-profit Section 8, Schedule B, Public Sector Enterprise, set up by the Department of Biotechnology (DBT), Government of India), which rec"
+    },
+    {
+      "slug": "bmssy",
+      "true_silver": "Social Welfare & Empowerment",
+      "predicted": "Business & Entrepreneurship",
+      "label_model": "openai/gpt-oss-120b",
+      "scheme_name": "Bina Mulya Samajik Suraksha Yojana",
+      "snippet": "Bina Mulya Samajik Suraksha Yojana. The BM-SSY is a significant step towards providing social security to the unorganised workers of West Bengal. The scheme has the potential to improve the lives of millions of workers and their families. The scheme covers all unorganized workers, including construction workers, transp"
+    },
+    {
+      "slug": "eapfdap",
+      "true_silver": "Business & Entrepreneurship",
+      "predicted": "Health & Wellness",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "Establishing Aavin Parlour for Differently Abled Persons",
+      "snippet": "Establishing Aavin Parlour for Differently Abled Persons. The 'Establishing Aavin Parlour for Differently Abled Persons' scheme was launched by the Department for the Welfare of Differently Abled Persons, Government of Tamil Nadu. The scheme aims to create self- employment avenues for differently abled persons, the gov"
+    },
+    {
+      "slug": "isec",
+      "true_silver": "Business & Entrepreneurship",
+      "predicted": "Education & Learning",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "Interest Subsidy Eligibility Certificate (isec) Scheme",
+      "snippet": "Interest Subsidy Eligibility Certificate (isec) Scheme. The Interest Subsidy."
+    },
+    {
+      "slug": "isss-wid",
+      "true_silver": "Women & Child",
+      "predicted": "Social Welfare & Empowerment",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "Integrated Social Security Scheme - Women In Distress",
+      "snippet": "Integrated Social Security Scheme - Women In Distress. Launched in 1995, ISSS (Integrated Social Security Scheme) is a State Sponsored Scheme by the Social Welfare Department of the Govt. of Jammu and Kashmir where financial assistance is provided to Old Age Persons, Widows, Divorcees, Women in Distress, Transgenders, "
+    },
+    {
+      "slug": "nwa",
+      "true_silver": "Agriculture, Rural & Environment",
+      "predicted": "Sports & Culture",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "National Water Awards",
+      "snippet": "National Water Awards. National Water Awards under the Department of Water Resources, River Developmen,t and Ganga Rejuvenation Encourage the various stakeholder including Civil Societies, Gram Panchayats, Urban Local Bodies, Water User Associations, Institutions, Corporate Sector, Individuals etc.to adoptg innovative "
+    },
+    {
+      "slug": "pmfby",
+      "true_silver": "Agriculture, Rural & Environment",
+      "predicted": "Banking, Financial Services & Insurance",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "Pradhan Mantri Fasal Bima Yojna",
+      "snippet": "Pradhan Mantri Fasal Bima Yojna. Objective: The PMFBY works on the One Nation, One Crop, One Premium. To provide insurance coverage and financial support to the farmers in the event of failure of any of the notified crops as a result of natural calamities, pests & diseases. To stabilize the income of farmers to ensure "
+    },
+    {
+      "slug": "rmewf-education",
+      "true_silver": "Education & Learning",
+      "predicted": "Social Welfare & Empowerment",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "RMEWF-Financial Assistance For Education Of Children & Widows Of Ex-Servicemen",
+      "snippet": "RMEWF-Financial Assistance For Education Of Children & Widows Of Ex-Servicemen. A scheme to provide financial assistance to Ex-Servicemen and their widows for helping them in educating their child (for maximum two children) up to graduation and also for widows to pursue Post Graduation degree. Aim of this scheme is to "
+    },
+    {
+      "slug": "slswe",
+      "true_silver": "Women & Child",
+      "predicted": "Business & Entrepreneurship",
+      "label_model": "gemini-3.1-flash-lite",
+      "scheme_name": "Soft Loan Scheme for Women Entrepreneurs",
+      "snippet": "Soft Loan Scheme for Women Entrepreneurs. The scheme \"Soft Loan Scheme for Women Entrepreneurs\" was started under Kerala Startup Mission (KSUM) to support women startups with a soft loan of an amount limited to ₹15 Lakhs as working capital for implementing works and projects received from the Govt. departments and the "
+    }
+  ],
+  "classes": [
+    "Education & Learning",
+    "Social Welfare & Empowerment",
+    "Women & Child",
+    "Agriculture, Rural & Environment",
+    "Business & Entrepreneurship",
+    "Skills & Employment",
+    "Sports & Culture",
+    "Health & Wellness",
+    "Science, IT & Communications",
+    "Housing & Shelter",
+    "Banking, Financial Services & Insurance",
+    "Transport & Infrastructure",
+    "Utility & Sanitation",
+    "Travel & Tourism",
+    "Public Safety, Law & Justice"
+  ]
+}

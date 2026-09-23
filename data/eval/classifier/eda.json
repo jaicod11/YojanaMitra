@@ -1,0 +1,645 @@
+{
+  "seed": 42,
+  "files_read": {
+    "scheme_records": "data/interim/schemes/*.json",
+    "labels": "data/interim/labels/predictions.json"
+  },
+  "rows": {
+    "scheme_records": 2066,
+    "labels": 2066,
+    "joined": 2066
+  },
+  "label_models": {
+    "gemini-3.6-flash": 77,
+    "gemini-3.1-flash-lite": 1662,
+    "openai/gpt-oss-120b": 327
+  },
+  "fields": {
+    "scheme_name": {
+      "empty": 0,
+      "chars": {
+        "median": 46.0,
+        "q1": 31.0,
+        "q3": 66.0,
+        "mean": 53.4,
+        "min": 5,
+        "max": 246
+      },
+      "words": {
+        "median": 6.0,
+        "q1": 4.0,
+        "q3": 9.0,
+        "mean": 7.2,
+        "min": 1,
+        "max": 33
+      }
+    },
+    "description": {
+      "empty": 0,
+      "chars": {
+        "median": 662.0,
+        "q1": 447.0,
+        "q3": 1113.25,
+        "mean": 932.9,
+        "min": 19,
+        "max": 8593
+      },
+      "words": {
+        "median": 100.0,
+        "q1": 67.0,
+        "q3": 165.0,
+        "mean": 138.2,
+        "min": 3,
+        "max": 1320
+      }
+    },
+    "benefits_text": {
+      "empty": 20,
+      "chars": {
+        "median": 352.0,
+        "q1": 163.0,
+        "q3": 763.0,
+        "mean": 626.5,
+        "min": 8,
+        "max": 16823
+      },
+      "words": {
+        "median": 54.0,
+        "q1": 26.0,
+        "q3": 116.0,
+        "mean": 94.3,
+        "min": 2,
+        "max": 2570
+      }
+    },
+    "eligibility_text": {
+      "empty": 4,
+      "chars": {
+        "median": 540.5,
+        "q1": 299.0,
+        "q3": 1021.0,
+        "mean": 832.3,
+        "min": 26,
+        "max": 9213
+      },
+      "words": {
+        "median": 82.5,
+        "q1": 46.0,
+        "q3": 156.0,
+        "mean": 125.4,
+        "min": 3,
+        "max": 1408
+      }
+    },
+    "tags": {
+      "empty": 33,
+      "chars": {
+        "median": 50,
+        "q1": 40.0,
+        "q3": 63.0,
+        "mean": 53.1,
+        "min": 4,
+        "max": 242
+      },
+      "words": {
+        "median": 6,
+        "q1": 5.0,
+        "q3": 7.0,
+        "mean": 6.3,
+        "min": 1,
+        "max": 33
+      }
+    }
+  },
+  "class_distribution": [
+    {
+      "category": "Education & Learning",
+      "count": 441,
+      "percent": 21.35
+    },
+    {
+      "category": "Social Welfare & Empowerment",
+      "count": 388,
+      "percent": 18.78
+    },
+    {
+      "category": "Women & Child",
+      "count": 266,
+      "percent": 12.88
+    },
+    {
+      "category": "Agriculture, Rural & Environment",
+      "count": 251,
+      "percent": 12.15
+    },
+    {
+      "category": "Business & Entrepreneurship",
+      "count": 227,
+      "percent": 10.99
+    },
+    {
+      "category": "Skills & Employment",
+      "count": 126,
+      "percent": 6.1
+    },
+    {
+      "category": "Sports & Culture",
+      "count": 98,
+      "percent": 4.74
+    },
+    {
+      "category": "Health & Wellness",
+      "count": 95,
+      "percent": 4.6
+    },
+    {
+      "category": "Science, IT & Communications",
+      "count": 43,
+      "percent": 2.08
+    },
+    {
+      "category": "Housing & Shelter",
+      "count": 37,
+      "percent": 1.79
+    },
+    {
+      "category": "Banking, Financial Services & Insurance",
+      "count": 36,
+      "percent": 1.74
+    },
+    {
+      "category": "Transport & Infrastructure",
+      "count": 20,
+      "percent": 0.97
+    },
+    {
+      "category": "Utility & Sanitation",
+      "count": 16,
+      "percent": 0.77
+    },
+    {
+      "category": "Travel & Tourism",
+      "count": 15,
+      "percent": 0.73
+    },
+    {
+      "category": "Public Safety, Law & Justice",
+      "count": 7,
+      "percent": 0.34
+    }
+  ],
+  "classes_under_25": [
+    "Transport & Infrastructure",
+    "Utility & Sanitation",
+    "Travel & Tourism",
+    "Public Safety, Law & Justice"
+  ],
+  "input_text_words": {
+    "overall": {
+      "median": 180.0,
+      "q1": 112.0,
+      "q3": 306.0,
+      "mean": 243.6,
+      "min": 9,
+      "max": 3084
+    },
+    "by_class": {
+      "Education & Learning": {
+        "median": 206,
+        "q1": 123.5,
+        "q3": 338.0,
+        "mean": 263.2,
+        "min": 30,
+        "max": 1384
+      },
+      "Social Welfare & Empowerment": {
+        "median": 118.0,
+        "q1": 88.25,
+        "q3": 176.75,
+        "mean": 163.5,
+        "min": 44,
+        "max": 979
+      },
+      "Women & Child": {
+        "median": 167.5,
+        "q1": 107.5,
+        "q3": 262.0,
+        "mean": 215.5,
+        "min": 38,
+        "max": 863
+      },
+      "Agriculture, Rural & Environment": {
+        "median": 213,
+        "q1": 130.0,
+        "q3": 319.0,
+        "mean": 271.7,
+        "min": 55,
+        "max": 3084
+      },
+      "Business & Entrepreneurship": {
+        "median": 221,
+        "q1": 152.0,
+        "q3": 342.0,
+        "mean": 281.6,
+        "min": 9,
+        "max": 1146
+      },
+      "Skills & Employment": {
+        "median": 187.0,
+        "q1": 106.0,
+        "q3": 367.0,
+        "mean": 250.9,
+        "min": 46,
+        "max": 1033
+      },
+      "Sports & Culture": {
+        "median": 191.0,
+        "q1": 95.0,
+        "q3": 375.25,
+        "mean": 298.5,
+        "min": 67,
+        "max": 1712
+      },
+      "Health & Wellness": {
+        "median": 153,
+        "q1": 97.0,
+        "q3": 222.0,
+        "mean": 205.1,
+        "min": 48,
+        "max": 1417
+      },
+      "Science, IT & Communications": {
+        "median": 287,
+        "q1": 223.0,
+        "q3": 435.0,
+        "mean": 358.4,
+        "min": 84,
+        "max": 1103
+      },
+      "Housing & Shelter": {
+        "median": 175,
+        "q1": 117.5,
+        "q3": 391.0,
+        "mean": 279.3,
+        "min": 65,
+        "max": 967
+      },
+      "Banking, Financial Services & Insurance": {
+        "median": 218.0,
+        "q1": 141.25,
+        "q3": 418.0,
+        "mean": 301.4,
+        "min": 56,
+        "max": 1099
+      },
+      "Transport & Infrastructure": {
+        "median": 141.0,
+        "q1": 94.5,
+        "q3": 240.5,
+        "mean": 213.4,
+        "min": 61,
+        "max": 822
+      },
+      "Utility & Sanitation": {
+        "median": 374.0,
+        "q1": 185.0,
+        "q3": 409.0,
+        "mean": 355.4,
+        "min": 108,
+        "max": 871
+      },
+      "Travel & Tourism": {
+        "median": 302,
+        "q1": 144.0,
+        "q3": 431.0,
+        "mean": 297,
+        "min": 108,
+        "max": 702
+      },
+      "Public Safety, Law & Justice": {
+        "median": 398,
+        "q1": 124.0,
+        "q3": 497.0,
+        "mean": 434,
+        "min": 115,
+        "max": 1090
+      }
+    }
+  },
+  "distinctive_terms": {
+    "Education & Learning": [
+      "students",
+      "scholarship",
+      "education",
+      "courses",
+      "student",
+      "class",
+      "course",
+      "higher",
+      "scholarships",
+      "coaching"
+    ],
+    "Social Welfare & Empowerment": [
+      "pension",
+      "citizens",
+      "persons",
+      "death",
+      "senior",
+      "welfare",
+      "social",
+      "old",
+      "disability",
+      "marriage"
+    ],
+    "Women & Child": [
+      "women",
+      "child",
+      "girl",
+      "girls",
+      "children",
+      "marriage",
+      "maternity",
+      "pregnant",
+      "birth",
+      "mothers"
+    ],
+    "Agriculture, Rural & Environment": [
+      "farmers",
+      "agriculture",
+      "farm",
+      "seed",
+      "farmer",
+      "subsidy",
+      "crop",
+      "crops",
+      "production",
+      "unit"
+    ],
+    "Business & Entrepreneurship": [
+      "industries",
+      "units",
+      "enterprises",
+      "capital",
+      "startups",
+      "entrepreneurs",
+      "loan",
+      "micro",
+      "start",
+      "startup"
+    ],
+    "Skills & Employment": [
+      "training",
+      "skill",
+      "skills",
+      "trainee",
+      "trainees",
+      "stipend",
+      "apprenticeship",
+      "internship",
+      "placement",
+      "job"
+    ],
+    "Sports & Culture": [
+      "sports",
+      "culture",
+      "artists",
+      "art",
+      "award",
+      "cultural",
+      "games",
+      "organization",
+      "grantee",
+      "medal"
+    ],
+    "Health & Wellness": [
+      "treatment",
+      "health",
+      "medical",
+      "hospitals",
+      "surgery",
+      "diseases",
+      "patients",
+      "cancer",
+      "cashless",
+      "hospital"
+    ],
+    "Science, IT & Communications": [
+      "research",
+      "scientist",
+      "technology",
+      "serb",
+      "scientists",
+      "fellowship",
+      "science",
+      "host",
+      "researchers",
+      "emeritus"
+    ],
+    "Housing & Shelter": [
+      "housing",
+      "house",
+      "houses",
+      "pucca",
+      "ghar",
+      "mig",
+      "awas",
+      "construction",
+      "dwelling",
+      "iap"
+    ],
+    "Banking, Financial Services & Insurance": [
+      "insurance",
+      "premium",
+      "insured",
+      "coconut",
+      "palm",
+      "bima",
+      "handloom",
+      "street",
+      "accidental",
+      "credit"
+    ],
+    "Transport & Infrastructure": [
+      "bus",
+      "border",
+      "pass",
+      "road",
+      "buses",
+      "concession",
+      "roads",
+      "habitations",
+      "safety",
+      "boundary"
+    ],
+    "Utility & Sanitation": [
+      "lpg",
+      "sanitation",
+      "waste",
+      "swachh",
+      "odf",
+      "defecation",
+      "connections",
+      "consumers",
+      "cleanliness",
+      "bharat"
+    ],
+    "Travel & Tourism": [
+      "tourism",
+      "tea",
+      "homestay",
+      "tourists",
+      "breakfast",
+      "pilgrims",
+      "yatra",
+      "punjab",
+      "bed",
+      "stay"
+    ],
+    "Public Safety, Law & Justice": [
+      "injury",
+      "compensation",
+      "loss",
+      "victim",
+      "particular",
+      "resulting",
+      "limb",
+      "limit",
+      "involving",
+      "ethnic"
+    ]
+  },
+  "duplicates": {
+    "exact_duplicate_input_texts": {
+      "groups": 0,
+      "rows": 0
+    },
+    "same_description_and_benefits_different_name": {
+      "groups": 3,
+      "rows": 7,
+      "groups_with_conflicting_labels": 0,
+      "examples": [
+        [
+          "naospasa-bac",
+          "naospasa-bnpiocpasa"
+        ],
+        [
+          "naospasa-beidowagpasa",
+          "naospasa-bircarsadu",
+          "naospasa-oai"
+        ],
+        [
+          "naospasa-bpjmbpasa",
+          "naospasa-bri"
+        ]
+      ]
+    },
+    "near_duplicates_by_embedding": {
+      "threshold_cosine": 0.95,
+      "method": "stored bge-m3 overview vectors (name + description)",
+      "pairs": 76,
+      "rows_involved": 85,
+      "pairs_with_same_label": 72,
+      "examples": [
+        [
+          "naospasa-bac",
+          "naospasa-bri",
+          0.995,
+          true
+        ],
+        [
+          "naospasa-bac",
+          "naospasa-oai",
+          0.995,
+          true
+        ],
+        [
+          "atnmasfogi",
+          "atnmasfogii",
+          0.995,
+          true
+        ],
+        [
+          "naospasa-bri",
+          "naospasa-oai",
+          0.994,
+          true
+        ],
+        [
+          "psgs-deg",
+          "psgs-dip",
+          0.993,
+          true
+        ],
+        [
+          "sak-deg",
+          "sak-dip",
+          0.993,
+          true
+        ],
+        [
+          "nassvsbpsopwwsc",
+          "nassvsbpubsopwwsc",
+          0.993,
+          true
+        ],
+        [
+          "ddanwrasi",
+          "ddanwrasii",
+          0.991,
+          false
+        ]
+      ]
+    }
+  },
+  "confounds": {
+    "note": "Each input alone, same folds and pipeline rules as the main evaluation; LogisticRegression C=1, not tuned. tags are myScheme's own tags; the silver labeller never saw them.",
+    "majority_class": {
+      "macro_f1_mean": 0.0235,
+      "macro_f1_std": 0.0001,
+      "accuracy_mean": 0.2135,
+      "accuracy_std": 0.001
+    },
+    "tags_only": {
+      "macro_f1_mean": 0.4179,
+      "macro_f1_std": 0.0124,
+      "accuracy_mean": 0.7222,
+      "accuracy_std": 0.0105
+    },
+    "scheme_name_only": {
+      "macro_f1_mean": 0.3166,
+      "macro_f1_std": 0.0188,
+      "accuracy_mean": 0.6075,
+      "accuracy_std": 0.0122
+    },
+    "state_and_level_only": {
+      "macro_f1_mean": 0.0936,
+      "macro_f1_std": 0.0053,
+      "accuracy_mean": 0.3025,
+      "accuracy_std": 0.0177
+    },
+    "literal_category_words": {
+      "tags": {
+        "own_category_word_present": 0.4293,
+        "any_category_word_present": 0.7657
+      },
+      "scheme_name": {
+        "own_category_word_present": 0.153,
+        "any_category_word_present": 0.2803
+      }
+    },
+    "tags_equal_to_category_name": 7
+  },
+  "cleaning": {
+    "rows_before": 2066,
+    "rows_after": 2066,
+    "steps": {
+      "mojibake repair (ftfy), per field": 1,
+      "glued section heading removed ('BenefitsProvides' -> 'Provides'), per field": 97,
+      "run-on words split ('CardLandholding' -> 'Card Landholding'), per field": 2193,
+      "whitespace collapsed, per field": 5
+    },
+    "empty_text": "No record has an empty name or description, so none is dropped; the 20 records with no benefits_text use name + description.",
+    "deduplication": "Kept all rows. No two records have the same input text. Three groups (7 records) share description and benefits under different scheme names; they are distinct schemes with the same label in every group, so they stay. Near-duplicates are kept and reported; they make the CV scores somewhat optimistic.",
+    "lowercasing": "The stored text keeps case (the embeddings were computed on cased text); the TF-IDF vectorizers lowercase inside the pipeline."
+  }
+}
