@@ -17,13 +17,12 @@ produced for one query and returns the same entries with
 and ordered eligible, then needs_checking, then not_eligible, each group by
 how much of the person's own situation the verdict rests on (see sort_key).
 
-Residual conditions restate typed ones often enough ("The farmers must be
-from Telangana state." beside a state check that passed) that they have to be
-filtered. generate.py applies the same rule to its relevance flags from the
-other side: it knows which of the person's facts a passed condition covers
-(_CHECKED_KEYS) and lets the model pair the text. Reading a residual's
-subject is only needed here, so those patterns live here, keyed by the same
-condition fields.
+A residual condition is left out of caveats only when it is word for word
+the clause a passed check was read from (rule a), or when it states a
+stricter number than a passed age, income, land or disability check and the
+person's own confident value meets it (rule b). Mentioning a word linked to a
+passed check is not enough: "The farmer should have a bank account" mentions
+the passed occupation but is about a bank account.
 """
 import re
 
@@ -32,7 +31,6 @@ from app.generate import _digit_numbers as digit_numbers
 from app.generate import _inr, _join, _label, _lang, _num, _passed, fallback_reason
 
 STATUS_ORDER = {"eligible": 0, "needs_checking": 1, "not_eligible": 2}
-CAVEAT_CHARS = 160
 # A scheme with unchecked conditions says how many; the conditions themselves
 # are in "caveats". {noun} is singular or plural for n.
 NOUN = {"en": ("condition", "conditions"), "hi": ("शर्त", "शर्तों"), "te": ("షరతు", "షరతులు")}
@@ -94,18 +92,17 @@ _UPPER = re.compile(r"(not more than|no more than|not exceeding|maximum(?: of)?|
                     r"(?:rs\.?|₹)?\s*(\d+(?:[.,]\d+)?)", re.I)
 _EXCLUSIVE_LOWER = ("more than", "above", "over", "greater than", "exceeding")
 _EXCLUSIVE_UPPER = ("less than", "below", "under")
+# What a residual has to be about to count as a stricter number "of the same
+# kind" as a passed numeric check. These only find stricter-number candidates;
+# they never make a residual a restatement on their own.
 _SUBJECTS = {
-    "state": re.compile(r"\b(?:resident|residents|residing|residence|domicile[ds]?|domiciled|native|state)\b", re.I),
     "age": re.compile(r"\b(?:age|aged|ages|age group|years? of age|years old)\b", re.I),
     "category": re.compile(r"\b(?:sc|st|obc|ews|scheduled caste|scheduled tribe|backward class(?:es)?|minority|"
                            r"minorities|caste|disabilit(?:y|ies)|disabled|divyang|handicapped)\b", re.I),
     "land": re.compile(r"\b(?:land|lands|landholding|acres?|hectares?|cultivable)\b", re.I),
     "income": re.compile(r"\b(?:income|salary|salaries|earnings?|wages?)\b", re.I),
-    "bpl_household": re.compile(r"\b(?:bpl|below poverty line|poverty line)\b", re.I),
-    "marital_status": re.compile(r"\b(?:married|unmarried|widow(?:ed|er)?s?|divorced|separated|abandoned)\b", re.I),
-    "residence": re.compile(r"\b(?:rural|urban|village|town|city)\b", re.I),
 }
-assert set(_SUBJECTS) <= set(CONDITION_FIELDS), "unknown condition field in _SUBJECTS"
+assert set(_SUBJECTS) == set(NUMERIC_KINDS) and set(_SUBJECTS) <= set(CONDITION_FIELDS)
 
 
 def _norm_text(text):
@@ -151,31 +148,34 @@ def is_requirement(condition):
     return bool(_REQUIREMENT.search(_INCLUSION.sub(" ", condition or "")))
 
 
+def _span_clauses(span):
+    """The clause(s) a check was read from. The matcher joins a field's
+    several provenance clauses with " | "."""
+    return {_norm_text(piece) for piece in (span or "").split(" | ") if _norm_text(piece)}
+
+
 def classify_residual(residual, result):
     """(kind, field) for one unverified condition, against what was checked:
 
-    "restatement"  the ground is already covered by a condition that passed
-    "stricter"     same subject, but it states a number the check did not
-    "other"        something no condition touched
+    "restatement"  word for word the clause a passed check was read from
+                   (rule a; compared after lowercasing and collapsing
+                   punctuation and whitespace)
+    "stricter"     about the same quantity as a passed age, income, land or
+                   disability check, but stating a number that check did not
+                   use; the person's own value decides what happens to it
+                   (rule b settles it, rules c/d downgrade)
+    "other"        anything else, shown as a caveat
     """
     normalized = _norm_text(residual)
-    stricter_field = None
-    for c in result["conditions"]:
-        if not (c["decisive"] and c["result"] == "pass"):
-            continue
-        span = _norm_text(c["source_span"])
-        if span and (span in normalized or normalized in span):
+    passed = [c for c in result["conditions"] if c["decisive"] and c["result"] == "pass"]
+    for c in passed:
+        if normalized and normalized in _span_clauses(c["source_span"]):
             return "restatement", c["field"]
-        same_subject = (c["field"] == "occupation"
-                        and any(_norm_text(o) in normalized for o in (c["constraint"] or [])))
+    for c in passed:
         pattern = _SUBJECTS.get(c["field"])
-        same_subject = same_subject or bool(pattern and pattern.search(residual or ""))
-        if not same_subject:
-            continue
-        if _numbers_covered(residual, c):
-            return "restatement", c["field"]
-        stricter_field = stricter_field or c["field"]
-    return ("stricter", stricter_field) if stricter_field else ("other", None)
+        if pattern and pattern.search(residual or "") and not _numbers_covered(residual, c):
+            return "stricter", c["field"]
+    return "other", None
 
 
 def _plausible(number, key):
@@ -259,10 +259,10 @@ def caveats_for(result, profile, confidence):
 
 
 def quotable(condition):
-    """The condition as it would be quoted: no leading numbering, punctuation,
-    colons or quote marks, and truncated."""
-    text = _LEADING_JUNK.sub("", _CONDITION_LEAD.sub("", re.sub(r"\s+", " ", condition or "").strip()))
-    return text[:CAVEAT_CHARS].rsplit(" ", 1)[0].rstrip(" .,;:") + "…" if len(text) > CAVEAT_CHARS else text
+    """The condition as it is quoted: no leading numbering, punctuation, colons
+    or quote marks. Never truncated: the condition that caused a downgrade
+    appears in full, numbers included."""
+    return _LEADING_JUNK.sub("", _CONDITION_LEAD.sub("", re.sub(r"\s+", " ", condition or "").strip()))
 
 
 def is_grounded(quote, sources):
