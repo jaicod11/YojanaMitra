@@ -17,7 +17,9 @@ Everything this module adds sits outside the frozen components
   sorted eligible, then needs_checking, then not_eligible, each group by how
   certain the verdict is (see sort_key)
 - an eligible scheme that still has unverified conditions says so in its
-  reason, so it does not read as a clean match
+  reason and lists them in "caveats"; when one of them states a stricter
+  bound than the matcher checked and the person's answers do not settle it,
+  the status drops to needs_checking (see app/postprocess.py)
 - notice: when the person names a scheme ("... Yojana", "... Card") that no
   scheme name in the corpus matches, the answer says so instead of silently
   showing other schemes
@@ -46,8 +48,7 @@ from pydantic import BaseModel, Field
 
 from app import generate
 from app.generate import explain, fallback_reason
-from app.generate import _CHECKED_KEYS as CONDITION_FIELDS    # what a passed condition covers
-from app.generate import _digit_numbers as digit_numbers
+from app.postprocess import finalize
 from app.matcher import match, select_clarifying_field
 from app.retrieval import default_retriever
 from app.understand import PROFILE_KEYS, UnderstandError, phrase_question, understand
@@ -56,35 +57,6 @@ ROOT = Path(__file__).resolve().parents[2]
 SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
 TOP_K = 10
 MAX_QUERY_CHARS = 2000
-STATUS_ORDER = {"eligible": 0, "needs_checking": 1, "not_eligible": 2}
-# An eligible scheme whose conditions are not all checked says so, quoting the
-# first unverified one.
-CAVEAT = {"en": "This may not fit you: {condition}",
-          "hi": "यह आपके लिए शायद ठीक न बैठे: {condition}",
-          "te": "ఇది మీకు సరిపోకపోవచ్చు: {condition}"}
-CAVEAT_CHARS = 160
-_CONDITION_LEAD = re.compile(r"^(?:note\s*\d*\s*[:.\-]\s*|\d{1,2}[.)]\s*|[a-z][.)]\s*)", re.I)
-# Residual conditions include descriptions and objectives; only a sentence
-# that states a requirement is worth showing as a caveat.
-_REQUIREMENT = re.compile(r"\b(?:must|should|shall|required)\b", re.I)
-# They also restate conditions the matcher checked ("The farmers must be from
-# Telangana state." next to a state check that passed). generate.py applies
-# the same rule to its relevance flags, but from the other side: it knows
-# which of the person's facts a passed condition covers (_CHECKED_KEYS) and
-# lets the model pair the text. Reading a residual's subject is only needed
-# here, so these patterns live here, keyed by the same condition fields.
-_SUBJECTS = {
-    "state": re.compile(r"\b(?:resident|residents|residing|residence|domicile[ds]?|domiciled|native|state)\b", re.I),
-    "age": re.compile(r"\b(?:age|aged|ages|age group|years? of age|years old)\b", re.I),
-    "category": re.compile(r"\b(?:sc|st|obc|ews|scheduled caste|scheduled tribe|backward class(?:es)?|minority|"
-                           r"minorities|caste|disabilit(?:y|ies)|disabled|divyang|handicapped)\b", re.I),
-    "land": re.compile(r"\b(?:land|lands|landholding|acres?|hectares?|cultivable)\b", re.I),
-    "income": re.compile(r"\b(?:income|salary|salaries|earnings?|wages?)\b", re.I),
-    "bpl_household": re.compile(r"\b(?:bpl|below poverty line|poverty line)\b", re.I),
-    "marital_status": re.compile(r"\b(?:married|unmarried|widow(?:ed|er)?s?|divorced|separated|abandoned)\b", re.I),
-    "residence": re.compile(r"\b(?:rural|urban|village|town|city)\b", re.I),
-}
-assert set(_SUBJECTS) <= set(CONDITION_FIELDS), "unknown condition field in _SUBJECTS"
 LANGUAGES = ("en", "hi", "te", "ta", "bn")
 
 # CORS: local dev servers plus the deployed frontend. Replace the placeholder
@@ -128,89 +100,6 @@ _DOC_HEADER = re.compile(r"^(?:indicative\s+|required\s+|necessary\s+)?documents
                          r"|^list of documents$|documents required$", re.I)
 # "TS Rythu Bheema Pathakam Documents Required Claim Form" -> "Claim Form"
 _DOC_LEAD_IN = re.compile(r"^.{0,60}?documents?\s+(?:required|needed|list)\s*(?=[A-Z])", re.I)
-
-
-def _norm_text(text):
-    return re.sub(r"[^a-z0-9 ]+", " ", re.sub(r"\s+", " ", (text or "").lower())).strip()
-
-
-def _constraint_numbers(constraint):
-    """Every number a constraint states ({"min": 18, "max": 60} -> 18, 60)."""
-    found = []
-    def walk(value):
-        if isinstance(value, bool) or value is None:
-            return
-        if isinstance(value, (int, float)):
-            found.append(float(value))
-        elif isinstance(value, str):
-            found.extend(digit_numbers(value))
-        elif isinstance(value, dict):
-            for v in value.values():
-                walk(v)
-        elif isinstance(value, (list, tuple)):
-            for v in value:
-                walk(v)
-    walk(constraint)
-    return found
-
-
-def _numbers_covered(residual, condition):
-    """False when the residual states a number the condition's own constraint
-    does not, which means it says something stricter or narrower than what was
-    checked ("disability of 80% or more" against a PwD check made at 40%)."""
-    allowed = _constraint_numbers(condition["constraint"])
-    return all(any(abs(n - a) < 0.01 for a in allowed) for n in digit_numbers(residual))
-
-
-def restates_passed_check(residual, result):
-    """True when a residual repeats ground a passed condition already covers:
-    the clause the check was read from, the occupations it listed, or its
-    subject (state, age, category, land, income...). A residual that carries a
-    number the constraint does not cover is never treated as a repeat, except
-    when it is the very clause the check was read from."""
-    normalized = _norm_text(residual)
-    for c in result["conditions"]:
-        if not (c["decisive"] and c["result"] == "pass"):
-            continue
-        span = _norm_text(c["source_span"])
-        if span and (span in normalized or normalized in span):
-            return True
-        if not _numbers_covered(residual, c):
-            continue
-        if c["field"] == "occupation" and any(_norm_text(o) in normalized for o in (c["constraint"] or [])):
-            return True
-        pattern = _SUBJECTS.get(c["field"])
-        if pattern and pattern.search(residual or ""):
-            return True
-    return False
-
-
-def first_requirement(conditions, result):
-    """The first unverified condition that states a requirement the matcher
-    has not already checked, if any."""
-    return next((c for c in conditions
-                 if _REQUIREMENT.search(c or "") and not restates_passed_check(c, result)), None)
-
-
-def caveat(condition, language):
-    """"This may not fit you: <the scheme's first unchecked condition>"."""
-    text = _CONDITION_LEAD.sub("", re.sub(r"\s+", " ", condition or "").strip())
-    if len(text) > CAVEAT_CHARS:
-        text = text[:CAVEAT_CHARS].rsplit(" ", 1)[0].rstrip(" .,;:") + "…"
-    return CAVEAT[language if language in CAVEAT else "en"].format(condition=text)
-
-
-def sort_key(result, status, rank):
-    """Within a status group, the more of the person's own situation a verdict
-    rests on, the higher it ranks: first schemes with a condition about the
-    person that was actually checked (state and board registration are not:
-    registration is a gate into a board's schemes, not a check of this
-    scheme), then the fewest conditions left unverified, then the most checks
-    passed, then retrieval order."""
-    passes = [c for c in result["conditions"] if c["decisive"] and c["result"] == "pass"]
-    personal = [c for c in passes if c["field"] != "state" and not c.get("gate")]
-    return (STATUS_ORDER.get(status, 3), 0 if personal else 1,
-            len(result["unverified_conditions"]), -len(personal), rank)
 
 
 def split_documents(text):
@@ -299,6 +188,7 @@ class Result(BaseModel):
     reason: str
     matched_clause: str | None
     unverified_conditions: list[str]
+    caveats: list[str]
     documents: list[str]
     apply_url: str | None
     last_updated: str | None
@@ -369,7 +259,7 @@ def match_schemes(request: MatchRequest):
 
     explanations = {e["slug"]: e for e in explained["schemes"]}
     evidence = {h["slug"]: h["evidence"]["text"] for h in hits}
-    ranked = []
+    explained_results = []
     for m in matched:
         e = explanations.get(m["slug"])
         if e is None:                                # outside the five explain() covers
@@ -377,19 +267,21 @@ def match_schemes(request: MatchRequest):
             status = m["status"]
         else:
             reason, citations, status = e["reason"], e["citations"], e["status"]
-        if status == "eligible" and (unchecked := first_requirement(m["unverified_conditions"], m)):
-            reason = f"{reason} {caveat(unchecked, language)}"
-        record = scheme_record(m["slug"])
-        ranked.append((sort_key(m, status, m["rank"]), Result(
+        explained_results.append({"match": m, "status": status, "reason": reason, "citations": citations,
+                                  "eligibility_text": scheme_record(m["slug"]).get("eligibility_text")})
+
+    results = []
+    for entry in finalize(explained_results, profile, facts, confidence=u["confidence"], language=language):
+        m, record = entry["match"], scheme_record(entry["match"]["slug"])
+        results.append(Result(
             slug=m["slug"], scheme_name=m["scheme_name"] or record.get("scheme_name"), level=m["level"],
-            status=status, reason=reason,
-            matched_clause=(citations[0]["quote"] if citations else evidence.get(m["slug"])),
-            unverified_conditions=m["unverified_conditions"],
+            status=entry["status"], reason=entry["reason"],
+            matched_clause=(entry["citations"][0]["quote"] if entry["citations"] else evidence.get(m["slug"])),
+            unverified_conditions=m["unverified_conditions"], caveats=entry["caveats"],
             documents=split_documents(record.get("documents_text")),
             apply_url=record.get("source_url"), last_updated=record.get("last_updated"),
             source_url=record.get("source_url"),
-        )))
-    results = [result for _, result in sorted(ranked, key=lambda pair: pair[0])]
+        ))
 
     return MatchResponse(
         profile_confidence=[ProfileField(field=k, value=profile[k], confidence=u["confidence"].get(k))
