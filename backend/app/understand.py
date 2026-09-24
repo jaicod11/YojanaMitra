@@ -606,11 +606,25 @@ def _parse(raw):
 def _pools():
     lc.load_dotenv(ROOT / ".env")
     logging.getLogger("google_genai.models").setLevel(logging.ERROR)
-    pools = [lc.ProviderPool("gemini", lc.DEFAULT_GEMINI_MODEL, "GEMINI_API_KEY", lc.make_gemini_client),
-             lc.ProviderPool("groq", lc.GROQ_MODEL, "GROQ_API_KEY", lc.make_groq_client)]
+    # A key that hits repeated per-minute 429s is benched for
+    # lc.MINUTE_COOLDOWN_S, not retired until restart; a daily cap still
+    # retires it for the life of the process.
+    pools = [lc.ProviderPool("gemini", lc.DEFAULT_GEMINI_MODEL, "GEMINI_API_KEY", lc.make_gemini_client,
+                             minute_cooldown=lc.MINUTE_COOLDOWN_S),
+             lc.ProviderPool("groq", lc.GROQ_MODEL, "GROQ_API_KEY", lc.make_groq_client,
+                             minute_cooldown=lc.MINUTE_COOLDOWN_S)]
     if not any(p.available for p in pools):
         raise UnderstandError("no GEMINI_API_KEY or GROQ_API_KEY configured in .env")
     return pools
+
+
+def provider_status():
+    """Each provider's key state, for /health. Reads counters only; no
+    provider is called."""
+    try:
+        return [p.status() for p in _pools()]
+    except UnderstandError:
+        return []
 
 
 def _generate(prompt):
@@ -618,12 +632,16 @@ def _generate(prompt):
     failures = []
     for pool in _pools():
         if not pool.available:
+            s = pool.status()
+            lc.log.warning("[%s] skipped: no usable key (%d cooling down, %d retired, of %d)",
+                           pool.name, s["keys_cooling_down"], s["keys_retired"], s["keys_total"])
             continue
         res = lc.pool_generate(pool, prompt, delay=1.0)
         if res["status"] == "ok":
             return res["text"], pool.name, pool.model
         if res["status"] == "fatal":
             pool.disable("fatal")
+            lc.log.error("[%s] disabled until restart after a fatal error", pool.name)
         failures.append(f"{pool.name}: {res['status']} ({res['error']})")
     raise UnderstandError("no provider answered: " + "; ".join(failures or ["all providers exhausted"]))
 

@@ -7,7 +7,13 @@ the frontend expects: profile_confidence, clarifying_question, notice and
 results. A clarification is appended to the query and the whole pipeline runs
 again on the combined text.
 
-GET /health returns {"status": "ok"} without touching the model.
+GET /health returns {"status": "ok"} and each LLM provider's key state
+(keys available, cooling down, retired; last failure) without calling any
+model.
+
+Logging: the provider pool's lines (every failed attempt, every answer, key
+cooldowns) and failures this module swallows go to the "yojanamitra" loggers,
+written in uvicorn's format once the server starts (see lifespan).
 
 Everything this module adds sits outside the frozen components
 (understand.py, retrieval.py, matcher.py, generate.py), which it only calls:
@@ -42,6 +48,7 @@ returns the matched schemes with reasons.
 """
 import inspect
 import json
+import logging
 import os
 import re
 import threading
@@ -55,6 +62,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from uvicorn.logging import DefaultFormatter
 
 from app import generate
 from app import matcher as matcher_module
@@ -62,13 +70,14 @@ from app.generate import explain
 from app.postprocess import collect, finalize, is_grounded
 from app.matcher import match, select_clarifying_field
 from app.retrieval import default_retriever
-from app.understand import PROFILE_KEYS, UnderstandError, phrase_question, understand
+from app.understand import PROFILE_KEYS, UnderstandError, phrase_question, provider_status, understand
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMES_DIR = ROOT / "data" / "interim" / "schemes"
 TOP_K = 10
 MAX_QUERY_CHARS = 2000
 LANGUAGES = ("en", "hi", "te", "ta", "bn")
+log = logging.getLogger("yojanamitra.api")
 
 # ALLOWED_ORIGINS may be set in the environment or in the repo-root .env; a
 # variable already set in the environment wins.
@@ -228,9 +237,27 @@ EMPTY_UNDERSTANDING = {"search_query_en": None, "profile": {**dict.fromkeys(PROF
                        "confidence": {}, "evidence": {}, "clarifying_question": None, "status": "unavailable"}
 
 
+def configure_server_logging():
+    """Send the app's log lines (this module's and the provider pool's) to the
+    server log in uvicorn's format. The pool's default handler is for the
+    batch scripts' progress bars (scripts/label_categories.py), so it is
+    removed here. Done at startup, not import, so scripts that import this
+    module keep their own output."""
+    handler = logging.StreamHandler()
+    handler.setFormatter(DefaultFormatter("%(levelprefix)s %(message)s"))
+    app_log = logging.getLogger("yojanamitra")
+    app_log.handlers[:] = [handler]
+    app_log.setLevel(logging.INFO)
+    app_log.propagate = False
+    providers_log = logging.getLogger("yojanamitra.providers")
+    providers_log.handlers.clear()
+    providers_log.propagate = True
+
+
 @asynccontextmanager
 async def lifespan(app):
     """Load the index, bge-m3 and the chunk texts once, before the first request."""
+    configure_server_logging()
     default_retriever().search("government scheme for farmers", k=1, mode="hybrid")
     generate.scheme_chunks("pm-kisan")
     yield
@@ -243,7 +270,9 @@ app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_methods=
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    """Liveness, plus each provider's key state. Reads counters only; no model
+    or provider is called."""
+    return {"status": "ok", "providers": provider_status()}
 
 
 @app.post("/match", response_model=MatchResponse)
@@ -255,7 +284,8 @@ def match_schemes(request: MatchRequest):
 
     try:
         u = understand(text, language)
-    except UnderstandError:
+    except UnderstandError as e:
+        log.warning("understand() failed, continuing without a profile: %s", e)
         u = EMPTY_UNDERSTANDING                      # no provider: keep going without a profile
     profile = u["profile"]
     facts = profile.get("other_facts") or []
@@ -276,7 +306,8 @@ def match_schemes(request: MatchRequest):
         if not question and selection and selection.get("field"):
             try:
                 question = phrase_question(selection["field"], language, refine=selection["kind"] == "refine")
-            except (UnderstandError, ValueError):
+            except (UnderstandError, ValueError) as e:
+                log.warning("phrase_question() failed, no clarifying question: %s", e)
                 question = None
 
     evidence = {h["slug"]: h["evidence"]["text"] for h in hits}

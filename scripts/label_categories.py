@@ -482,12 +482,54 @@ def collect_keys(prefix):
 DAILY_QUOTA_RE = re.compile(r"per\s*-?\s*day|perday|\bTPD\b|\bRPD\b|daily", re.IGNORECASE)
 MINUTE_QUOTA_RE = re.compile(r"per\s*-?\s*minute|perminute|\bTPM\b|\bRPM\b", re.IGNORECASE)
 MAX_CONSECUTIVE_429 = 3
+# How long the API (backend/app/understand.py) benches a key after
+# MAX_CONSECUTIVE_429 per-minute 429s in a row, instead of retiring it for the
+# life of the process. Both providers define their per-minute limits
+# (RPM/TPM) over a 60 s window, and in the 1,904-scheme extraction run
+# (data/interim/constraints/boolean_fields_run.log) 86 of 87 per-minute 429s
+# cleared after one 20 s wait and the other after 20 s + 40 s. A key that has
+# returned three in a row has already been waited on for 60 s, so one more
+# full window is enough; if it is still limited, it cools down again. The
+# batch scripts do not set it: they retire the key for the run, as before.
+MINUTE_COOLDOWN_S = 60
+
+# Provider messages -- every failed attempt, retries, key rotation, and every
+# answer -- go to this logger. The batch scripts show them above the progress
+# bar through tqdm.write, as they always did (the handler below; it passes
+# WARNING and up, so answers, logged at INFO, stay out of a long run's
+# output). The API replaces that handler with the server log's
+# (backend/app/main.py).
+log = logging.getLogger("yojanamitra.providers")
+
+
+class TqdmLogHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            tqdm.write(self.format(record))
+        except Exception:  # noqa: BLE001
+            self.handleError(record)
+
+
+if not log.handlers:
+    _cli_handler = TqdmLogHandler(logging.WARNING)
+    _cli_handler.setFormatter(logging.Formatter("  %(message)s"))
+    log.addHandler(_cli_handler)
+    log.propagate = False
 
 
 class ProviderPool:
-    """One provider, one or more API keys, with usage + exhaustion tracking."""
+    """One provider, one or more API keys, with usage + exhaustion tracking.
 
-    def __init__(self, name, model, key_prefix, client_factory, brief=True, batch_size=10):
+    Keys are used in order: each call goes to the first key that is neither
+    retired nor cooling down. A retired key (daily cap, fatal error) is out
+    for the life of the pool. With minute_cooldown set (the API sets it), a
+    key that returns MAX_CONSECUTIVE_429 per-minute 429s in a row is benched
+    for that many seconds instead, and used again once the time is up;
+    without it (the batch scripts), such a key is retired, as before.
+    """
+
+    def __init__(self, name, model, key_prefix, client_factory, brief=True, batch_size=10,
+                 minute_cooldown=None):
         self.name = name
         self.model = model
         self.keys = collect_keys(key_prefix)
@@ -497,48 +539,85 @@ class ProviderPool:
         # validated in rather than a single global setting.
         self.brief = brief
         self.batch_size = batch_size
+        self.minute_cooldown = minute_cooldown
         self.cooldown = 0  # skip this pool for N selections after a non-quota failure
-        self.idx = 0
         self._clients = {}
-        self.exhausted_keys = []
+        self.exhausted_keys = []  # permanent retirements, in order: {"key", "reason"}
+        self.retired = set()
+        self.cooling_until = {}  # key name -> time.monotonic() at which it may be used again
+        self.last_failure = None
         self.usage = collections.Counter()  # prompt / completion / total / requests
         self.per_key_usage = collections.defaultdict(collections.Counter)
-        self.consecutive_429 = 0
+        self.consecutive_429 = collections.Counter()  # per key
+
+    def usable_keys(self, now=None):
+        now = time.monotonic() if now is None else now
+        return [n for n, _ in self.keys if n not in self.retired and self.cooling_until.get(n, 0) <= now]
 
     @property
     def available(self):
-        return self.idx < len(self.keys)
+        return bool(self.usable_keys())
 
     @property
     def key_name(self):
-        return self.keys[self.idx][0] if self.available else None
+        """The key the next call goes to."""
+        usable = self.usable_keys()
+        return usable[0] if usable else None
 
-    def client(self):
-        name, key = self.keys[self.idx]
+    def client(self, name=None):
+        name = name or self.key_name
         if name not in self._clients:
-            self._clients[name] = self.client_factory(key)
+            self._clients[name] = self.client_factory(dict(self.keys)[name])
         return self._clients[name]
 
-    def record_usage(self, prompt_t, completion_t, total_t):
-        key = self.key_name or "exhausted"
+    def record_usage(self, prompt_t, completion_t, total_t, key=None):
+        key = key or self.key_name or "exhausted"
         for counter in (self.usage, self.per_key_usage[key]):
             counter["prompt"] += prompt_t
             counter["completion"] += completion_t
             counter["total"] += total_t
             counter["requests"] += 1
 
+    def note_failure(self, key, kind, http_status):
+        self.last_failure = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "key": key,
+                             "kind": kind, "http_status": http_status}
+
+    def retire_key(self, name, reason):
+        """Take one key out for the life of the pool; -> whether any key is left."""
+        if name not in self.retired:
+            self.retired.add(name)
+            self.exhausted_keys.append({"key": name, "reason": reason})
+        self.consecutive_429[name] = 0
+        return self.available
+
     def retire_current_key(self, reason):
         """Daily cap on this key -> rotate to the next one, if any."""
         if self.available:
-            self.exhausted_keys.append({"key": self.key_name, "reason": reason})
-            self.idx += 1
-            self.consecutive_429 = 0
+            self.retire_key(self.key_name, reason)
+        return self.available
+
+    def cool_down_key(self, name, seconds):
+        """Bench one key for `seconds`; -> whether another key is usable now."""
+        self.cooling_until[name] = time.monotonic() + seconds
+        self.consecutive_429[name] = 0
         return self.available
 
     def disable(self, reason):
-        """Take the whole provider out of this run (misconfiguration, not quota)."""
-        while self.available:
-            self.retire_current_key(reason)
+        """Take the whole provider out of this run (misconfiguration, not quota),
+        including keys that are only cooling down."""
+        for name, _ in self.keys:
+            if name not in self.retired:
+                self.retire_key(name, reason)
+
+    def status(self):
+        """Key state, for a health check. Reads counters only; calls nothing."""
+        now = time.monotonic()
+        cooling = {n: t - now for n, t in self.cooling_until.items() if n not in self.retired and t > now}
+        return {"provider": self.name, "model": self.model, "keys_total": len(self.keys),
+                "keys_available": len(self.usable_keys(now)), "keys_cooling_down": len(cooling),
+                "keys_retired": len(self.retired),
+                "cooldown_seconds_left": {n: round(s) for n, s in cooling.items()},
+                "last_failure": self.last_failure}
 
 
 def make_gemini_client(api_key):
@@ -618,42 +697,63 @@ def pool_generate(pool, prompt, delay, reasoning_effort=None):
     """One provider attempt, including its own retries.
 
     Returns {"ok", "text", "error", "status"} where status is one of
-    'ok' | 'exhausted' | 'fatal' | 'failed'. 'exhausted' means every key for
-    this provider has reported its daily cap.
+    'ok' | 'exhausted' | 'fatal' | 'failed'. 'exhausted' means no key of this
+    provider is usable: every one has reported its daily cap (or, in the API,
+    the rest are cooling down after repeated per-minute 429s).
+
+    Every failed attempt is logged with the provider, key, error kind, HTTP
+    status and message, and every answer with the key and the time taken.
     """
     attempt = 0
+    started = time.monotonic()
+    # Consecutive per-minute 429s, per key. The batch scripts count across
+    # calls (the pool's own counter, as before); the API counts within one
+    # call, so 429s from unrelated requests never add up to a cooldown.
+    streak = collections.Counter() if pool.minute_cooldown else pool.consecutive_429
     while pool.available:
         attempt += 1
+        key = pool.key_name  # this attempt's key, even if another key's cooldown ends meanwhile
         try:
             if pool.name == "gemini":
-                text, usage = call_gemini(pool.client(), prompt, pool.model)
+                text, usage = call_gemini(pool.client(key), prompt, pool.model)
             else:
-                text, usage = call_groq(pool.client(), prompt, pool.model, reasoning_effort)
+                text, usage = call_groq(pool.client(key), prompt, pool.model, reasoning_effort)
         except Exception as e:  # noqa: BLE001
             kind = classify_error(e)
-            _, message = error_status_and_message(e)
+            status, message = error_status_and_message(e)
             short = f"{type(e).__name__}: {message[:200]}"
+            pool.note_failure(key, kind, status)
+            log.log(logging.ERROR if kind == "fatal" else logging.WARNING,
+                    "[%s] %s failed: %s, HTTP %s, attempt %d: %s",
+                    pool.name, key, kind, status if status is not None else "none", attempt, short)
 
             if kind == "daily_quota":
-                tqdm.write(f"  [{pool.name}] daily cap reported on {pool.key_name}: {message[:160]}")
-                if not pool.retire_current_key("daily_quota"):
+                log.warning(f"[{pool.name}] daily cap reported on {key}: {message[:160]}")
+                if not pool.retire_key(key, "daily_quota"):
                     return {"ok": False, "text": None, "error": short, "status": "exhausted"}
-                tqdm.write(f"  [{pool.name}] rotating to key {pool.key_name}")
+                log.warning(f"[{pool.name}] rotating to key {pool.key_name}")
                 attempt = 0
                 continue
 
             if kind == "rate_minute":
-                pool.consecutive_429 += 1
-                if pool.consecutive_429 >= MAX_CONSECUTIVE_429:
-                    tqdm.write(f"  [{pool.name}] {MAX_CONSECUTIVE_429} consecutive 429s on "
-                               f"{pool.key_name}; treating as exhausted")
-                    if not pool.retire_current_key("repeated_429"):
+                streak[key] += 1
+                if streak[key] >= MAX_CONSECUTIVE_429:
+                    streak[key] = 0
+                    if pool.minute_cooldown:
+                        log.warning(f"[{pool.name}] {MAX_CONSECUTIVE_429} consecutive 429s on {key}; "
+                                    f"cooling it down for {pool.minute_cooldown:.0f}s")
+                        any_left = pool.cool_down_key(key, pool.minute_cooldown)
+                    else:
+                        log.warning(f"[{pool.name}] {MAX_CONSECUTIVE_429} consecutive 429s on "
+                                    f"{key}; treating as exhausted")
+                        any_left = pool.retire_key(key, "repeated_429")
+                    if not any_left:
                         return {"ok": False, "text": None, "error": short, "status": "exhausted"}
                     attempt = 0
                     continue
                 if attempt <= 2:
                     wait = max(delay, 20.0 * attempt)
-                    tqdm.write(f"  [{pool.name}] per-minute rate limit; waiting {wait:.0f}s")
+                    log.warning(f"[{pool.name}] per-minute rate limit; waiting {wait:.0f}s")
                     time.sleep(wait)
                     continue
                 return {"ok": False, "text": None, "error": short, "status": "failed"}
@@ -666,8 +766,9 @@ def pool_generate(pool, prompt, delay, reasoning_effort=None):
 
             return {"ok": False, "text": None, "error": short, "status": "fatal"}
 
-        pool.record_usage(*usage)
-        pool.consecutive_429 = 0
+        pool.record_usage(*usage, key=key)
+        streak[key] = 0
+        log.info("[%s] %s answered in %.1fs (attempt %d)", pool.name, key, time.monotonic() - started, attempt)
         return {"ok": True, "text": text, "error": None, "status": "ok"}
 
     return {"ok": False, "text": None, "error": "no keys available", "status": "exhausted"}
