@@ -1,15 +1,29 @@
 # Changes since `pipeline-frozen-dev`
 
 Every behaviour change made in `backend/` and `scripts/` after the pipeline
-was frozen. The frozen components are unchanged: `understand.py`,
-`retrieval.py`, `matcher.py`, `generate.py`, the index, and every constraint
-record. All changes below live in four files:
+was frozen.
+
+These frozen components are unchanged: `retrieval.py`, `matcher.py`,
+`generate.py`, the index, and every constraint record.
+
+`understand.py` has one post-freeze commit (`bb0e4c4a`, 2026-09-24; see #12):
+- **What it is:** logging and key bookkeeping only.
+- **Why:** provider failures that used to be silent now reach the server log,
+  and a key hit by per-minute rate limits recovers without a restart.
+- **What it doesn't touch:** no output-affecting line (prompt, model,
+  temperature, parsing or validation). Output was verified byte-identical on
+  two cached queries.
+
+All changes below live in these files:
 
 - `backend/app/main.py` (the HTTP API)
 - `backend/app/postprocess.py` (what happens to results between the frozen
   pipeline and the API response)
 - `backend/requirements.txt`
 - `scripts/evaluate_generate.py`
+- `backend/app/understand.py` (#12 only: logging and key bookkeeping)
+- `scripts/label_categories.py` (#12 only: the provider pool that
+  `understand.py` shares with the batch labelling and extraction scripts)
 
 This log was compiled from the code and the work sessions, not from git.
 Where the tag sits relative to the first version of `main.py` was not
@@ -41,6 +55,8 @@ run on the test split.
 | 8 | Restatement rule fix | Only eligible → needs_checking, through #5 | 1 dev row (gold_007); corpus audit |
 | 9 | Evaluation runs `collect()`/`finalize()` | No (measurement) | — |
 | 10 | `requirements.txt` | No | — |
+| 11 | Frontend wiring: CORS from `ALLOWED_ORIGINS`, verbatim flags, dependent-note flag | No | The real UI driven against the running API; corpus scan |
+| 12 | Provider failure logging and per-minute key cooldown | No line that decides a status changed. Indirectly, only through which provider answers | Stubbed-provider simulations; 1 real query; output byte-identical on 2 hand-made cached queries |
 
 Across every step, nothing moves a status upward, and nothing produces
 `not_eligible` that the matcher did not already produce.
@@ -259,6 +275,126 @@ Across every step, nothing moves a status upward, and nothing produces
   (verified).
 - **Why:** deployment.
 - **Statuses:** never.
+
+## 11. Frontend wiring (`main.py`)
+
+- **What** (commit `13488d89`, 2026-09-23, tag `frontend-wired`):
+  - **CORS:** the allowed origins come from `ALLOWED_ORIGINS`, set in the
+    environment or in the repo-root `.env`. `main.py` loads that file by a
+    path relative to its own location, not the working directory.
+    - Format: comma-separated exact origins; trailing slashes are removed.
+    - The default is `http://localhost:8080`, the frontend's dev server.
+    - An origin containing `*` stops startup with an error.
+    - Methods: POST and OPTIONS. Header: `Content-Type` only. No
+      credentials.
+
+    This replaces #1's setting of localhost plus a Lovable placeholder
+    domain.
+  - **`caveats_verbatim` and `unverified_verbatim`:** one boolean per entry
+    of `caveats` and of `unverified_conditions`. Each says whether that entry
+    appears word for word in the scheme's `eligibility_text`, using the same
+    check as #6's grounding (`postprocess.is_grounded`).
+  - **`requires_dependent_note`:** when a scheme requires a dependent, the
+    matcher adds a fixed sentence to `unverified_conditions`: "the scheme
+    requires a dependent (see the scheme text)". It isn't scheme text, so the
+    API takes it out of `unverified_conditions` and reports this boolean
+    instead. The frontend shows its own fixed line. `main.py` keeps a copy of
+    the sentence and asserts at startup that `matcher.py` still contains it.
+- **Why:**
+  - The browser calls the API directly, so CORS has to name the frontend's
+    origin.
+  - Extraction asks for verbatim residuals but doesn't enforce it. The UI
+    shouldn't present a paraphrase, or the matcher's own sentence, as the
+    scheme's words.
+- **Evidence:**
+  - **UI runs:** the real UI, driven with Playwright against the running
+    API, in five scenarios: English, Hindi, the clarify flow, an invented
+    scheme name, and the server-down error screen.
+  - **Preflight checks (2026-09-23):**
+    - The CORS preflight was checked in the browser and with curl. An origin
+      of exactly `http://localhost:8080` is allowed.
+    - `http://127.0.0.1:8080`, `http://localhost:8081` and the LAN address
+      get `400 Disallowed CORS origin`.
+    - A non-allowed request header gets `400 Disallowed CORS headers`.
+  - **Corpus scan (2026-10-02):** 118 of the 7,939 residuals (1.5%), in 64
+    schemes, are not word for word in their scheme's `eligibility_text`.
+    Those are the entries the flags mark `false`.
+- **Statuses:** never. The fields sit alongside the existing ones, and CORS
+  only decides which browser origins may call the API.
+
+## 12. Provider failure logging and per-minute key cooldown
+
+- **What** (commit `bb0e4c4a`, 2026-09-24). This is logging and key
+  bookkeeping only. It touches three files: `scripts/label_categories.py`
+  (the provider pool that `understand.py` and the batch scripts share),
+  `backend/app/understand.py` (frozen) and `main.py`.
+  - **Logging:**
+    - Every failed provider attempt logs one line: provider, key name, error
+      kind (`retryable`, `fatal`, `rate_minute` or `daily_quota`), HTTP
+      status, attempt number and a truncated message.
+    - Every answer logs the provider, the key and the time taken.
+    - The existing messages are kept word for word.
+    - The server writes these lines in uvicorn's format. The batch scripts
+      still print them above their progress bar: failures and retries, but
+      not answers.
+  - **Swallowed errors:** `main.py` now logs the `understand()` and
+    `phrase_question()` errors it swallows. The swallowing itself is
+    unchanged.
+  - **In `understand.py`:**
+    - `_pools()` passes `minute_cooldown` to both pools. Provider order is
+      unchanged: Gemini, then Groq.
+    - A line is logged when a provider is skipped because no key is usable,
+      and when a fatal error disables it.
+    - A new read-only `provider_status()`.
+  - **Per-minute key cooldown (API only):**
+    - Three consecutive per-minute 429s on a key, within one call, bench
+      that key for 60 s. Before, they retired it until restart.
+    - A daily cap still retires a key for the life of the process.
+    - The batch scripts keep permanent retirement, so a long run paces itself
+      as before.
+  - **`/health`:** for each provider, the number of keys in total,
+    available, cooling down and retired; the seconds left on each cooldown;
+    and the last failure (time, key, kind, HTTP status). No provider is
+    called.
+- **Why:**
+  - **Silent failures.** A server log showed Groq 429s and no Gemini lines.
+    Gemini's 5xx, timeout, connection and fatal errors fell through to Groq
+    without any message, and successes were never logged.
+  - **The cache showed what happened:** Groq answered every call from 14:59
+    UTC on 2026-09-23. One Gemini answer at 15:03 proved Gemini was failing
+    silently, not retired.
+  - **Permanent retirement.** Three per-minute 429s retired a key until
+    uvicorn restarted, though such limits clear within a minute.
+  - **Why 60 s:** both providers define their per-minute limits over a 60 s
+    window. In the log of the 1,904-scheme extraction run, 86 of 87
+    per-minute 429s cleared after one 20 s wait, and the other after
+    20 s + 40 s.
+- **Evidence:**
+  - **Stubbed providers:** fake keys, no API call.
+    - A Gemini 503 on every attempt now logs three Gemini failure lines
+      before Groq answers.
+    - Three per-minute 429s put a key in a 60 s cooldown and the next key
+      answers. After 61 s of real time, the first key is used again.
+    - The batch-script path still retires the key, with the old messages.
+  - **One real, uncached query:** three `[gemini] GEMINI_API_KEY answered`
+    lines.
+  - **Output unchanged:** two hand-made queries, both cached and not gold
+    rows: an English Andhra Pradesh farmer and a Hindi Uttar Pradesh widow.
+    Their full `/match` responses were **byte-identical** before and after
+    the change. The server's caches pointed at scratch copies, so
+    `data/cache` was not written.
+- **Statuses:**
+  - **No line touched decides a status or affects output:** no prompt, model
+    name, temperature, parsing or validation line.
+  - **Indirect effect:** which provider answers an uncached call can differ
+    after a burst of per-minute 429s. A cooled-down Gemini key now returns
+    after 60 s, where before Groq answered until restart.
+- **Known weaknesses (described, not changed):**
+  - A single fatal error still disables a provider until restart, for
+    example one 400 from Gemini on an unusual prompt. It is now logged at
+    ERROR.
+  - `/health` is public and shows key variable names, though never the
+    values.
 
 ## Known gaps
 
