@@ -1,0 +1,27 @@
+test: 82 rows {'positive': 43, 'exclusion': 23, 'clarify': 12, 'no_match': 4} (2 skip_scoring rows excluded)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 21483.61it/s]
+
+mode    |         positive (n=43)         |        exclusion (n=23)       
+        |    R@5   R@10  MRR@10          | false-incl.  via excl. chunk
+bm25    |  0.209  0.395   0.209          |       0.391                5
+dense   |  0.372  0.442   0.341          |       0.435                2
+hybrid  |  0.360  0.372   0.278          |       0.391                3
+
+by language
+  en  bm25    positive n=36  R@5  0.250  R@10  0.472  MRR@10  0.250   | exclusion n=23  false-incl.  0.391
+  en  dense   positive n=36  R@5  0.403  R@10  0.486  MRR@10  0.366   | exclusion n=23  false-incl.  0.435
+  en  hybrid  positive n=36  R@5  0.389  R@10  0.403  MRR@10  0.295   | exclusion n=23  false-incl.  0.391
+  hi  bm25    positive n= 3  R@5  0.000  R@10  0.000  MRR@10  0.000   | exclusion n= 0  false-incl.    —  
+  hi  dense   positive n= 3  R@5  0.500  R@10  0.500  MRR@10  0.500   | exclusion n= 0  false-incl.    —  
+  hi  hybrid  positive n= 3  R@5  0.500  R@10  0.500  MRR@10  0.444   | exclusion n= 0  false-incl.    —  
+  te  bm25    positive n= 4  R@5  0.000  R@10  0.000  MRR@10  0.000   | exclusion n= 0  false-incl.    —  
+  te  dense   positive n= 4  R@5  0.000  R@10  0.000  MRR@10  0.000   | exclusion n= 0  false-incl.    —  
+  te  hybrid  positive n= 4  R@5  0.000  R@10  0.000  MRR@10  0.000   | exclusion n= 0  false-incl.    —  
+
+positive rows with no expected scheme in the top 10
+  bm25    gold_001(en), gold_002(en), gold_012(en), gold_015(en), gold_017(te), gold_018(hi), gold_019(en), gold_020(en), gold_021(en), gold_023(en), gold_025(en), gold_027(en), gold_036(te), gold_037(hi), gold_038(en), gold_041(en), gold_043(te), gold_046(en), gold_048(hi), gold_049(en), gold_055(en), gold_063(en), gold_071(te), gold_078(en), gold_079(en), gold_090(en)
+  dense   gold_001(en), gold_012(en), gold_015(en), gold_017(te), gold_019(en), gold_020(en), gold_021(en), gold_023(en), gold_025(en), gold_027(en), gold_036(te), gold_037(hi), gold_038(en), gold_041(en), gold_043(te), gold_046(en), gold_049(en), gold_055(en), gold_063(en), gold_066(en), gold_071(te), gold_079(en), gold_090(en)
+  hybrid  gold_001(en), gold_006(en), gold_012(en), gold_015(en), gold_017(te), gold_019(en), gold_020(en), gold_021(en), gold_023(en), gold_025(en), gold_027(en), gold_030(en), gold_036(te), gold_037(hi), gold_038(en), gold_041(en), gold_043(te), gold_046(en), gold_049(en), gold_055(en), gold_063(en), gold_066(en), gold_071(te), gold_074(en), gold_079(en), gold_090(en)
+
+saved data/eval/test_20261029-191521.json

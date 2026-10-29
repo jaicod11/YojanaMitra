@@ -1,0 +1,290 @@
+test: 82 rows {'positive': 43, 'exclusion': 23, 'clarify': 12, 'no_match': 4} (2 skip_scoring rows excluded)
+  understand  1/82 gold_001 [en] ok      cached
+  understand  2/82 gold_002 [en] ok      cached
+  understand  3/82 gold_004 [en] ok      cached
+  understand  4/82 gold_005 [en] ok      cached
+  understand  5/82 gold_006 [en] ok      cached
+  understand  6/82 gold_008 [en] ok      cached
+  understand  7/82 gold_009 [en] ok      cached
+  understand  8/82 gold_010 [en] ok      cached
+  understand  9/82 gold_011 [en] ok      cached
+  understand 10/82 gold_012 [en] ok      cached
+  understand 11/82 gold_013 [en] ok      cached
+  understand 12/82 gold_015 [en] ok      cached
+  understand 13/82 gold_016 [en] ok      cached
+  understand 14/82 gold_017 [te] ok      cached
+  understand 15/82 gold_018 [hi] ok      cached
+  understand 16/82 gold_019 [en] ok      cached
+  understand 17/82 gold_020 [en] ok      cached
+  understand 18/82 gold_021 [en] ok      cached
+  understand 19/82 gold_022 [en] ok      cached
+  understand 20/82 gold_023 [en] ok      cached
+  understand 21/82 gold_024 [en] ok      cached
+  understand 22/82 gold_025 [en] ok      cached
+  understand 23/82 gold_026 [en] ok      cached
+  understand 24/82 gold_027 [en] ok      cached
+  understand 25/82 gold_028 [en] ok      cached
+  understand 26/82 gold_029 [en] ok      cached
+  understand 27/82 gold_030 [en] ok      cached
+  understand 28/82 gold_031 [en] ok      cached
+  understand 29/82 gold_033 [en] ok      cached
+  understand 30/82 gold_034 [en] ok      cached
+  understand 31/82 gold_035 [en] ok      cached
+  understand 32/82 gold_036 [te] ok      cached
+  understand 33/82 gold_037 [hi] ok      cached
+  understand 34/82 gold_038 [en] ok      cached
+  understand 35/82 gold_040 [en] ok      cached
+  understand 36/82 gold_041 [en] ok      cached
+  understand 37/82 gold_042 [en] ok      cached
+  understand 38/82 gold_043 [te] ok      cached
+  understand 39/82 gold_044 [en] ok      cached
+  understand 40/82 gold_045 [en] ok      cached
+  understand 41/82 gold_046 [en] ok      cached
+  understand 42/82 gold_047 [en] ok      cached
+  understand 43/82 gold_048 [hi] ok      cached
+  understand 44/82 gold_049 [en] ok      cached
+  understand 45/82 gold_050 [en] ok      cached
+  understand 46/82 gold_051 [en] ok      cached
+  understand 47/82 gold_052 [en] ok      cached
+  understand 48/82 gold_054 [en] ok      cached
+  understand 49/82 gold_055 [en] ok      cached
+  understand 50/82 gold_057 [en] ok      cached
+  understand 51/82 gold_058 [en] ok      cached
+  understand 52/82 gold_059 [en] ok      cached
+  understand 53/82 gold_060 [en] ok      cached
+  understand 54/82 gold_061 [en] ok      cached
+  understand 55/82 gold_063 [en] ok      cached
+  understand 56/82 gold_066 [en] ok      cached
+  understand 57/82 gold_068 [en] ok      cached
+  understand 58/82 gold_070 [en] ok      cached
+  understand 59/82 gold_071 [te] invalid cached
+  understand 60/82 gold_073 [en] ok      cached
+  understand 61/82 gold_074 [en] ok      cached
+  understand 62/82 gold_075 [en] ok      cached
+  understand 63/82 gold_076 [en] ok      cached
+  understand 64/82 gold_078 [en] ok      cached
+  understand 65/82 gold_079 [en] ok      cached
+  understand 66/82 gold_080 [en] ok      cached
+  understand 67/82 gold_081 [en] ok      cached
+  understand 68/82 gold_085 [en] ok      cached
+  understand 69/82 gold_087 [en] ok      cached
+  understand 70/82 gold_088 [hi] ok      cached
+  understand 71/82 gold_090 [en] ok      cached
+  understand 72/82 gold_091 [en] ok      cached
+  understand 73/82 gold_092 [en] ok      cached
+  understand 74/82 gold_094 [en] ok      cached
+  understand 75/82 gold_096 [en] ok      cached
+  understand 76/82 gold_097 [en] ok      cached
+  understand 77/82 gold_098 [en] ok      cached
+  understand 78/82 gold_100 [en] ok      cached
+  understand 79/82 gold_101 [en] ok      cached
+  understand 80/82 gold_102 [te] ok      cached
+  understand 81/82 gold_103 [hi] ok      cached
+  understand 82/82 gold_104 [en] ok      cached
+  1 rows fell back to the raw description: ['gold_071']
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 29451.42it/s]
+
+mode    |         positive (n=43)         |        exclusion (n=23)       
+        |    R@5   R@10  MRR@10          | false-incl.  via excl. chunk
+bm25    |  0.233  0.419   0.217          |       0.391                5
+dense   |  0.395  0.465   0.349          |       0.435                2
+hybrid  |  0.349  0.395   0.267          |       0.391                3
+
+by language
+  en  bm25    positive n=36  R@5  0.250  R@10  0.472  MRR@10  0.250   | exclusion n=23  false-incl.  0.391
+  en  dense   positive n=36  R@5  0.403  R@10  0.486  MRR@10  0.366   | exclusion n=23  false-incl.  0.435
+  en  hybrid  positive n=36  R@5  0.389  R@10  0.403  MRR@10  0.295   | exclusion n=23  false-incl.  0.391
+  hi  bm25    positive n= 3  R@5  0.333  R@10  0.333  MRR@10  0.111   | exclusion n= 0  false-incl.    —  
+  hi  dense   positive n= 3  R@5  0.500  R@10  0.500  MRR@10  0.500   | exclusion n= 0  false-incl.    —  
+  hi  hybrid  positive n= 3  R@5  0.333  R@10  0.500  MRR@10  0.222   | exclusion n= 0  false-incl.    —  
+  te  bm25    positive n= 4  R@5  0.000  R@10  0.000  MRR@10  0.000   | exclusion n= 0  false-incl.    —  
+  te  dense   positive n= 4  R@5  0.250  R@10  0.250  MRR@10  0.083   | exclusion n= 0  false-incl.    —  
+  te  hybrid  positive n= 4  R@5  0.000  R@10  0.250  MRR@10  0.042   | exclusion n= 0  false-incl.    —  
+
+positive rows with no expected scheme in the top 10
+  bm25    gold_001(en), gold_002(en), gold_012(en), gold_015(en), gold_017(te), gold_018(hi), gold_019(en), gold_020(en), gold_021(en), gold_023(en), gold_025(en), gold_027(en), gold_036(te), gold_037(hi), gold_038(en), gold_041(en), gold_043(te), gold_046(en), gold_049(en), gold_055(en), gold_063(en), gold_071(te), gold_078(en), gold_079(en), gold_090(en)
+  dense   gold_001(en), gold_012(en), gold_015(en), gold_017(te), gold_019(en), gold_020(en), gold_021(en), gold_023(en), gold_025(en), gold_027(en), gold_036(te), gold_037(hi), gold_038(en), gold_041(en), gold_046(en), gold_049(en), gold_055(en), gold_063(en), gold_066(en), gold_071(te), gold_079(en), gold_090(en)
+  hybrid  gold_001(en), gold_006(en), gold_012(en), gold_015(en), gold_017(te), gold_019(en), gold_020(en), gold_021(en), gold_023(en), gold_025(en), gold_027(en), gold_030(en), gold_036(te), gold_037(hi), gold_038(en), gold_041(en), gold_046(en), gold_049(en), gold_055(en), gold_063(en), gold_066(en), gold_071(te), gold_074(en), gold_079(en), gold_090(en)
+
+profile extraction, understand-v4.1 (82 rows; occupation matched by word overlap, approximate; family not scored)
+  field               accuracy  (n gold non-null)  false-fill  (n gold null)
+  occupation ~           0.840                 50       0.031             32
+  state                  0.979                 48       0.029             34
+  age                    0.833                 18       0.000             64
+  gender                 0.615                 13       0.000             69
+  annual_income_inr      1.000                 24       0.000             58
+  land_acres             1.000                  9       0.000             73
+  caste_category         1.000                 15       0.000             67
+  all fields             0.904                177       0.005            397
+  en                     0.912                147       0.006            357
+  hi                     0.933                 15       0.000             20
+  te                     0.800                 15       0.000             20
+
+family (gold vs predicted) and other_facts, understand-v4.1
+  gold_001 [en] family gold='daughter_class_11' predicted='daughter_in_11th_class'
+           other_facts=[]
+  gold_002 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_004 [en] family gold='nri' predicted=None
+           other_facts=[{'original': 'I live abroad now', 'en': 'I live abroad now'}]
+  gold_005 [en] family gold=None predicted=None
+           other_facts=[{'original': "I don't own any land", 'en': "I don't own any land"}, {'original': 'I lease one acre from a landowner', 'en': 'I lease one acre from a landowner'}, {'original': 'grow vegetables', 'en': 'grow vegetables'}]
+  gold_006 [en] family gold='husband_died_farm_accident_age_42' predicted='husband_died_in_farm_accident'
+           other_facts=[{'original': 'My husband, a registered farmer in Maharashtra, died in a farm accident.', 'en': 'My husband, a registered farmer in Maharashtra, died in a farm accident.'}]
+  gold_008 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_009 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_010 [en] family gold='also_a_chartered_accountant' predicted=None
+           other_facts=[{'original': 'I own 15 acres of farmland', 'en': 'I own 15 acres of farmland'}]
+  gold_011 [en] family gold='farmers_widow_land_being_transferred' predicted='husband_passed_away'
+           other_facts=[{'original': 'the land is now being transferred to me as his legal heir', 'en': 'the land is now being transferred to me as his legal heir'}]
+  gold_012 [en] family gold='bpl_household' predicted=None
+           other_facts=[]
+  gold_013 [en] family gold=None predicted=None
+           other_facts=[{'original': '2 bigha of land', 'en': '2 bigha of land'}]
+  gold_015 [en] family gold=None predicted=None
+           other_facts=[{'original': 'I grow paddy', 'en': 'I grow paddy'}, {'original': 'lost part of my crop in recent floods', 'en': 'lost part of my crop in recent floods'}, {'original': 'have valid land papers', 'en': 'have valid land papers'}]
+  gold_016 [en] family gold=None predicted=None
+           other_facts=[{'original': 'I lease my land from my own brother', 'en': 'I lease my land from my own brother'}]
+  gold_017 [te] family gold=None predicted=None
+           other_facts=[{'original': 'వరి పండిస్తాను', 'en': 'I grow paddy'}]
+  gold_018 [hi] family gold=None predicted=None
+           other_facts=[]
+  gold_019 [en] family gold='class_10' predicted=None
+           other_facts=[]
+  gold_020 [en] family gold='class_9' predicted=None
+           other_facts=[]
+  gold_021 [en] family gold='undergraduate' predicted=None
+           other_facts=[]
+  gold_022 [en] family gold='masters_student' predicted=None
+           other_facts=[]
+  gold_023 [en] family gold='class_5_minority_65pct_marks' predicted=None
+           other_facts=[{'original': 'scored 65% last year', 'en': 'scored 65% last year'}]
+  gold_024 [en] family gold='post_matric_sister_already_received_scholarship_twice' predicted='one_older_sister'
+           other_facts=[{'original': 'I have one older sister who already received this same scholarship two years running.', 'en': 'I have one older sister who already received this same scholarship two years running.'}]
+  gold_025 [en] family gold='first_year_college' predicted=None
+           other_facts=[{'original': 'I am in my first year of college', 'en': 'I am in my first year of college'}]
+  gold_026 [en] family gold='class_9_private_school' predicted=None
+           other_facts=[{'original': 'studying at a private school', 'en': 'studying at a private school'}]
+  gold_027 [en] family gold='post_matric_govt_college' predicted=None
+           other_facts=[{'original': 'doing my post-matric studies at a government college', 'en': 'doing my post-matric studies at a government college'}]
+  gold_028 [en] family gold='post_matric' predicted=None
+           other_facts=[]
+  gold_029 [en] family gold='class_8_attendance_55pct' predicted=None
+           other_facts=[{'original': 'attendance last year was around 55%', 'en': 'attendance last year was around 55%'}]
+  gold_030 [en] family gold='diploma_after_higher_secondary' predicted=None
+           other_facts=[{'original': 'just passed my higher secondary exam', 'en': 'just passed my higher secondary exam'}]
+  gold_031 [en] family gold='class_7_traditionally_untouchable_occupation' predicted=None
+           other_facts=[{'original': 'my parents work in an occupation traditionally considered untouchable', 'en': 'my parents work in an occupation traditionally considered untouchable'}]
+  gold_033 [en] family gold='has_a_daughter' predicted='daughter'
+           other_facts=[]
+  gold_034 [en] family gold=None predicted=None
+           other_facts=[{'original': 'need help paying for my hostel fees', 'en': 'need help paying for my hostel fees'}]
+  gold_035 [en] family gold='class_9_repeating_year' predicted=None
+           other_facts=[{'original': "I failed this class last year so I'm repeating it", 'en': "I failed this class last year so I'm repeating it"}]
+  gold_036 [te] family gold='class_10' predicted=None
+           other_facts=[]
+  gold_037 [hi] family gold='class_9_govt_school' predicted=None
+           other_facts=[{'original': 'मैं सरकारी स्कूल में पढ़ता हूँ', 'en': 'I study in a government school'}]
+  gold_038 [en] family gold='widow_bpl' predicted=None
+           other_facts=[]
+  gold_040 [en] family gold='widow_remarried_last_year' predicted=None
+           other_facts=[{'original': 'I remarried last year', 'en': 'I remarried last year'}]
+  gold_041 [en] family gold='breadwinner_died_age_45_bpl' predicted='husband_died_last_month'
+           other_facts=[{'original': 'My husband, the only earning member, died last month at age 45.', 'en': 'My husband, the only earning member, died last month at age 45.'}]
+  gold_042 [en] family gold='widow' predicted=None
+           other_facts=[]
+  gold_043 [te] family gold='widow_bpl' predicted=None
+           other_facts=[]
+  gold_044 [en] family gold='bpl' predicted=None
+           other_facts=[]
+  gold_045 [en] family gold='bpl' predicted=None
+           other_facts=[]
+  gold_046 [en] family gold='bpl' predicted=None
+           other_facts=[]
+  gold_047 [en] family gold=None predicted=None
+           other_facts=[{'original': 'I am old', 'en': 'I am old'}]
+  gold_048 [hi] family gold='bpl' predicted=None
+           other_facts=[]
+  gold_049 [en] family gold='bpl_disability_85pct' predicted=None
+           other_facts=[{'original': '85% locomotor disability', 'en': '85% locomotor disability'}]
+  gold_050 [en] family gold='disability_45pct_resident_5_years' predicted=None
+           other_facts=[{'original': "I've lived here for 5 years.", 'en': "I've lived here for 5 years."}]
+  gold_051 [en] family gold='disability_30pct' predicted=None
+           other_facts=[]
+  gold_052 [en] family gold='son_disability_90pct_bpl' predicted='son_15_years_old'
+           other_facts=[]
+  gold_054 [en] family gold='has_disability_unspecified' predicted=None
+           other_facts=[{'original': 'I have a disability', 'en': 'I have a disability'}]
+  gold_055 [en] family gold='family_trade_carpentry_no_prior_loan' predicted=None
+           other_facts=[{'original': 'this is our family trade', 'en': 'this is our family trade'}, {'original': "I've never taken a similar loan before", 'en': "I've never taken a similar loan before"}]
+  gold_057 [en] family gold=None predicted=None
+           other_facts=[{'original': 'I work as a government clerk', 'en': 'I work as a government clerk'}, {'original': 'I also want to register as a traditional artisan under a craft scheme', 'en': 'I also want to register as a traditional artisan under a craft scheme'}]
+  gold_058 [en] family gold=None predicted=None
+           other_facts=[{'original': 'I have a Certificate of Vending from the municipal corporation.', 'en': 'I have a Certificate of Vending from the municipal corporation.'}]
+  gold_059 [en] family gold='peri_urban_vendor_with_lor' predicted=None
+           other_facts=[{'original': 'The town committee gave me a recommendation letter.', 'en': 'The town committee gave me a recommendation letter.'}]
+  gold_060 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_061 [en] family gold='8th_pass' predicted=None
+           other_facts=[{'original': 'want to set up a manufacturing unit that will cost about 15 lakh rupees', 'en': 'want to set up a manufacturing unit that will cost about 15 lakh rupees'}]
+  gold_063 [en] family gold='family_trade_fishing_nets' predicted=None
+           other_facts=[{'original': "I make and repair fishing nets as our family's traditional work.", 'en': "I make and repair fishing nets as our family's traditional work."}]
+  gold_066 [en] family gold='pregnant_first_child_bpl' predicted='pregnant_with_first_child'
+           other_facts=[]
+  gold_068 [en] family gold='pregnant_twins_second_pregnancy_both_girls' predicted='pregnant_with_twins_second_pregnancy'
+           other_facts=[{'original': 'both will be girls', 'en': 'both will be girls'}]
+  gold_070 [en] family gold='pregnant_psu_employee' predicted='pregnant'
+           other_facts=[{'original': 'I work as a permanent employee', 'en': 'I work as a permanent employee'}]
+  gold_071 [te] family gold='pregnant_first_child_pm_kisan_beneficiary' predicted=None
+           other_facts=[]
+  gold_073 [en] family gold='daughter_age_11' predicted='daughter_11_years_old'
+           other_facts=[]
+  gold_074 [en] family gold='daughter_age_14_class_9_govt_school_unmarried' predicted='daughter_14_years_old'
+           other_facts=[{'original': 'unmarried', 'en': 'unmarried'}, {'original': 'studying in class 9 at a government school', 'en': 'studying in class 9 at a government school'}]
+  gold_075 [en] family gold='daughter_age_16_private_school' predicted='daughter_16_years_old'
+           other_facts=[{'original': 'studies in a private school', 'en': 'studies in a private school'}]
+  gold_076 [en] family gold='has_a_daughter' predicted='one_daughter'
+           other_facts=[]
+  gold_078 [en] family gold='nuclear_family_no_pucca_house' predicted='spouse_and_unmarried_kids'
+           other_facts=[{'original': "we don't own a pucca house anywhere", 'en': "we don't own a pucca house anywhere"}]
+  gold_079 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_080 [en] family gold=None predicted=None
+           other_facts=[{'original': 'I want a home loan subsidy under PMAY', 'en': 'I want a home loan subsidy under PMAY'}]
+  gold_081 [en] family gold='already_owns_house_and_availed_housing_scheme_before' predicted=None
+           other_facts=[{'original': 'I already own a house elsewhere', 'en': 'I already own a house elsewhere'}, {'original': 'previously received a housing scheme benefit', 'en': 'previously received a housing scheme benefit'}]
+  gold_085 [en] family gold='daughter_admitted_higher_education' predicted='daughter_in_higher_education'
+           other_facts=[]
+  gold_087 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_088 [hi] family gold=None predicted=None
+           other_facts=[{'original': 'मैं असंगठित क्षेत्र में काम करता हूँ', 'en': 'I work in the unorganized sector'}]
+  gold_090 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_091 [en] family gold='already_has_lpg_connection' predicted=None
+           other_facts=[{'original': 'I already have an LPG gas connection at home', 'en': 'I already have an LPG gas connection at home'}]
+  gold_092 [en] family gold='poor_household_no_lpg' predicted=None
+           other_facts=[{'original': 'from a poor household', 'en': 'from a poor household'}, {'original': "I don't have an LPG connection at home", 'en': "I don't have an LPG connection at home"}]
+  gold_094 [en] family gold='one_son_govt_employee_income_tax_payer' predicted='one_son_is_government_clerk'
+           other_facts=[{'original': 'One of our sons works as a government clerk and pays income tax', 'en': 'One of our sons works as a government clerk and pays income tax'}]
+  gold_096 [en] family gold='wants_apy_has_savings_account_no_income_tax' predicted=None
+           other_facts=[{'original': 'I have a savings bank account', 'en': 'I have a savings bank account'}, {'original': "I don't pay income tax", 'en': "I don't pay income tax"}]
+  gold_097 [en] family gold='wants_apy' predicted=None
+           other_facts=[]
+  gold_098 [en] family gold='converted_farmland_to_house_plot_not_updated_in_records' predicted=None
+           other_facts=[{'original': 'converted part of my farmland into a house plot last year', 'en': 'converted part of my farmland into a house plot last year'}, {'original': "it's still shown as farmland in the revenue records", 'en': "it's still shown as farmland in the revenue records"}]
+  gold_100 [en] family gold='tenant_farmers_widow_recently_bereaved' predicted='husband_passed_away_three_months_ago'
+           other_facts=[{'original': 'my late husband cultivated 1.5 acres of leased land as a tenant', 'en': 'my late husband cultivated 1.5 acres of leased land as a tenant'}, {'original': 'He passed away three months ago', 'en': 'He passed away three months ago'}]
+  gold_101 [en] family gold=None predicted=None
+           other_facts=[]
+  gold_102 [te] family gold=None predicted=None
+           other_facts=[]
+  gold_103 [hi] family gold=None predicted=None
+           other_facts=[]
+  gold_104 [en] family gold=None predicted=None
+           other_facts=[]
+
+saved data/eval/test_20261029-192759.json

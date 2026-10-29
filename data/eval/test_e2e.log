@@ -1,0 +1,1094 @@
+test: 82 rows, understand-v4.1, hybrid top 10, occupation threshold 0.85, residual-touch threshold 0.48, min clarify score 0.5
+   1/82 gold_001 [en] ok      cached
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 30683.52it/s]
+   2/82 gold_002 [en] ok      cached
+   3/82 gold_004 [en] ok      cached
+   4/82 gold_005 [en] ok      cached
+   5/82 gold_006 [en] ok      cached
+   6/82 gold_008 [en] ok      cached
+   7/82 gold_009 [en] ok      cached
+   8/82 gold_010 [en] ok      cached
+   9/82 gold_011 [en] ok      cached
+  10/82 gold_012 [en] ok      cached
+  11/82 gold_013 [en] ok      cached
+  12/82 gold_015 [en] ok      cached
+  13/82 gold_016 [en] ok      cached
+  14/82 gold_017 [te] ok      cached
+  15/82 gold_018 [hi] ok      cached
+  16/82 gold_019 [en] ok      cached
+  17/82 gold_020 [en] ok      cached
+  18/82 gold_021 [en] ok      cached
+  19/82 gold_022 [en] ok      cached
+  20/82 gold_023 [en] ok      cached
+  21/82 gold_024 [en] ok      cached
+  22/82 gold_025 [en] ok      cached
+  23/82 gold_026 [en] ok      cached
+  24/82 gold_027 [en] ok      cached
+  25/82 gold_028 [en] ok      cached
+  26/82 gold_029 [en] ok      cached
+  27/82 gold_030 [en] ok      cached
+  28/82 gold_031 [en] ok      cached
+  29/82 gold_033 [en] ok      cached
+  30/82 gold_034 [en] ok      cached
+  31/82 gold_035 [en] ok      cached
+  32/82 gold_036 [te] ok      cached
+  33/82 gold_037 [hi] ok      cached
+  34/82 gold_038 [en] ok      cached
+  35/82 gold_040 [en] ok      cached
+  36/82 gold_041 [en] ok      cached
+  37/82 gold_042 [en] ok      cached
+  38/82 gold_043 [te] ok      cached
+  39/82 gold_044 [en] ok      cached
+  40/82 gold_045 [en] ok      cached
+  41/82 gold_046 [en] ok      cached
+  42/82 gold_047 [en] ok      cached
+  43/82 gold_048 [hi] ok      cached
+  44/82 gold_049 [en] ok      cached
+  45/82 gold_050 [en] ok      cached
+  46/82 gold_051 [en] ok      cached
+  47/82 gold_052 [en] ok      cached
+  48/82 gold_054 [en] ok      cached
+  49/82 gold_055 [en] ok      cached
+  50/82 gold_057 [en] ok      cached
+  51/82 gold_058 [en] ok      cached
+  52/82 gold_059 [en] ok      cached
+  53/82 gold_060 [en] ok      cached
+  54/82 gold_061 [en] ok      cached
+  55/82 gold_063 [en] ok      cached
+  56/82 gold_066 [en] ok      cached
+  57/82 gold_068 [en] ok      cached
+  58/82 gold_070 [en] ok      cached
+  59/82 gold_071 [te] invalid cached
+  60/82 gold_073 [en] ok      cached
+  61/82 gold_074 [en] ok      cached
+  62/82 gold_075 [en] ok      cached
+  63/82 gold_076 [en] ok      cached
+  64/82 gold_078 [en] ok      cached
+  65/82 gold_079 [en] ok      cached
+  66/82 gold_080 [en] ok      cached
+  67/82 gold_081 [en] ok      cached
+  68/82 gold_085 [en] ok      cached
+  69/82 gold_087 [en] ok      cached
+  70/82 gold_088 [hi] ok      cached
+  71/82 gold_090 [en] ok      cached
+  72/82 gold_091 [en] ok      cached
+  73/82 gold_092 [en] ok      cached
+  74/82 gold_094 [en] ok      cached
+  75/82 gold_096 [en] ok      cached
+  76/82 gold_097 [en] ok      cached
+  77/82 gold_098 [en] ok      cached
+  78/82 gold_100 [en] ok      cached
+  79/82 gold_101 [en] ok      cached
+  80/82 gold_102 [te] ok      cached
+  81/82 gold_103 [hi] ok      cached
+  82/82 gold_104 [en] ok      cached
+
+            positive (52): eligible 8, needs_checking 44, not_eligible 0 | false-exclusion 0.0 | retrieved 19 | end-to-end 0.3654
+            exclusion (24): correct 0.1667, wrongly included 0.0, not ruled out 0.8333 | retrieved 9
+            top-10 candidates: {'eligible': 21, 'needs_checking': 439, 'not_eligible': 360}
+
+profile extraction (gold's seven scored fields; occupation approximate)
+  occupation         accuracy 0.84 (n=50)  false-fill 0.0312 (n=32)
+  state              accuracy 0.9792 (n=48)  false-fill 0.0294 (n=34)
+  age                accuracy 0.8333 (n=18)  false-fill 0.0 (n=64)
+  gender             accuracy 0.6154 (n=13)  false-fill 0.0 (n=69)
+  annual_income_inr  accuracy 1.0 (n=24)  false-fill 0.0 (n=58)
+  land_acres         accuracy 1.0 (n=9)  false-fill 0.0 (n=73)
+  caste_category     accuracy 1.0 (n=15)  false-fill 0.0 (n=67)
+  all                accuracy 0.904 (n=177)  false-fill 0.005 (n=397)
+fill rate of the added profile fields:
+  education_class                  12/82  {'gold_001': 11, 'gold_019': 10, 'gold_020': 9, 'gold_023': 5, 'gold_026': 9, 'gold_029': 8, 'gold_031': 7, 'gold_035': 9, 'gold_036': 10, 'gold_037': 9, 'gold_061': 8, 'gold_074': 9}
+  education_stage                  22/82  {'gold_001': 'higher_secondary', 'gold_019': 'school', 'gold_020': 'school', 'gold_021': 'undergraduate', 'gold_022': 'postgraduate', 'gold_023': 'school', 'gold_024': 'postgraduate', 'gold_025': 'undergraduate', 'gold_026': 'school', 'gold_027': 'postgraduate', 'gold_028': 'postgraduate', 'gold_029': 'school', 'gold_030': 'diploma', 'gold_031': 'school', 'gold_034': 'undergraduate', 'gold_035': 'school', 'gold_036': 'school', 'gold_037': 'school', 'gold_061': 'school', 'gold_074': 'school', 'gold_075': 'higher_secondary', 'gold_085': 'undergraduate'}
+  residence                         7/82  {'gold_058': 'urban', 'gold_059': 'rural', 'gold_078': 'urban', 'gold_079': 'urban', 'gold_102': 'urban', 'gold_103': 'urban', 'gold_104': 'urban'}
+  marital_status                    8/82  {'gold_006': 'widowed', 'gold_011': 'widowed', 'gold_038': 'widowed', 'gold_040': 'married', 'gold_041': 'widowed', 'gold_042': 'widowed', 'gold_043': 'widowed', 'gold_100': 'widowed'}
+  disability_percent                4/82  {'gold_049': 85, 'gold_050': 45, 'gold_051': 30, 'gold_052': 90}
+  is_minority                       2/82  {'gold_023': True, 'gold_024': True}
+  bpl_household                    11/82  {'gold_012': True, 'gold_038': True, 'gold_041': True, 'gold_043': True, 'gold_044': True, 'gold_045': True, 'gold_046': True, 'gold_048': True, 'gold_049': True, 'gold_052': True, 'gold_066': True}
+  registered_construction_worker    1/82  {'gold_085': True}
+  prior_benefit_schemes             2/82  {'gold_040': ['widow pension'], 'gold_091': ['LPG gas connection']}
+  applying_for                     81/82  {'gold_001': 'child', 'gold_002': 'self', 'gold_004': 'self', 'gold_005': 'self', 'gold_006': 'self', 'gold_008': 'self', 'gold_009': 'self', 'gold_010': 'self', 'gold_011': 'self', 'gold_012': 'self', 'gold_013': 'self', 'gold_015': 'self', 'gold_016': 'self', 'gold_017': 'self', 'gold_018': 'self', 'gold_019': 'self', 'gold_020': 'self', 'gold_021': 'self', 'gold_022': 'self', 'gold_023': 'self', 'gold_024': 'self', 'gold_025': 'self', 'gold_026': 'self', 'gold_027': 'self', 'gold_028': 'self', 'gold_029': 'self', 'gold_030': 'self', 'gold_031': 'self', 'gold_033': 'child', 'gold_034': 'self', 'gold_035': 'self', 'gold_036': 'self', 'gold_037': 'self', 'gold_038': 'self', 'gold_040': 'self', 'gold_041': 'self', 'gold_042': 'self', 'gold_043': 'self', 'gold_044': 'self', 'gold_045': 'self', 'gold_046': 'self', 'gold_047': 'self', 'gold_048': 'self', 'gold_049': 'self', 'gold_050': 'self', 'gold_051': 'self', 'gold_052': 'child', 'gold_054': 'self', 'gold_055': 'self', 'gold_057': 'self', 'gold_058': 'self', 'gold_059': 'self', 'gold_060': 'self', 'gold_061': 'self', 'gold_063': 'self', 'gold_066': 'self', 'gold_068': 'self', 'gold_070': 'self', 'gold_073': 'child', 'gold_074': 'child', 'gold_075': 'child', 'gold_076': 'child', 'gold_078': 'self', 'gold_079': 'self', 'gold_080': 'self', 'gold_081': 'self', 'gold_085': 'child', 'gold_087': 'self', 'gold_088': 'self', 'gold_090': 'self', 'gold_091': 'self', 'gold_092': 'self', 'gold_094': 'self', 'gold_096': 'self', 'gold_097': 'self', 'gold_098': 'self', 'gold_100': 'self', 'gold_101': 'self', 'gold_102': 'self', 'gold_103': 'self', 'gold_104': 'self'}
+
+clarify rows
+  gold_009 [en] state (missing, 2.929)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: To help you find the right schemes, could you please tell me which state you live in, and if you have any specific needs like land ownership details or family information?
+      gold notes: State and landholding details are both missing, which are required before any scheme can be suggested.
+  gold_013 [en] annual_income_inr (missing, 1.1)
+      asks: Could you please provide the total annual income for your household?   | understand fallback: None
+      gold notes: Land unit given in 'bigha', which varies by region and isn't directly convertible to acres/hectares without a local conversion — ask for the exact area.
+  gold_033 [en] state (missing, 2.8179)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: None
+      gold notes: Very vague — daughter's age/class, state, family income and caste category are all missing. Depending on the answers, this could point to Sukanya Samriddhi (if under 10), a pre/post-matric scholarship, or a state girl-child scheme like Kanyashree.
+  gold_034 [en] state (missing, 1.679)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: None
+      gold notes: No caste category, income, or state given — all three are needed before any scholarship can be identified.
+  gold_042 [en] state (missing, 2.929)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: None
+      gold notes: Age and BPL/income status are both missing, and each changes which pension applies.
+  gold_047 [en] state (missing, 2.829)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: Could you please tell me your age, which state you live in, and if you have any documents like a BPL card or pension status?
+      gold notes: No exact age or BPL/income status given — both are required before recommending anything.
+  gold_054 [en] state (missing, 2.2861)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: Could you please tell me which state you live in and if you have a disability certificate?
+      gold notes: Disability percentage, age, state and income/BPL status are all missing — each affects eligibility.
+  gold_059 [en] nothing (best {'field': 'annual_income_inr', 'score': 0.125} below 0.5)
+      asks: None   | understand fallback: None
+      gold notes: PM SVANidhi extends to peri-urban/rural vendors within a Town Vending Committee's geographic limits when they hold a Letter of Recommendation — this vendor qualifies even though outside the town itself. Corrected 2026-09-21: retyped positive → clarify with no expected scheme — PM SVANidhi covers peri-urban vendors who vend inside the town's (ULB) limits with a Letter of Recommendation, and this vendor sells in a village outside the town, so ask where the cart operates.
+  gold_060 [en] state (missing, 2.479)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: To help you find the right loan scheme, could you please tell me which state you live in and what kind of shop you run?
+      gold notes: No loan amount, business type, or location given — needed to decide between Mudra, PMEGP, or PM Vishwakarma.
+  gold_076 [en] state (missing, 2.929)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: To help you find the right schemes for your daughter, could you please tell me her age or current class in school?
+      gold notes: Daughter's exact age determines Sukanya Samriddhi eligibility (under 10); state, school type and income determine schemes like Kanyashree.
+  gold_087 [en] state (missing, 2.6929)
+      asks: Could you please tell me which state you currently reside in?   | understand fallback: Could you please tell me which state you live in and if you have a specific goal, such as finding work, education support, or health benefits?
+      gold notes: Exact trade, state and welfare board registration status are needed before matching a specific benefit.
+  gold_088 [hi] occupation (refine, 1.2)
+      asks: आप किस प्रकार का काम या हुनर (trade/craft) जानते हैं?   | understand fallback: None
+      gold notes: Hindi entry: cart puller in Bihar. Occupation and state alone aren't enough here — welfare board registration status would need to be confirmed for any Bihar-specific unorganized-worker scheme.
+
+traces (target scheme per row)
+
+gold_001 [en] positive -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Andhra Pradesh' [high]  (central scheme)
+    unverified conditions: 8
+
+gold_001 [en] positive -> ysrrb: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: category, occupation
+    unknown category: rule=["SC", "ST", "OBC", "Minority"] profile=None  (not determined: ['caste_category', 'is_minority'])
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    unknown occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='farmer' [high]  (closest is 'Landholder farmer' (0.778), below 0.85)
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_002 [en] positive -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Bihar' [high]  (central scheme)
+    unverified conditions: 8
+
+gold_002 [en] positive -> pmfby: NEEDS_CHECKING  (retrieved rank 10)  reason: could not check: occupation
+    pass    state: rule="central scheme" profile='Bihar' [high]  (central scheme)
+    unknown occupation: rule=["cultivator", "sharecropper"] profile='farmer' [high]  (closest is 'cultivator' (0.733), below 0.85)
+             span: The farmer must be a cultivator or a sharecropper on the insured land.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: They must not have received any compensation for the same crop loss from any other source.
+    unverified conditions: 6
+
+gold_004 [en] exclusion -> namo-shetkari-mahasanman-nidhi-yojana: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: occupation
+    pass    state: rule="Maharashtra" profile='Maharashtra' [high]
+    unknown occupation: rule=["Cultivable land holding farmers"] profile='farmer' [medium]  (closest is 'Cultivable land holding farmers' (0.622), below 0.85)
+             span: Cultivable land holding farmers families (comprising of husband, wife and minor children) having land holding 
+    residual touch 0.4882: 'I live abroad now' ~ 'having land holding on dated 01.02.2019'
+    to confirm: ['resident of Maharashtra (any domicile rule in the scheme text)']
+    unverified conditions: 11
+
+gold_005 [en] positive -> ysrrb: NEEDS_CHECKING  (retrieved rank 1)  reason: something you said may bear on a condition that is not checked automatically
+    pass    category: rule=["SC", "ST", "OBC", "Minority"] profile={'caste_category': 'ST'}
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    pass    occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='tenant farmer' [high]  (matches 'Tenant farmer' (1.000))
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    residual touch 0.4935: "I don't own any land" ~ 'Farmers cultivating Acquired Lands for which compensation was not paid'
+    residual touch 0.5907: "I don't own any land" ~ 'The tenant farmer/family member shall not have any Agriculture/Horticu'
+    residual touch 0.5175: "I don't own any land" ~ 'Minimum Area to be taken for lease by a single individual Landless ten'
+    residual touch 0.5211: "I don't own any land" ~ 'The lease agreement entered between the Landless Tenant/Cultivator and'
+    residual touch 0.5179: "I don't own any land" ~ 'Exclusion: All Institutional Land holders.'
+    residual touch 0.4878: "I don't own any land" ~ 'Exclusion: Persons owning farmlands converted into House sites, Aquacu'
+    residual touch 0.498: 'I lease one acre from a landowner' ~ 'Farmers cultivating Acquired Lands for which compensation was not paid'
+    residual touch 0.4993: 'I lease one acre from a landowner' ~ 'If the quantum of cultivable land owned by two or more individual fami'
+    residual touch 0.5329: 'I lease one acre from a landowner' ~ 'The tenant farmer/family member shall not have any Agriculture/Horticu'
+    residual touch 0.512: 'I lease one acre from a landowner' ~ 'Support will not be extended for lease agreements within the family.'
+    residual touch 0.6504: 'I lease one acre from a landowner' ~ 'Minimum Area to be taken for lease by a single individual Landless ten'
+    residual touch 0.5991: 'I lease one acre from a landowner' ~ 'Irrespective of the size of the Holding, the benefit will be extended '
+    residual touch 0.5234: 'I lease one acre from a landowner' ~ 'Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Categ'
+    residual touch 0.53: 'I lease one acre from a landowner' ~ 'In Tribal areas, as per the Statute, only Tribal Cultivators/ tenants '
+    residual touch 0.6524: 'I lease one acre from a landowner' ~ 'A Land Less Tenant/Cultivator having multiple lease agreements is elig'
+    residual touch 0.6005: 'I lease one acre from a landowner' ~ 'The lease agreement entered between the Landless Tenant/Cultivator and'
+    residual touch 0.5049: 'I lease one acre from a landowner' ~ 'Tenants cultivating Inam lands/ Endowment lands will be extended benef'
+    residual touch 0.4827: 'grow vegetables' ~ 'Farmers cultivating Acquired Lands for which compensation was not paid'
+    residual touch 0.5031: 'grow vegetables' ~ 'Minimum Area to be taken for lease by a single individual Landless ten'
+    residual touch 0.5028: 'grow vegetables' ~ 'A Land Less Tenant/Cultivator having multiple lease agreements is elig'
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_006 [en] positive -> gopinath-munde-shetkari-apghat-suraksha-sanugrah-audhan-yojana: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age, occupation
+    unknown age: rule={"min": 10, "max": 75} profile=None  (not stated)
+             span: 1) Registered farmer in the age group of 10 -75 years.
+    pass    state: rule="Maharashtra" profile='Maharashtra' [high]
+             span: 2) Person registered as farmer in Maharashtra as evidenced by 7/12 extract.
+    unknown occupation: rule=["farmer"] profile=None  (not stated)
+             span: 1) Registered farmer in the age group of 10 -75 years.
+    residual touch 0.605: 'My husband, a registered farmer in Maharashtra, di' ~ 'Registered farmer'
+    residual touch 0.592: 'My husband, a registered farmer in Maharashtra, di' ~ 'Person registered as farmer in Maharashtra as evidenced by 7/12 extrac'
+    residual touch 0.4951: 'My husband, a registered farmer in Maharashtra, di' ~ 'Natural death'
+    to confirm: ['resident of Maharashtra (any domicile rule in the scheme text)']
+    unverified conditions: 16
+
+gold_008 [en] positive -> farmer-insurance: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: age
+    unknown age: rule={"min": 18, "max": 60} profile=None  (not stated)
+             span: All the farmers in Telangana, who are aged between 18 and 60years
+    pass    state: rule="Telangana" profile='Telangana' [high]
+             span: All the farmers in Telangana, who are aged between 18 and 60years
+    pass    occupation: rule=["farmers"] profile='farmer' [high]  (matches 'farmers' (0.886))
+             span: All the farmers in Telangana, who are aged between 18 and 60years
+    to confirm: ['resident of Telangana (any domicile rule in the scheme text)']
+    unverified conditions: 0
+
+gold_008 [en] positive -> rythu-bima: NEEDS_CHECKING  (retrieved rank 3)  reason: could not check: age
+    unknown age: rule={"min": 18, "max": 60} profile=None  (not stated)
+             span: The scheme covers all farmers between the ages of 18 and 60 years, including tenant farmers
+    pass    state: rule="Telangana" profile='Telangana' [high]
+             span: Farmers in the state of Telangana are eligible to apply for the Rythu Bima Scheme.
+    pass    occupation: rule=["farmer"] profile='farmer' [high]  (matches 'farmer' (1.000))
+             span: The scheme is only applicable to farmers.
+    to confirm: ['resident of Telangana (any domicile rule in the scheme text)']
+    unverified conditions: 17
+
+gold_009 [en] clarify: no target; selector would ask about state
+
+gold_010 [en] exclusion -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Gujarat' [high]  (central scheme)
+    residual touch 0.5483: 'I own 15 acres of farmland' ~ 'All Institutional Land holders.'
+    unverified conditions: 8
+
+gold_011 [en] positive -> ysrrb: NEEDS_CHECKING  (retrieved rank 2)  reason: could not check: category, occupation
+    unknown category: rule=["SC", "ST", "OBC", "Minority"] profile=None  (not determined: ['caste_category', 'is_minority'])
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    unknown occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='farmer' [medium]  (closest is 'Landholder farmer' (0.778), below 0.85)
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    residual touch 0.4939: 'the land is now being transferred to me as his leg' ~ 'Farmers cultivating Acquired Lands for which compensation was not paid'
+    residual touch 0.5424: 'the land is now being transferred to me as his leg' ~ 'In case of joint holding the benefit will be transferred to the bank a'
+    residual touch 0.5626: 'the land is now being transferred to me as his leg' ~ 'If the quantum of cultivable land owned by two or more individual fami'
+    residual touch 0.5044: 'the land is now being transferred to me as his leg' ~ 'Irrespective of the size of the Holding, the benefit will be extended '
+    residual touch 0.4878: 'the land is now being transferred to me as his leg' ~ 'A Land Less Tenant/Cultivator having multiple lease agreements is elig'
+    residual touch 0.5292: 'the land is now being transferred to me as his leg' ~ 'Tenants cultivating Inam lands/ Endowment lands will be extended benef'
+    residual touch 0.539: 'the land is now being transferred to me as his leg' ~ 'In case of death cases, the financial benefit will be provided to the '
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_012 [en] positive -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='West Bengal' [high]  (central scheme)
+    unverified conditions: 8
+
+gold_012 [en] positive -> nsap-ignoaps: ELIGIBLE  (retrieved rank None)  reason: every checked condition passes
+    pass    age: rule={"min": 60, "max": null} profile=65 [high]
+             span: The applicant should be at least 60 years of age.
+    pass    state: rule="central scheme" profile='West Bengal' [high]  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should be living Below Poverty Line.
+    to confirm: ['citizen of India']
+    unverified conditions: 0
+
+gold_013 [en] clarify: no target; selector would ask about annual_income_inr
+
+gold_015 [en] positive -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Karnataka' [high]  (central scheme)
+    residual touch 0.6414: 'have valid land papers' ~ 'All Institutional Land holders.'
+    unverified conditions: 8
+
+gold_015 [en] positive -> pmfby: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: occupation
+    pass    state: rule="central scheme" profile='Karnataka' [high]  (central scheme)
+    unknown occupation: rule=["cultivator", "sharecropper"] profile='farmer' [medium]  (closest is 'cultivator' (0.733), below 0.85)
+             span: The farmer must be a cultivator or a sharecropper on the insured land.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: They must not have received any compensation for the same crop loss from any other source.
+    residual touch 0.4921: 'I grow paddy' ~ 'The farmer must be a cultivator or a sharecropper on the insured land.'
+    residual touch 0.5174: 'I grow paddy' ~ 'Farmers must have a valid and authenticated land ownership certificate'
+    residual touch 0.4991: 'I grow paddy' ~ 'The farmer should have a valid bank account and provide details of the'
+    residual touch 0.5049: 'lost part of my crop in recent floods' ~ 'The farmer must be a cultivator or a sharecropper on the insured land.'
+    residual touch 0.504: 'lost part of my crop in recent floods' ~ 'Farmers must have a valid and authenticated land ownership certificate'
+    residual touch 0.5025: 'lost part of my crop in recent floods' ~ 'Exclusions: Risks and Losses arising out of the following perils shall'
+    residual touch 0.546: 'have valid land papers' ~ 'The farmer must be a cultivator or a sharecropper on the insured land.'
+    residual touch 0.7083: 'have valid land papers' ~ 'Farmers must have a valid and authenticated land ownership certificate'
+    residual touch 0.5901: 'have valid land papers' ~ 'The farmer should have a valid bank account and provide details of the'
+    residual touch 0.4969: 'have valid land papers' ~ 'All farmers growing notified crops in a notified area during the seaso'
+    unverified conditions: 6
+
+gold_016 [en] exclusion -> ysrrb: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: category
+    unknown category: rule=["SC", "ST", "OBC", "Minority"] profile=None  (not determined: ['caste_category', 'is_minority'])
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    pass    occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='tenant farmer' [high]  (matches 'Tenant farmer' (1.000))
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    residual touch 0.5063: 'I lease my land from my own brother' ~ 'In case of joint holding the benefit will be transferred to the bank a'
+    residual touch 0.5415: 'I lease my land from my own brother' ~ 'If the quantum of cultivable land owned by two or more individual fami'
+    residual touch 0.5628: 'I lease my land from my own brother' ~ 'The tenant farmer/family member shall not have any Agriculture/Horticu'
+    residual touch 0.5451: 'I lease my land from my own brother' ~ 'Support will not be extended for lease agreements within the family.'
+    residual touch 0.5486: 'I lease my land from my own brother' ~ 'Minimum Area to be taken for lease by a single individual Landless ten'
+    residual touch 0.5549: 'I lease my land from my own brother' ~ 'Irrespective of the size of the Holding, the benefit will be extended '
+    residual touch 0.4826: 'I lease my land from my own brother' ~ 'In Tribal areas, as per the Statute, only Tribal Cultivators/ tenants '
+    residual touch 0.5702: 'I lease my land from my own brother' ~ 'A Land Less Tenant/Cultivator having multiple lease agreements is elig'
+    residual touch 0.5226: 'I lease my land from my own brother' ~ 'The lease agreement entered between the Landless Tenant/Cultivator and'
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_017 [te] positive -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Andhra Pradesh' [high]  (central scheme)
+    unverified conditions: 8
+
+gold_017 [te] positive -> ysrrb: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: category, occupation
+    unknown category: rule=["SC", "ST", "OBC", "Minority"] profile=None  (not determined: ['caste_category', 'is_minority'])
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    unknown occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='farmer' [high]  (closest is 'Landholder farmer' (0.778), below 0.85)
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_017 [te] positive -> pmfby: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: occupation
+    pass    state: rule="central scheme" profile='Andhra Pradesh' [high]  (central scheme)
+    unknown occupation: rule=["cultivator", "sharecropper"] profile='farmer' [high]  (closest is 'cultivator' (0.733), below 0.85)
+             span: The farmer must be a cultivator or a sharecropper on the insured land.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: They must not have received any compensation for the same crop loss from any other source.
+    residual touch 0.4921: 'I grow paddy' ~ 'The farmer must be a cultivator or a sharecropper on the insured land.'
+    residual touch 0.5174: 'I grow paddy' ~ 'Farmers must have a valid and authenticated land ownership certificate'
+    residual touch 0.4991: 'I grow paddy' ~ 'The farmer should have a valid bank account and provide details of the'
+    unverified conditions: 6
+
+gold_018 [hi] positive -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Punjab' [high]  (central scheme)
+    unverified conditions: 8
+
+gold_018 [hi] positive -> pmfby: NEEDS_CHECKING  (retrieved rank 6)  reason: could not check: occupation
+    pass    state: rule="central scheme" profile='Punjab' [high]  (central scheme)
+    unknown occupation: rule=["cultivator", "sharecropper"] profile='farmer' [high]  (closest is 'cultivator' (0.733), below 0.85)
+             span: The farmer must be a cultivator or a sharecropper on the insured land.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: They must not have received any compensation for the same crop loss from any other source.
+    unverified conditions: 6
+
+gold_019 [en] positive -> pre-sc: ELIGIBLE  (retrieved rank None)  reason: every checked condition passes
+    pass    income: rule={"max_annual_inr": 250000, "basis": "family"} profile=180000 [high]  (profile income is family income)
+             span: The Total Income of parents/guardian of the applicant must be less than or equal to ₹ 2.5 lakh per annum.
+    pass    education_class: rule={"min_class": 9, "max_class": 10} profile=10 [high]
+             span: The applicant must be studying in Class 9th or Class 10th.
+    pass    category: rule=["SC"] profile={'caste_category': 'SC'}
+             span: The applicant must be from Scheduled Caste.
+    pass    state: rule="central scheme" profile='Odisha' [high]  (central scheme)
+    pass    occupation: rule=["student"] profile='student' [high]  (matches 'student' (1.000))
+             span: The applicant must be a student.
+    unverified conditions: 2
+
+gold_020 [en] positive -> pre-st: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income
+    unknown income: rule={"max_annual_inr": 250000, "basis": "family"} profile=200000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The Total Annual income of parents/guardians of the applicant (from all sources) must not exceed ₹ 2.50 Lakh p
+    pass    education_class: rule={"min_class": 9, "max_class": 10} profile=9 [high]
+             span: The applicant must be a student studying in Class 9th or Class 10th.
+    pass    category: rule=["ST"] profile={'caste_category': 'ST'}
+             span: The applicant must be from Scheduled Tribe.
+    pass    state: rule="central scheme" profile='Jharkhand' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The applicant must not be availing of any other scholarship by the govt.
+    unverified conditions: 0
+
+gold_021 [en] positive -> post-st: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, education_class
+    unknown income: rule={"max_annual_inr": 200000, "basis": "family"} profile=190000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: Scholarships will be paid to the students whose parents/guardians' income from all sources does not exceed ₹ 2
+    unknown education_class: rule={"min_class": 10, "max_class": null} profile=None  (not stated)
+             span: These scholarships will be given for the study of all recognized post-matriculation post-secondary courses pur
+    pass    education_stage: rule="post-matriculation" profile='undergraduate' [high]
+             span: These scholarships will be given for the study of all recognized post-matriculation post-secondary courses pur
+    pass    category: rule=["ST"] profile={'caste_category': 'ST'}
+             span: Only those candidates who belong to Scheduled Tribes so specified in relation to the State/Union Territory to 
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this scheme will not hold any other scholarship/stipend.
+    to confirm: ['citizen of India']
+    unverified conditions: 11
+
+gold_022 [en] exclusion -> post-st: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, education_class
+    unknown income: rule={"max_annual_inr": 200000, "basis": "family"} profile=210000 [high]  (over the cap, but the bases are ambiguous (profile None, scheme family))
+             span: Scholarships will be paid to the students whose parents/guardians' income from all sources does not exceed ₹ 2
+    unknown education_class: rule={"min_class": 10, "max_class": null} profile=None  (not stated)
+             span: These scholarships will be given for the study of all recognized post-matriculation post-secondary courses pur
+    pass    education_stage: rule="post-matriculation" profile='postgraduate' [high]
+             span: These scholarships will be given for the study of all recognized post-matriculation post-secondary courses pur
+    pass    category: rule=["ST"] profile={'caste_category': 'ST'}
+             span: Only those candidates who belong to Scheduled Tribes so specified in relation to the State/Union Territory to 
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this scheme will not hold any other scholarship/stipend.
+    to confirm: ['citizen of India']
+    unverified conditions: 11
+
+gold_023 [en] positive -> presm: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income
+    unknown income: rule={"max_annual_inr": 100000, "basis": "family"} profile=90000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The Annual income of parents/guardians of the applicant (from all sources) should be less than or equal to ₹ 1
+    pass    education_class: rule={"min_class": 1, "max_class": 10} profile=5 [high]
+             span: The applicant must be a student in a class between Class 1st to 10th.
+    pass    category: rule=["Minority"] profile={'is_minority': True}
+             span: The applicant must be from a Minority Community.
+    pass    state: rule="central scheme" profile='Uttar Pradesh' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The applicant must not be availing any other scholarship by the govt. | The student availing any other scholar
+    residual touch 0.6272: 'scored 65% last year' ~ 'The applicant should have secured not less than 50% marks in the previ'
+    unverified conditions: 6
+
+gold_024 [en] exclusion -> postsm: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, not_availing_other_scheme
+    unknown income: rule={"max_annual_inr": 200000, "basis": "family"} profile=180000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The Annual income of parents/guardians of the applicant (from all sources) should be less than or equal to ₹ 2
+    pass    education_stage: rule="post-matric" profile='postgraduate' [high]
+             span: The applicant must be pursuing a post-matric qualification.
+    pass    category: rule=["Minority"] profile={'is_minority': True}
+             span: The applicant must be from a Minority Community.
+    pass    state: rule="central scheme" profile='Kerala' [high]  (central scheme)
+    unknown not_availing_other_scheme: rule=true profile=None  (prior benefit stated (I have one older sister who already received this same scholarship two years running.); check it is not for the same purpose)
+             span: The applicant must not be availing any other scholarship by the govt. | The student obtaining benefits under t
+    residual touch 0.5723: 'I have one older sister who already received this ' ~ 'The applicant must be pursuing a post-matric qualification.'
+    residual touch 0.6386: 'I have one older sister who already received this ' ~ 'The applicant must not be the third sibling in his/her family who has '
+    residual touch 0.5184: 'I have one older sister who already received this ' ~ 'If a student violates school discipline or any other terms and conditi'
+    residual touch 0.5348: 'I have one older sister who already received this ' ~ 'The student availing any other scholarship out of all the available Sc'
+    residual touch 0.4915: 'I have one older sister who already received this ' ~ 'If a student is found to have obtained a scholarship by false statemen'
+    unverified conditions: 6
+
+gold_025 [en] positive -> pm-yasasvipmsobcebcdnts: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: education_class
+    pass    income: rule={"max_annual_inr": 250000, "basis": "family"} profile=230000 [high]  (profile income is family income)
+             span: Employed students whose income combined with the income of their parents/guardians does not exceed ₹2.50 lakhs
+    unknown education_class: rule={"min_class": 11, "max_class": null} profile=None  (not stated)
+             span: These scholarships will be given for the study of all recognized post-matriculation or post- secondary courses
+    pass    education_stage: rule="post-matriculation" profile='undergraduate' [high]
+             span: These scholarships will be given for the study of all recognized post-matriculation or post- secondary courses
+    pass    category: rule=["OBC"] profile={'caste_category': 'OBC'}
+             span: The scholarships will be open to Indian nationals belonging to OBCs, EBCs, and DNTs, as notified by the Centra
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this Scheme will not hold any other scholarship/stipend.
+    residual touch 0.5338: 'I am in my first year of college' ~ 'Students, who pursue their studies through correspondence/online cours'
+    residual touch 0.5077: 'I am in my first year of college' ~ 'The scholarship is provided on the basis of satisfactory progress and '
+    residual touch 0.5021: 'I am in my first year of college' ~ 'The award once made will be payable up to the completion of the course'
+    to confirm: ['citizen of India']
+    unverified conditions: 13
+
+gold_026 [en] exclusion -> pmyasasvipmsobcebcdnts: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, education_stage
+    unknown income: rule={"max_annual_inr": 250000, "basis": "family"} profile=200000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: Scholarship award will be sanctioned in the case of students whose parents/guardians income from all sources d
+    pass    education_class: rule={"min_class": 9, "max_class": 10} profile=9 [high]
+             span: The students should be studying in Class IX and X on a full-time basis in Government Schools only.
+    unknown education_stage: rule="Class IX and X" profile='school' [high]  (the stage text does not map to profile stages)
+             span: The students should be studying in Class IX and X on a full-time basis in Government Schools only.
+    pass    category: rule=["OBC"] profile={'caste_category': 'OBC'}
+             span: They should belong to either of the OBC, EBC, or DNT (who are not covered under SC, ST, or OBC) categories thr
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this scheme will not hold any other educational scholarship for the purpose of stud
+    residual touch 0.6643: 'studying at a private school' ~ 'The students should be studying in Government Schools only.'
+    residual touch 0.5237: 'studying at a private school' ~ 'A regular attendance record of not less than 75% in the previous year '
+    residual touch 0.5216: 'studying at a private school' ~ '30% of the beneficiaries should be reserved for girl students.'
+    residual touch 0.5219: 'studying at a private school' ~ 'If a student has to repeat a class, she/he will not get a scholarship '
+    to confirm: ['citizen of India']
+    unverified conditions: 8
+
+gold_027 [en] positive -> dacsspostmsebcs: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: education_class
+    pass    income: rule={"max_annual_inr": 100000, "basis": "family"} profile=95000 [high]  (profile income is family income)
+             span: Employed students whose income combined with the income of their parents/guardians does not exceed ₹ 1,00,000 
+    unknown education_class: rule={"min_class": 11, "max_class": null} profile=None  (not stated)
+             span: These scholarships will be given for the study of all recognized post-matriculation or post-secondary courses 
+    pass    education_stage: rule="post-matriculation" profile='postgraduate' [high]
+             span: These scholarships will be given for the study of all recognized post-matriculation or post-secondary courses 
+    pass    category: rule=["General"] profile={'caste_category': 'General'}
+             span: The scholarships will be open to Indian nationals belonging to the General Category (Other than Schedule Caste
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this Scheme will not hold any other scholarship/stipend.
+    residual touch 0.5825: 'doing my post-matric studies at a government colle' ~ 'These scholarships will be given for the study of all recognized post-'
+    residual touch 0.5281: 'doing my post-matric studies at a government colle' ~ 'Students pursuing Post-graduate courses in medicine will be eligible i'
+    residual touch 0.4911: 'doing my post-matric studies at a government colle' ~ 'Students who after failing or passing the undergraduate/Post-Graduate '
+    to confirm: ['citizen of India']
+    unverified conditions: 12
+
+gold_028 [en] exclusion -> dacsspostmsebcs: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, education_class
+    unknown income: rule={"max_annual_inr": 100000, "basis": "family"} profile=150000 [high]  (over the cap, but the bases are ambiguous (profile None, scheme family))
+             span: Employed students whose income combined with the income of their parents/guardians does not exceed ₹ 1,00,000 
+    unknown education_class: rule={"min_class": 11, "max_class": null} profile=None  (not stated)
+             span: These scholarships will be given for the study of all recognized post-matriculation or post-secondary courses 
+    pass    education_stage: rule="post-matriculation" profile='postgraduate' [high]
+             span: These scholarships will be given for the study of all recognized post-matriculation or post-secondary courses 
+    pass    category: rule=["General"] profile={'caste_category': 'General'}
+             span: The scholarships will be open to Indian nationals belonging to the General Category (Other than Schedule Caste
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this Scheme will not hold any other scholarship/stipend.
+    to confirm: ['citizen of India']
+    unverified conditions: 12
+
+gold_029 [en] exclusion -> csspremsobcsi: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: category
+    pass    income: rule={"max_annual_inr": 250000, "basis": "family"} profile=240000 [high]  (profile income is family income)
+             span: The scholarship award will be sanctioned in the case of students whose parents/guardians' income from all sour
+    pass    education_stage: rule="pre-matriculation" profile='school' [high]
+             span: The scholarship will be tenable only in such institutions and for such pre-matriculation courses, which have b
+    unknown category: rule=["PwD"] profile={'caste_category': 'OBC'}  (not determined: ['disability_percent'])
+             span: At least 5% of students with disabilities should be covered by grants or scholarships.
+    pass    state: rule="central scheme" profile='Bihar' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The scholar obtaining benefits under this scheme shall not be allowed to avail of benefits under any other pre
+    residual touch 0.7017: 'attendance last year was around 55%' ~ 'Regular attendance records of not less than 60% in the previous year s'
+    residual touch 0.5612: 'attendance last year was around 55%' ~ '30% of the beneficiaries should be reserved for girl students.'
+    unverified conditions: 3
+
+gold_030 [en] positive -> pmsscs-g: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income
+    unknown income: rule={"max_annual_inr": 250000, "basis": "family"} profile=220000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: Scholarships will be paid to the students whose parents/guardians' income from all sources does not exceed ₹2,
+    pass    category: rule=["SC"] profile={'caste_category': 'SC'}
+             span: The student should belong to the Scheduled Caste Category of Gujarat.
+    pass    state: rule="Gujarat" profile='Gujarat' [high]
+             span: The student should belong to the Scheduled Caste Category of Gujarat.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this scheme will not hold any other scholarship/stipend.
+    residual touch 0.6487: 'just passed my higher secondary exam' ~ 'students who have passed the Matriculation or Higher Secondary or any '
+    residual touch 0.488: 'just passed my higher secondary exam' ~ 'Candidates who, after passing one stage of education are studying in t'
+    residual touch 0.5395: 'just passed my higher secondary exam' ~ 'Students, who pursue their studies through correspondence/online cours'
+    residual touch 0.49: 'just passed my higher secondary exam' ~ 'The award once made will be payable up to the completion of the course'
+    to confirm: ['resident of Gujarat (any domicile rule in the scheme text)']
+    unverified conditions: 7
+
+gold_031 [en] positive -> obcpms: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: age, income
+    unknown age: rule={"min": 12, "max": 20} profile=None  (not stated)
+             span: Beneficiary's age limit is 12 to 20 years old (as of July 1st).
+    unknown income: rule={"max_annual_inr": 200000, "basis": "family"} profile=160000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: Beneficiaries' parents' annual income should not be more than ₹2,00,000/-.
+    pass    category: rule=["OBC"] profile={'caste_category': 'OBC'}
+             span: Beneficiary must belong to the Other Backward Class (OBC) caste category.
+    pass    state: rule="Uttar Pradesh" profile='Uttar Pradesh' [high]
+             span: Beneficiary must be a resident of Uttar Pradesh.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: Students cannot receive other scholarships alongside this one (with some exceptions).
+    residual touch 0.724: 'my parents work in an occupation traditionally con' ~ 'Beneficiaries who are dependents of people in occupations traditionall'
+    to confirm: ['resident of Uttar Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 3
+
+gold_033 [en] clarify: no target; selector would ask about state
+
+gold_034 [en] clarify: no target; selector would ask about state
+
+gold_035 [en] exclusion -> pre-sc: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income
+    unknown income: rule={"max_annual_inr": 250000, "basis": "family"} profile=150000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The Total Income of parents/guardian of the applicant must be less than or equal to ₹ 2.5 lakh per annum.
+    pass    education_class: rule={"min_class": 9, "max_class": 10} profile=9 [high]
+             span: The applicant must be studying in Class 9th or Class 10th.
+    pass    category: rule=["SC"] profile={'caste_category': 'SC'}
+             span: The applicant must be from Scheduled Caste.
+    pass    state: rule="central scheme" profile='Odisha' [high]  (central scheme)
+    pass    occupation: rule=["student"] profile='student' [high]  (matches 'student' (1.000))
+             span: The applicant must be a student.
+    residual touch 0.5904: "I failed this class last year so I'm repeating it" ~ 'If a student has to repeat a class, she / he would not get scholarship'
+    unverified conditions: 2
+
+gold_036 [te] positive -> pre-st: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income
+    unknown income: rule={"max_annual_inr": 250000, "basis": "family"} profile=180000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The Total Annual income of parents/guardians of the applicant (from all sources) must not exceed ₹ 2.50 Lakh p
+    pass    education_class: rule={"min_class": 9, "max_class": 10} profile=10 [high]
+             span: The applicant must be a student studying in Class 9th or Class 10th.
+    pass    category: rule=["ST"] profile={'caste_category': 'ST'}
+             span: The applicant must be from Scheduled Tribe.
+    pass    state: rule="central scheme" profile='Andhra Pradesh' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The applicant must not be availing of any other scholarship by the govt.
+    unverified conditions: 0
+
+gold_037 [hi] positive -> pmyasasvipmsobcebcdnts: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, education_stage
+    unknown income: rule={"max_annual_inr": 250000, "basis": "family"} profile=90000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: Scholarship award will be sanctioned in the case of students whose parents/guardians income from all sources d
+    pass    education_class: rule={"min_class": 9, "max_class": 10} profile=9 [high]
+             span: The students should be studying in Class IX and X on a full-time basis in Government Schools only.
+    unknown education_stage: rule="Class IX and X" profile='school' [high]  (the stage text does not map to profile stages)
+             span: The students should be studying in Class IX and X on a full-time basis in Government Schools only.
+    pass    category: rule=["OBC"] profile={'caste_category': 'OBC'}
+             span: They should belong to either of the OBC, EBC, or DNT (who are not covered under SC, ST, or OBC) categories thr
+    pass    state: rule="central scheme" profile='Uttar Pradesh' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: A scholarship holder under this scheme will not hold any other educational scholarship for the purpose of stud
+    residual touch 0.7556: 'I study in a government school' ~ 'The students should be studying in Government Schools only.'
+    residual touch 0.4942: 'I study in a government school' ~ 'Income Certificate is required to be taken once only, i.e. at the time'
+    residual touch 0.5249: 'I study in a government school' ~ 'A regular attendance record of not less than 75% in the previous year '
+    residual touch 0.5026: 'I study in a government school' ~ 'At least 5% of students with disabilities should be covered for the gr'
+    residual touch 0.5472: 'I study in a government school' ~ '30% of the beneficiaries should be reserved for girl students.'
+    residual touch 0.5003: 'I study in a government school' ~ 'If a student has to repeat a class, she/he will not get a scholarship '
+    to confirm: ['citizen of India']
+    unverified conditions: 8
+
+gold_038 [en] positive -> ignwps: ELIGIBLE  (retrieved rank None)  reason: every checked condition passes
+    pass    age: rule={"min": 40, "max": 79} profile=45 [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    gender: rule="female" profile='female' [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    marital_status: rule="widow" profile='widowed' [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    state: rule="central scheme" profile='Odisha' [high]  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should belong to a household living below the poverty line according to the criteria prescribed 
+    unverified conditions: 2
+
+gold_040 [en] exclusion -> ignwps: NOT_ELIGIBLE  (retrieved rank 6)  reason: a condition fails: marital_status
+    unknown age: rule={"min": 40, "max": 79} profile=None  (not stated)
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    gender: rule="female" profile='female' [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    fail    marital_status: rule="widow" profile='married' [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown bpl_household: rule=true profile=None  (not stated)
+             span: The applicant should belong to a household living below the poverty line according to the criteria prescribed 
+    residual touch 0.5799: 'I remarried last year' ~ 'Pension will be discontinuedIn case of remarriage of widow'
+    residual touch 0.5433: 'I remarried last year' ~ 'Once the widow moves above poverty line'
+    unverified conditions: 2
+
+gold_041 [en] positive -> nfbs: NEEDS_CHECKING  (retrieved rank None)  reason: something you said may bear on a condition that is not checked automatically
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The family of the applicant must be living Below Poverty Line (BPL).
+    residual touch 0.5739: 'My husband, the only earning member, died last mon' ~ "The primary breadwinner of the applicant's family must have been decea"
+    residual touch 0.4973: 'My husband, the only earning member, died last mon' ~ 'The age of the deceased breadwinner must have been more than 18 years '
+    to confirm: ['citizen of India']
+    unverified conditions: 3
+
+gold_042 [en] clarify: no target; selector would ask about state
+
+gold_043 [te] positive -> ignwps: ELIGIBLE  (retrieved rank 6)  reason: every checked condition passes
+    pass    age: rule={"min": 40, "max": 79} profile=50 [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    gender: rule="female" profile='female' [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    marital_status: rule="widow" profile='widowed' [high]
+             span: The applicant must be a widow in the age group of 40-79 years.
+    pass    state: rule="central scheme" profile='Andhra Pradesh' [high]  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should belong to a household living below the poverty line according to the criteria prescribed 
+    unverified conditions: 2
+
+gold_044 [en] positive -> nsap-ignoaps: ELIGIBLE  (retrieved rank 4)  reason: every checked condition passes
+    pass    age: rule={"min": 60, "max": null} profile=65 [high]
+             span: The applicant should be at least 60 years of age.
+    pass    state: rule="central scheme" profile='Tamil Nadu' [high]  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should be living Below Poverty Line.
+    to confirm: ['citizen of India']
+    unverified conditions: 0
+
+gold_045 [en] exclusion -> nsap-ignoaps: NOT_ELIGIBLE  (retrieved rank None)  reason: a condition fails: age
+    fail    age: rule={"min": 60, "max": null} profile=58 [high]
+             span: The applicant should be at least 60 years of age.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should be living Below Poverty Line.
+    to confirm: ['citizen of India']
+    unverified conditions: 0
+
+gold_046 [en] positive -> nsap-ignoaps: ELIGIBLE  (retrieved rank None)  reason: every checked condition passes
+    pass    age: rule={"min": 60, "max": null} profile=85 [high]
+             span: The applicant should be at least 60 years of age.
+    pass    state: rule="central scheme" profile='Kerala' [high]  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should be living Below Poverty Line.
+    to confirm: ['citizen of India']
+    unverified conditions: 0
+
+gold_047 [en] clarify: no target; selector would ask about state
+
+gold_048 [hi] positive -> nsap-ignoaps: ELIGIBLE  (retrieved rank 2)  reason: every checked condition passes
+    pass    age: rule={"min": 60, "max": null} profile=75 [high]
+             span: The applicant should be at least 60 years of age.
+    pass    state: rule="central scheme" profile='Rajasthan' [high]  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should be living Below Poverty Line.
+    to confirm: ['citizen of India']
+    unverified conditions: 0
+
+gold_049 [en] positive -> igndps: NEEDS_CHECKING  (retrieved rank None)  reason: something you said may bear on a condition that is not checked automatically
+    pass    age: rule={"min": 18, "max": 79} profile=30 [high]
+             span: The age of the applicant should range between 18-79 years.
+    pass    category: rule=["PwD"] profile={'disability_percent': 85}
+             span: The applicant should be a physically or mentally disabled person.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should belong to Below Poverty Line.
+    residual touch 0.6706: '85% locomotor disability' ~ "The applicant's disability should be more than 80%."
+    unverified conditions: 3
+
+gold_050 [en] positive -> disabled-pension: NEEDS_CHECKING  (retrieved rank 1)  reason: something you said may bear on a condition that is not checked automatically
+    pass    income: rule={"max_annual_inr": 150000, "basis": "family"} profile=120000 [high]  (profile income is family income)
+             span: The family income of the applicant should not exceed ₹1.50 lacs annually.
+    pass    category: rule=["PwD"] profile={'disability_percent': 45}
+             span: The applicant's disability must be to the extent of 40% or above then they will be eligible to avail the benef
+    pass    state: rule="Chandigarh" profile='Chandigarh' [high]
+             span: The applicant must be a resident of UT Chandigarh for more than 3 years.
+    residual touch 0.5212: "I've lived here for 5 years." ~ 'The applicant must be a resident of UT Chandigarh for more than 3 year'
+    to confirm: ['resident of Chandigarh (any domicile rule in the scheme text)']
+    unverified conditions: 2
+
+gold_051 [en] exclusion -> disabled-pension: NOT_ELIGIBLE  (retrieved rank 1)  reason: a condition fails: income, category
+    fail    income: rule={"max_annual_inr": 150000, "basis": "family"} profile=170000 [high]  (profile income is family income)
+             span: The family income of the applicant should not exceed ₹1.50 lacs annually.
+    fail    category: rule=["PwD"] profile={'disability_percent': 30}  (every listed category is ruled out)
+             span: The applicant's disability must be to the extent of 40% or above then they will be eligible to avail the benef
+    pass    state: rule="Chandigarh" profile='Chandigarh' [high]
+             span: The applicant must be a resident of UT Chandigarh for more than 3 years.
+    to confirm: ['resident of Chandigarh (any domicile rule in the scheme text)']
+    unverified conditions: 2
+
+gold_052 [en] exclusion -> igndps: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age, category
+    unknown age: rule={"min": 18, "max": 79} profile=None  (not stated)
+             span: The age of the applicant should range between 18-79 years.
+    unknown category: rule=["PwD"] profile={'disability_percent': 90}  (not determined: ['disability_percent'])
+             span: The applicant should be a physically or mentally disabled person.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    pass    bpl_household: rule=true profile=True [high]
+             span: The applicant should belong to Below Poverty Line.
+    unverified conditions: 3
+
+gold_054 [en] clarify: no target; selector would ask about state
+
+gold_055 [en] positive -> pmv: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: occupation
+    pass    age: rule={"min": 18, "max": null} profile=28 [high]
+             span: On the date of registration for the scheme, the minimum age of the applicant should be 18 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown occupation: rule=["artisan or craftsperson working with hands and tools", "engaged in a profile='carpenter' [high]  (closest is 'artisan or craftsperson working with hands and tools' (0.525), below 0.85)
+             span: The applicant should be an artisan or craftsperson working with hands and tools.The applicant should be engage
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The applicant should not have availed loans under similar credit-based schemes of the Central Government or St
+    residual touch 0.5004: 'this is our family trade' ~ 'The applicant should be engaged in the concerned trade on the date of '
+    residual touch 0.5752: "I've never taken a similar loan before" ~ 'The applicant should not have availed loans under similar credit-based'
+    unverified conditions: 4
+
+gold_057 [en] exclusion -> pmv: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age, occupation
+    unknown age: rule={"min": 18, "max": null} profile=None  (not stated)
+             span: On the date of registration for the scheme, the minimum age of the applicant should be 18 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown occupation: rule=["artisan or craftsperson working with hands and tools", "engaged in a profile='government clerk' [high]  (closest is 'artisan or craftsperson working with hands and tools' (0.470), below 0.85)
+             span: The applicant should be an artisan or craftsperson working with hands and tools.The applicant should be engage
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The applicant should not have availed loans under similar credit-based schemes of the Central Government or St
+    residual touch 0.5107: 'I work as a government clerk' ~ 'The applicant should be engaged in the concerned trade on the date of '
+    residual touch 0.5461: 'I work as a government clerk' ~ 'A person in government service and their family members shall not be e'
+    residual touch 0.6248: 'I also want to register as a traditional artisan u' ~ 'The applicant should be engaged in the concerned trade on the date of '
+    unverified conditions: 4
+
+gold_058 [en] positive -> pm-svanidhi: NEEDS_CHECKING  (retrieved rank 1)  reason: something you said may bear on a condition that is not checked automatically
+    pass    state: rule="central scheme" profile='Maharashtra' [high]  (central scheme)
+    pass    occupation: rule=["Street vendors"] profile='street vendor' [high]  (matches 'Street vendors' (0.928))
+             span: Street vendors in possession of Certificate of Vending / Identity Card issued by Urban Local Bodies (ULBs).
+    residual touch 0.6931: 'I have a Certificate of Vending from the municipal' ~ 'Street vendors in possession of Certificate of Vending / Identity Card'
+    residual touch 0.6451: 'I have a Certificate of Vending from the municipal' ~ 'The vendors, who have been identified in the survey but have not been '
+    residual touch 0.5894: 'I have a Certificate of Vending from the municipal' ~ 'Street Vendors left out of the ULB-led identification survey or who ha'
+    residual touch 0.5232: 'I have a Certificate of Vending from the municipal' ~ 'The vendors of surrounding development/ peri-urban/rural areas vending'
+    unverified conditions: 4
+
+gold_059 [en] clarify: no target; selector would ask about None
+
+gold_060 [en] clarify: no target; selector would ask about state
+
+gold_061 [en] positive -> pmegp: NEEDS_CHECKING  (retrieved rank 3)  reason: could not check: age, education_stage
+    unknown age: rule={"min": 18, "max": null} profile=None  (not stated)
+             span: Any individual, above 18 years of age.
+    pass    education_class: rule={"min_class": 8, "max_class": null} profile=8 [high]
+             span: For setting up of project costing above Rs.10 lakh in the Manufacturing sector and above ₹ 5,00,000 in the Bus
+    unknown education_stage: rule="VIII standard pass" profile='school' [medium]  (the stage text does not map to profile stages)
+             span: For setting up of project costing above Rs.10 lakh in the Manufacturing sector and above ₹ 5,00,000 in the Bus
+    pass    state: rule="central scheme" profile='Odisha' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: Existing Units (under PMRY, REGP, or any other scheme of the Government of India or State Government) and the 
+    residual touch 0.5016: 'want to set up a manufacturing unit that will cost' ~ 'The unit is profit- making with good turnover and has the potential fo'
+    unverified conditions: 11
+
+gold_063 [en] positive -> pmv: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: occupation
+    pass    age: rule={"min": 18, "max": null} profile=30 [high]
+             span: On the date of registration for the scheme, the minimum age of the applicant should be 18 years.
+    pass    state: rule="central scheme" profile='Kerala' [high]  (central scheme)
+    unknown occupation: rule=["artisan or craftsperson working with hands and tools", "engaged in a profile='fisherman' [high]  (closest is 'artisan or craftsperson working with hands and tools' (0.520), below 0.85)
+             span: The applicant should be an artisan or craftsperson working with hands and tools.The applicant should be engage
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The applicant should not have availed loans under similar credit-based schemes of the Central Government or St
+    unverified conditions: 4
+
+gold_066 [en] positive -> pmmvy: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, gender, category, occupation
+    pass    age: rule={"min": 19, "max": null} profile=22 [high]
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown income: rule={"max_annual_inr": 800000, "basis": "family"} profile=None  (not stated)
+             span: Women whose net family income is less than Rs. 8 Lakh per annum
+    unknown gender: rule="female" profile=None  (not stated)
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown category: rule=["SC", "ST", "PwD"] profile=None  (not determined: ['caste_category', 'disability_percent'])
+             span: Women belonging to scheduled castes and scheduled tribesWomen who are partially (40%) or fully disabled (Divya
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown occupation: rule=["employed"] profile=None  (not stated)
+             span: The applicant should be employed and experiencing wage-loss due to the pregnancy.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: All pregnant women and lactating mothers in regular employment with the Central Government or State Government
+    unverified conditions: 13
+
+gold_068 [en] positive -> pmmvy: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: age, income, category, occupation
+    unknown age: rule={"min": 19, "max": null} profile=None  (not stated)
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown income: rule={"max_annual_inr": 800000, "basis": "family"} profile=None  (not stated)
+             span: Women whose net family income is less than Rs. 8 Lakh per annum
+    pass    gender: rule="female" profile='female' [high]
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown category: rule=["SC", "ST", "PwD"] profile=None  (not determined: ['caste_category', 'disability_percent'])
+             span: Women belonging to scheduled castes and scheduled tribesWomen who are partially (40%) or fully disabled (Divya
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown occupation: rule=["employed"] profile=None  (not stated)
+             span: The applicant should be employed and experiencing wage-loss due to the pregnancy.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: All pregnant women and lactating mothers in regular employment with the Central Government or State Government
+    residual touch 0.5197: 'both will be girls' ~ 'If a beneficiary delivers twins/ triplets/ quadruplets in her second p'
+    residual touch 0.4835: 'both will be girls' ~ 'Women holding e-Shram card'
+    unverified conditions: 13
+
+gold_070 [en] exclusion -> pmmvy: NEEDS_CHECKING  (retrieved rank 8)  reason: could not check: age, income, category, occupation
+    unknown age: rule={"min": 19, "max": null} profile=None  (not stated)
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown income: rule={"max_annual_inr": 800000, "basis": "family"} profile=None  (not stated)
+             span: Women whose net family income is less than Rs. 8 Lakh per annum
+    pass    gender: rule="female" profile='female' [high]
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown category: rule=["SC", "ST", "PwD"] profile=None  (not determined: ['caste_category', 'disability_percent'])
+             span: Women belonging to scheduled castes and scheduled tribesWomen who are partially (40%) or fully disabled (Divya
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown occupation: rule=["employed"] profile='public sector undertaking employee' [high]  (closest is 'employed' (0.664), below 0.85)
+             span: The applicant should be employed and experiencing wage-loss due to the pregnancy.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: All pregnant women and lactating mothers in regular employment with the Central Government or State Government
+    residual touch 0.5415: 'I work as a permanent employee' ~ 'Women holding MGNREGA Job Card'
+    unverified conditions: 13
+
+gold_071 [te] positive -> pmmvy: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age, income, gender, category, occupation
+    unknown age: rule={"min": 19, "max": null} profile=None  (not stated)
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown income: rule={"max_annual_inr": 800000, "basis": "family"} profile=None  (not stated)
+             span: Women whose net family income is less than Rs. 8 Lakh per annum
+    unknown gender: rule="female" profile=None  (not stated)
+             span: The applicant should be of at least 19 years old and a pregnant women.
+    unknown category: rule=["SC", "ST", "PwD"] profile=None  (not determined: ['caste_category', 'disability_percent'])
+             span: Women belonging to scheduled castes and scheduled tribesWomen who are partially (40%) or fully disabled (Divya
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown occupation: rule=["employed"] profile=None  (not stated)
+             span: The applicant should be employed and experiencing wage-loss due to the pregnancy.
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: All pregnant women and lactating mothers in regular employment with the Central Government or State Government
+    unverified conditions: 13
+
+gold_073 [en] exclusion -> ssy: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: age, gender
+    unknown age: rule={"min": null, "max": 10} profile=None  (not stated)
+             span: the name of a girl child, who has not attained the age of ten years as of the date of opening of the account.
+    unknown gender: rule="female" profile=None  (not stated)
+             span: the name of a girl child
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unverified conditions: 3
+
+gold_074 [en] positive -> wbkanyashree: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age, income, gender, marital_status
+    unknown age: rule={"min": 13, "max": 18} profile=None  (not stated)
+             span: Age limit: Girls between the ages of 13 and 18 years are eligible for the scheme.
+    unknown income: rule={"max_annual_inr": 120000, "basis": "family"} profile=100000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The scheme applies to girls from families with an annual income of up to Rs. 1.2 lakhs.
+    pass    education_class: rule={"min_class": 8, "max_class": 12} profile=9 [high]
+             span: Girls who are studying in classes 8 to 12 in government-aided or recognized schools are eligible to apply for 
+    pass    education_stage: rule="school" profile='school' [high]
+             span: Girls who are studying in classes 8 to 12 in government-aided or recognized schools are eligible to apply for 
+    unknown gender: rule="female" profile=None  (not stated)
+             span: The Kanyashree Prakalpa Scheme is a social welfare scheme launched by the Government of West Bengal aimed at i
+    unknown marital_status: rule="unmarried" profile=None  (not stated)
+             span: Unmarried Girls are eligible to apply for the one-time grant provided under the scheme.
+    pass    state: rule="West Bengal" profile='West Bengal' [high]
+             span: The Kanyashree Prakalpa Scheme is a social welfare scheme launched by the Government of West Bengal aimed at i
+    residual touch 0.4819: 'studying in class 9 at a government school' ~ 'Girls studying in private schools are not eligible for the annual scho'
+    to confirm: ['resident of West Bengal (any domicile rule in the scheme text)']
+    unverified conditions: 3
+
+gold_075 [en] exclusion -> wbkanyashree: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age, income, education_class, gender, marital_status
+    unknown age: rule={"min": 13, "max": 18} profile=None  (not stated)
+             span: Age limit: Girls between the ages of 13 and 18 years are eligible for the scheme.
+    unknown income: rule={"max_annual_inr": 120000, "basis": "family"} profile=90000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: The scheme applies to girls from families with an annual income of up to Rs. 1.2 lakhs.
+    unknown education_class: rule={"min_class": 8, "max_class": 12} profile=None  (not stated)
+             span: Girls who are studying in classes 8 to 12 in government-aided or recognized schools are eligible to apply for 
+    pass    education_stage: rule="school" profile='higher_secondary' [medium]
+             span: Girls who are studying in classes 8 to 12 in government-aided or recognized schools are eligible to apply for 
+    unknown gender: rule="female" profile=None  (not stated)
+             span: The Kanyashree Prakalpa Scheme is a social welfare scheme launched by the Government of West Bengal aimed at i
+    unknown marital_status: rule="unmarried" profile=None  (not stated)
+             span: Unmarried Girls are eligible to apply for the one-time grant provided under the scheme.
+    pass    state: rule="West Bengal" profile='West Bengal' [high]
+             span: The Kanyashree Prakalpa Scheme is a social welfare scheme launched by the Government of West Bengal aimed at i
+    residual touch 0.623: 'studies in a private school' ~ 'Girls studying in private schools are not eligible for the annual scho'
+    residual touch 0.4947: 'studies in a private school' ~ 'The scheme applies only to girls who are residents of West Bengal and '
+    to confirm: ['resident of West Bengal (any domicile rule in the scheme text)']
+    unverified conditions: 3
+
+gold_076 [en] clarify: no target; selector would ask about state
+
+gold_078 [en] positive -> pmay-u: NEEDS_CHECKING  (retrieved rank 5)  reason: could not check: income, category
+    unknown income: rule={"max_annual_inr": 1800000, "basis": "family"} profile=250000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    unknown category: rule=["EWS"] profile=None  (not determined: ['caste_category'])
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    pass    state: rule="central scheme" profile='Gujarat' [high]  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The family MUST NOT have previously availed the benefits of any housing-related schemes set up by the Governme
+    residual touch 0.7594: "we don't own a pucca house anywhere" ~ 'The applicant or his/her family members must not be owning a pucca hou'
+    unverified conditions: 5
+
+gold_079 [en] positive -> pmay-u: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, category
+    unknown income: rule={"max_annual_inr": 1800000, "basis": "family"} profile=800000 [high]  (under the cap, but the profile's income basis (None) may not match the scheme's (family))
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    unknown category: rule=["EWS"] profile=None  (not determined: ['caste_category'])
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The family MUST NOT have previously availed the benefits of any housing-related schemes set up by the Governme
+    unverified conditions: 5
+
+gold_080 [en] exclusion -> pmay-u: NEEDS_CHECKING  (retrieved rank 6)  reason: could not check: income, category
+    unknown income: rule={"max_annual_inr": 1800000, "basis": "family"} profile=2000000 [high]  (over the cap, but the bases are ambiguous (profile None, scheme family))
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    unknown category: rule=["EWS"] profile=None  (not determined: ['caste_category'])
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown (non-decisive) not_availing_other_scheme: rule=true profile=None  (no prior benefit stated)
+             span: The family MUST NOT have previously availed the benefits of any housing-related schemes set up by the Governme
+    residual touch 0.5261: 'I want a home loan subsidy under PMAY' ~ 'The town/city in which the family resides must be covered under the sc'
+    unverified conditions: 5
+
+gold_081 [en] exclusion -> pmay-u: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: income, category, not_availing_other_scheme
+    unknown income: rule={"max_annual_inr": 1800000, "basis": "family"} profile=None  (not stated)
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    unknown category: rule=["EWS"] profile=None  (not determined: ['caste_category'])
+             span: 1. The family identifies as one of the following -a) Economically Weaker Section (EWS): households with annual
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unknown not_availing_other_scheme: rule=true profile=None  (prior benefit stated (previously received a housing scheme benefit); check it is not for the same purpose)
+             span: The family MUST NOT have previously availed the benefits of any housing-related schemes set up by the Governme
+    residual touch 0.5484: 'I already own a house elsewhere' ~ 'The applicant or his/her family members must not be owning a pucca hou'
+    residual touch 0.5363: 'I already own a house elsewhere' ~ 'The town/city in which the family resides must be covered under the sc'
+    residual touch 0.5602: 'previously received a housing scheme benefit' ~ 'The town/city in which the family resides must be covered under the sc'
+    unverified conditions: 5
+
+gold_085 [en] positive -> hefas-pbaocwwb: ELIGIBLE  (retrieved rank 1)  reason: every checked condition passes
+    pass    education_stage: rule="higher education program" profile='undergraduate' [medium]
+             span: The applicant should have secured admission into a higher education program through CENTAC, Puducherry.
+    pass    state: rule="Puducherry" profile='Puducherry' [high]
+             span: The applicant should have secured admission into a higher education program through CENTAC, Puducherry.
+    pass    registered_construction_worker: rule=true profile=True [high]
+             span: The Construction Worker should be registered as a Construction Worker with the Puducherry Building and Other C
+    pass    occupation: rule=["Student"] profile='construction worker' [high]  (the scheme requires construction-board registration and the person says they are registered)
+             span: The applicant should be a Student.
+    to confirm: ['resident of Puducherry (any domicile rule in the scheme text)', 'citizen of India']
+    unverified conditions: 3
+
+gold_087 [en] clarify: no target; selector would ask about state
+
+gold_088 [hi] clarify: no target; selector would ask about occupation
+
+gold_090 [en] positive -> kvps: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age
+    unknown age: rule={"min": 10, "max": null} profile=None  (not stated)
+             span: The minimum age of minors should be 10 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unverified conditions: 7
+
+gold_090 [en] positive -> nscs: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: age
+    unknown age: rule={"min": 10, "max": null} profile=None  (not stated)
+             span: The minimum age of minors should be 10 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unverified conditions: 6
+
+gold_091 [en] exclusion -> pmuy: NEEDS_CHECKING  (retrieved rank 3)  reason: could not check: gender, category
+    unknown gender: rule="female" profile=None  (not stated)
+             span: Male Member from a household cannot apply for the scheme.
+    unknown category: rule=["SC", "ST"] profile=None  (not determined: ['caste_category'])
+             span: Belongs to SC/ST households
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    residual touch 0.4964: 'I already have an LPG gas connection at home' ~ 'An adult woman belonging to a poor household'
+    unverified conditions: 6
+
+gold_092 [en] positive -> pmuy: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: category
+    pass    gender: rule="female" profile='female' [high]
+             span: Male Member from a household cannot apply for the scheme.
+    unknown category: rule=["SC", "ST"] profile=None  (not determined: ['caste_category'])
+             span: Belongs to SC/ST households
+    pass    state: rule="central scheme" profile='Bihar' [high]  (central scheme)
+    residual touch 0.7627: 'from a poor household' ~ 'An adult woman belonging to a poor household'
+    residual touch 0.4969: 'from a poor household' ~ 'If she is not falling in the above 2 categories, then she can stake he'
+    residual touch 0.4817: 'from a poor household' ~ 'Male Member from a household cannot apply for the scheme.'
+    residual touch 0.5282: "I don't have an LPG connection at home" ~ 'An adult woman belonging to a poor household'
+    residual touch 0.5171: "I don't have an LPG connection at home" ~ 'Male Member from a household cannot apply for the scheme.'
+    unverified conditions: 6
+
+gold_094 [en] exclusion -> pm-kisan: NEEDS_CHECKING  (retrieved rank None)  reason: nothing about you could be checked automatically
+    pass    state: rule="central scheme" profile='Maharashtra' [high]  (central scheme)
+    residual touch 0.5027: 'One of our sons works as a government clerk and pa' ~ 'All Persons who paid Income Tax in last assessment year'
+    unverified conditions: 8
+
+gold_094 [en] exclusion -> namo-shetkari-mahasanman-nidhi-yojana: NEEDS_CHECKING  (retrieved rank None)  reason: could not check: occupation
+    pass    state: rule="Maharashtra" profile='Maharashtra' [high]
+    unknown occupation: rule=["Cultivable land holding farmers"] profile='farmer' [high]  (closest is 'Cultivable land holding farmers' (0.622), below 0.85)
+             span: Cultivable land holding farmers families (comprising of husband, wife and minor children) having land holding 
+    to confirm: ['resident of Maharashtra (any domicile rule in the scheme text)']
+    unverified conditions: 11
+
+gold_096 [en] positive -> apy: NEEDS_CHECKING  (retrieved rank 1)  reason: something you said may bear on a condition that is not checked automatically
+    pass    age: rule={"min": 18, "max": 40} profile=24 [high]
+             span: The minimum age of joining APY is 18 years and maximum is 40 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    residual touch 0.5146: 'I have a savings bank account' ~ 'The age of exit and start of pension is 60 years.'
+    residual touch 0.5642: 'I have a savings bank account' ~ "Subscriber contribution to APY shall be made through the facility of '"
+    residual touch 0.5656: "I don't pay income tax" ~ 'From 1st October, 2022, any citizen who is or has been an income tax p'
+    unverified conditions: 4
+
+gold_097 [en] exclusion -> apy: NOT_ELIGIBLE  (retrieved rank 1)  reason: a condition fails: age
+    fail    age: rule={"min": 18, "max": 40} profile=42 [high]
+             span: The minimum age of joining APY is 18 years and maximum is 40 years.
+    pass    state: rule="central scheme" profile=None  (central scheme)
+    unverified conditions: 4
+
+gold_098 [en] exclusion -> ysrrb: NEEDS_CHECKING  (retrieved rank 1)  reason: could not check: category, occupation
+    unknown category: rule=["SC", "ST", "OBC", "Minority"] profile=None  (not determined: ['caste_category', 'is_minority'])
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    unknown occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='farmer' [high]  (closest is 'Landholder farmer' (0.778), below 0.85)
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    residual touch 0.4904: 'converted part of my farmland into a house plot la' ~ 'If the quantum of cultivable land owned by two or more individual fami'
+    residual touch 0.5033: 'converted part of my farmland into a house plot la' ~ 'The tenant farmer/family member shall not have any Agriculture/Horticu'
+    residual touch 0.4863: 'converted part of my farmland into a house plot la' ~ 'A Land Less Tenant/Cultivator having multiple lease agreements is elig'
+    residual touch 0.5247: 'converted part of my farmland into a house plot la' ~ 'Exclusion: Persons owning farmlands converted into House sites, Aquacu'
+    residual touch 0.5285: "it's still shown as farmland in the revenue record" ~ 'Farmers cultivating Acquired Lands for which compensation was not paid'
+    residual touch 0.5366: "it's still shown as farmland in the revenue record" ~ 'In Tribal areas, as per the Statute, only Tribal Cultivators/ tenants '
+    residual touch 0.4899: "it's still shown as farmland in the revenue record" ~ 'The lease agreement entered between the Landless Tenant/Cultivator and'
+    residual touch 0.5039: "it's still shown as farmland in the revenue record" ~ 'Tenants cultivating Inam lands/ Endowment lands will be extended benef'
+    residual touch 0.6032: "it's still shown as farmland in the revenue record" ~ 'Exclusion: Persons owning farmlands converted into House sites, Aquacu'
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_100 [en] positive -> ysrrb: NEEDS_CHECKING  (retrieved rank 4)  reason: could not check: category
+    unknown category: rule=["SC", "ST", "OBC", "Minority"] profile=None  (not determined: ['caste_category', 'is_minority'])
+             span: Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Category will get benefits along with Land Ow
+    pass    state: rule="Andhra Pradesh" profile='Andhra Pradesh' [high]
+             span: Repealing of Andhra Pradesh (Andhra Area) Tenancy Act, 1.956.
+    pass    occupation: rule=["Landholder farmer", "Tenant farmer", "Landless cultivator"] profile='tenant farmer' [medium]  (matches 'Tenant farmer' (1.000))
+             span: The benefit of the scheme shall be provided to all the landholder farmer families who collectively own cultiva
+    residual touch 0.4886: 'my late husband cultivated 1.5 acres of leased lan' ~ 'Farmers cultivating Acquired Lands for which compensation was not paid'
+    residual touch 0.4907: 'my late husband cultivated 1.5 acres of leased lan' ~ 'If the quantum of cultivable land owned by two or more individual fami'
+    residual touch 0.5402: 'my late husband cultivated 1.5 acres of leased lan' ~ 'The tenant farmer/family member shall not have any Agriculture/Horticu'
+    residual touch 0.5381: 'my late husband cultivated 1.5 acres of leased lan' ~ 'Minimum Area to be taken for lease by a single individual Landless ten'
+    residual touch 0.5121: 'my late husband cultivated 1.5 acres of leased lan' ~ 'Irrespective of the size of the Holding, the benefit will be extended '
+    residual touch 0.4899: 'my late husband cultivated 1.5 acres of leased lan' ~ 'Only One Tenant/Cultivator belonging to SC, ST, BC, and Minority Categ'
+    residual touch 0.494: 'my late husband cultivated 1.5 acres of leased lan' ~ 'In Tribal areas, as per the Statute, only Tribal Cultivators/ tenants '
+    residual touch 0.5604: 'my late husband cultivated 1.5 acres of leased lan' ~ 'A Land Less Tenant/Cultivator having multiple lease agreements is elig'
+    residual touch 0.5033: 'my late husband cultivated 1.5 acres of leased lan' ~ 'The lease agreement entered between the Landless Tenant/Cultivator and'
+    residual touch 0.5142: 'my late husband cultivated 1.5 acres of leased lan' ~ 'Tenants cultivating Inam lands/ Endowment lands will be extended benef'
+    to confirm: ['resident of Andhra Pradesh (any domicile rule in the scheme text)']
+    unverified conditions: 23
+
+gold_101 [en] no_match: no target; selector would ask about annual_income_inr
+
+gold_102 [te] no_match: no target; selector would ask about None
+
+gold_103 [hi] no_match: no target; selector would ask about disability_percent
+
+gold_104 [en] no_match: no target; selector would ask about occupation
+
+saved data/eval/e2e_test_20261029-193348.json
