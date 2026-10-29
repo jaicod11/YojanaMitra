@@ -5,6 +5,11 @@ project without the earlier conversations. Every fact below was read from
 files on disk on 2026-10-02, without running git. Anything that could not be
 confirmed is marked **Unverified**.
 
+**Updated 2026-10-29 with the test results.** The updated parts are §1 (test
+set), §2 (deadline status), §3 (the test-run row), §5, §6 (generation) and §7.
+Everything else, including the repository state below, is still as of
+2026-10-02.
+
 - **Repository state:** `main` is at `bb0e4c4a`, "log provider failures and
   answers, and let rate-limited keys recover" (2026-09-24 07:32 IST). No file
   outside `node_modules/`, `.git/` and caches has been modified since
@@ -79,9 +84,9 @@ claim:
   revealed it. Find corpus-level evidence first (a scan over all 2,062
   constraint records or all 7,939 residuals), and say when a decision still
   rests on one row.
-- **Test set:** the test split is run once, at the end, with `--final`
-  (§7). After that, changing the system and re-scoring test turns it into a
-  second dev set.
+- **Test set:** the test split was run once, at the end, with `--final`, on
+  2026-10-29 (§5). Changing the system now and re-scoring test would turn it
+  into a second dev set.
 
 **Operating habits that came from incidents:**
 - **Diagnose before rerunning.** State the cause of a failed or stopped run,
@@ -146,10 +151,12 @@ They get back up to 10 schemes from the myScheme portal, each with:
 **Unverified (not recorded in the repo):** the course name and code, the
 team members, and the deadline. The owner should fill these in here.
 
-**Deadline status:** see §7. As of 2026-10-02, deployment and the
-rule-first rebuild remain. The owner reports that the test run is complete
-and the report written. Neither the test results nor the report is in this
-checkout (§5, §7).
+**Deadline status:** see §7. As of 2026-10-29:
+- **Remaining:** deployment, the report and deck, and the rule-first
+  rebuild.
+- **Test run:** complete, and its results are in this checkout (§5).
+- **Report:** the owner reported on 2026-10-02 that it was written. It is not
+  in this checkout (§7).
 
 ## 3. Current state
 
@@ -170,7 +177,7 @@ checkout (§5, §7).
 | **Classifier** | Done. Predicts a scheme's myScheme category (15 classes). Headline macro-F1 0.742 ± 0.026 (§5). Standalone: nothing in the pipeline uses it. | **Yes** (`classifier-done`) | `scripts/classifier/`, `data/eval/classifier/`, `docs/CLASSIFIER.md` |
 | **HF data backup** | Private HF dataset `devil2411/yojanamitra-data-backup` holding `data/interim`, `data/index` and `data/cache`. Restore script with `--check` and `--force`; it rebuilds `chunks.jsonl` and checks its SHA. The backup was made on 2026-09-23, before the restore script was committed at 18:15 IST (inferred; the upload time isn't recorded locally). **`data/cache` was last written 2026-09-23 20:48, so the backup is probably missing the latest cache entries.** | n/a | `scripts/restore_data_backup.py` |
 | **Provider logging and key cooldown** | Done (commit `bb0e4c4a`, 2026-09-24). Details under the table. | Not tagged; post-freeze; logged as change #12 | `scripts/label_categories.py`, `backend/app/understand.py`, `backend/app/main.py` |
-| **Test run** | **The owner reports it is complete; the results are not on this machine** (§5). | n/a | §5, §7 |
+| **Test run** | **Complete** (updated 2026-10-29). Scored once on 2026-10-29 at `6b1ac224` (§5). It must not be run again. | n/a | `data/eval/test_20261029-*.json`, `e2e_test_20261029-193348.json`, `generate_test_20261029-200355.json`; `docs/TEST_RESULTS.md` |
 | **Deployment** | **Not started.** | n/a | §7 |
 | **Report and deck** | **The owner reports the report is written.** No report or deck files are in the repo. | n/a | §7, §10 |
 | **Rule-first rebuild** | **Not started.** No `understand_rules.py` and no feasibility doc exist. | n/a | §8 |
@@ -241,36 +248,104 @@ commit:
 
 ## 5. Results so far
 
-**All numbers below are on the 20-row dev split.** Dev is small: a
-positive-row rate moves by 0.10 per row, and an exclusion-row rate by about
-0.17. Read every number below with that in mind.
+### Test set (scored once, 2026-10-29)
 
-**Test-set results: not found on this machine.** On 2026-10-02 the owner
-reported that the test run is complete and the report written. Searching
-this checkout and this machine found no test results:
-- **No result files.** `data/eval/` has no `test_*`, `e2e_test_*` or
-  `generate_test_*` file, the names the three scripts write with
-  `--split test --final`. A search of the home directory and `/tmp`, by those
-  names and for any JSON containing `"split": "test"` modified since
-  2026-09-24, found nothing.
-- **No trace in the cache.** None of the 82 test descriptions is in
-  `data/cache/understand.jsonl`, while all 20 dev descriptions are. The cache
-  was last written 2026-09-23.
-  - The end-to-end and generation runs call `understand()` on every row, so
-    they did not run here against this data.
-  - A retrieval-only run on raw descriptions doesn't call `understand()`, so
-    the cache can't rule that one out. But it would still have left a
-    `test_*.json`.
-- **No later commits.** There is no commit after 2026-09-24 in this
-  checkout.
+**Full tables, per-language breakdowns and the run's provenance are in
+`docs/TEST_RESULTS.md`.** Figures marked † there were computed from per-row
+records rather than read from a result file's metrics block. The same mark is
+used here.
 
-The run may have been done in another checkout or on another machine.
-**Copy its result files into `data/eval/` and add the test numbers here.**
-Include all three retrieval modes, so the comparison with the BM25 keyword
-baseline is recorded. **Do not re-run the test split to regenerate them;**
-it is scored once.
+- **Run:** 82 rows (43 positive, 23 exclusion, 12 clarify, 4 no_match). The 2
+  `skip_scoring` rows are not in the split.
+  - **Code:** commit `6b1ac224`. The code is that of `bb0e4c4a`, including
+    change #12.
+  - **Commands** (never to be run again):
+    - `evaluate.py --split test --final`, once raw and once with
+      `--query-source rewritten`;
+    - `evaluate_e2e.py --split test --final`;
+    - `evaluate_generate.py --split test --final`.
+  - **Files, in `data/eval/`:**
+    - `test_20261029-191521.json`: retrieval on raw descriptions;
+    - `test_20261029-192759.json`: retrieval on understand-v4.1 rewrites,
+      plus profile extraction;
+    - `e2e_test_20261029-193348.json`: end to end;
+    - `generate_test_20261029-200355.json`: generation, through
+      `collect()`/`finalize()`.
+- **Providers:** understand used Gemini on all 82 rows. Generation made 107
+  calls, all to gemini-3.1-flash-lite. No Groq.
+- **The understand outputs came from the cache.** They were produced about
+  18 hours earlier, by an interrupted first attempt (the owner's account).
+  Details are in `docs/CHANGES_SINCE_FREEZE.md`.
+- **Units:** retrieval is per row. End to end is per (row, scheme) pair: 52
+  positive pairs and 24 exclusion pairs.
 
-### Retrieval
+**Retrieval** (R@k and MRR@10 over 43 positive rows; FIR over 23 exclusion
+rows):
+
+| Query sent to retrieval | Mode | R@5 | R@10 | MRR@10 | FIR |
+|---|---|---:|---:|---:|---:|
+| Raw description | BM25 | 0.2093 | 0.3953 | 0.2094 | 0.3913 |
+| Raw description | Dense | 0.3721 | 0.4419 | 0.3413 | 0.4348 |
+| Raw description | Hybrid | 0.3605 | 0.3721 | 0.2783 | 0.3913 |
+| understand-v4.1 rewrite | BM25 | 0.2326 | 0.4186 | 0.2172 | 0.3913 |
+| understand-v4.1 rewrite | Dense | **0.3953** | **0.4651** | **0.3491** | 0.4348 |
+| understand-v4.1 rewrite | Hybrid (deployed) | 0.3488 | 0.3953 | 0.2667 | 0.3913 |
+
+- **Raw vs rewritten:** for all 72 English rows the rewrite is identical to
+  the description †. So raw and rewritten differ only on 9 Hindi and Telugu
+  rows.
+- **Dense outperformed hybrid on every positive metric, for both query
+  sources.**
+  - Hybrid, the deployed mode, was chosen before the test run, on principle,
+    because dev could not separate the two (the owner's rationale).
+  - The deployed mode is unchanged.
+- **Inclusions via an exclusions chunk:** BM25 5, dense 2, hybrid 3.
+- **Telugu:** 4 positive rows. The best R@10 was 0.25 (rewritten, dense and
+  hybrid). On raw descriptions, every mode scored 0.
+- **Hindi:** 3 positive rows. Neither Hindi nor Telugu has any exclusion
+  rows.
+
+**End to end** (hybrid; matcher statuses, before post-processing):
+- **Positive pairs (52):** eligible 8, needs_checking 44, not_eligible 0.
+  - **False-exclusion rate: 0.0.**
+  - 19 were in the top 10, and 33 had rank None.
+  - **End-to-end rate: 0.3654** (19 of 52).
+  - Every positive pair lost end to end was lost in retrieval. For 4 of the
+    33, the matcher would have said eligible †.
+- **Exclusion pairs (24):** correctly not_eligible 0.1667, **wrongly
+  eligible 0.0**, left at needs_checking 0.8333. 9 were in the top 10.
+- **All 820 candidates:** eligible 21, needs_checking 439, not_eligible 360.
+- **Clarify rows (12):** 11 got a question (state on 9), and gold_059 got
+  none. These are reported qualitatively; the table is in
+  `TEST_RESULTS.md`.
+
+**Profile extraction** (rewritten run):
+- **Overall:** 160 of 177 = **0.904**, with false fill 0.005 (2 of 397).
+- **Against dev (0.8788), this is not an improvement.** Dev had no gold
+  income or caste values, and on test those two fields were 39 of 39. On the
+  five fields both splits scored, test is 0.8768 † against dev's 0.8788.
+- **Gender** is the weakest field (8 of 13).
+- **Telugu:** all three Telugu misses are gold_071, where understand
+  returned invalid.
+
+**Generation** (through post-processing; the dev run predates it):
+- **Hallucinated eligibility: 0** of 820 returned reasons, and 0 against the
+  matcher's status. Validation caught 1 claim (gold_036, Telugu) and
+  retried.
+- **Citation validity:** 668/677 (0.9867) on the first attempt and 891/909
+  (0.9802) over all attempts. The 1,153 final citations have 0 invalid.
+- **Fallback template:** 10 of 317 explained schemes (0.0315), in 8 rows. 28
+  rows needed a retry.
+- **Relevance flags:** 156. 2 eligible schemes were downgraded.
+- **no_match rows** naming the invented scheme: 0.
+
+### Dev set
+
+**Everything from here to the classifier is on the 20-row dev split.** Dev is
+small: a positive-row rate moves by 0.10 per row, and an exclusion-row rate
+by about 0.17. Read every number below with that in mind.
+
+### Retrieval (dev)
 
 Measured by `scripts/evaluate.py` on 10 positive and 6 exclusion dev rows.
 - **R@k:** recall@k of the expected scheme.
@@ -291,7 +366,7 @@ the final end-to-end dev run, the expected scheme was in the top 10 for
 **6 of 10** positive rows (recall@10 0.60). **MRR was not computed for
 v4.1;** no retrieval-only run used it.
 
-### Matcher (end to end)
+### Matcher, end to end (dev)
 
 From `data/eval/e2e_dev_20260922-191512.json`, the final run before the
 freeze, with the frozen configuration. Each target scheme is also matched
@@ -321,7 +396,7 @@ directly, so its status is known even when retrieval missed it.
 - **Clarify rows** are reported qualitatively: the field chosen, next to the
   gold notes. There is no metric.
 
-### Generation
+### Generation (dev)
 
 **These numbers date from 22 Sep and predate post-processing, so they do
 not describe what `/match` returns today.** The run (2026-09-22 20:28) came
@@ -329,7 +404,8 @@ before two later changes:
 - the post-processing layer (2026-09-23): downgrades, caveats, sort;
 - routing `evaluate_generate.py` through `collect()`/`finalize()`.
 
-Since then only a 2-row smoke test has run, and its metrics weren't read.
+The test run (above) is the first full measurement through post-processing.
+Before it, only a 2-row smoke test had run, and its metrics weren't read.
 
 From `data/eval/generate_dev_20260922-202840.json` (generate-v1, top 5
 explained):
@@ -461,8 +537,11 @@ Everything from the existing docs, plus the items added for this handoff.
   precedents.
 
 **Generation**
-- **No current measurement.** Generation's dev numbers predate
-  post-processing (§5).
+- **Measured through post-processing only on test** (§5). The dev run
+  predates post-processing. Against it:
+  - first-attempt citation validity fell from 0.9947 to 0.9867;
+  - the fallback rate rose from 0.0119 to 0.0315;
+  - hallucinated eligibility stayed at 0.
 - **One Hindi caveat looks truncated: "Must be below the poverty"** (leprosy
   pension `lpsup`, seen on the Hindi Uttar Pradesh widow query). This is not
   a UI cut. The source eligibility text reads "Must be below the poverty and
@@ -498,6 +577,9 @@ Everything from the existing docs, plus the items added for this handoff.
 
 ## 7. What remains
 
+What remains: deployment, the report and deck, and the rule-first rebuild.
+The one-shot test run is complete (§5) and must not be run again.
+
 ### Deployment (not started)
 - **Frontend.** `npm run build` (`vite build`) uses nitro with **Cloudflare
   as its default target**, according to the Lovable config header in
@@ -520,41 +602,18 @@ Everything from the existing docs, plus the items added for this handoff.
   viable once the backup also carries **a single archive**, such as a
   tarball of those folders. Refresh the backup at the same time (§3).
 
-### The one-shot test run (82 rows: 43 positive, 23 exclusion, 12 clarify, 4 no_match)
-- **Status:** the owner reports this run is complete, but its results aren't
-  on this machine (§5). If it has been run, it must not be run again. The
-  steps below record how it is run.
-- **Commands:**
-  - retrieval: `python scripts/evaluate.py --split test --final`
-  - end to end: `python scripts/evaluate_e2e.py --split test --final`
-  - generation: `python scripts/evaluate_generate.py --split test --final`
-
-  All three refuse the test split without `--final` and drop `skip_scoring`
-  rows.
-- **Before running:**
-  - make sure `docs/CHANGES_SINCE_FREEZE.md` is current (it was brought up
-    to date on 2026-10-02);
-  - decide whether the system tested is `HEAD` (including the post-freeze
-    logging commit) and record that;
-  - decide the rule-first question in §8.
-- **Quota.** Test descriptions are not in the LLM cache, so every row makes
-  fresh calls (roughly 2–4 per row). The Gemini caps (about 60 requests a day
-  across 3 keys) mean some calls will fall back to Groq. The cache records
-  which provider answered each call, and the server log now does too.
-  Report the provider mix with the results.
-- **Run it detached** (§1). Whatever comes out is what gets reported; don't
-  re-run.
-
 ### Report and deck
-The owner reports the report is written. Neither it nor a deck is in the
-repo, so they couldn't be checked against this document. §10 lists the
-material they must not lose.
+- **Status:** the owner reported on 2026-10-02 that the report was written.
+  Neither it nor a deck is in the repo, so they couldn't be checked against
+  this document.
+- **Test results:** these date from 2026-10-29, so a report written before
+  then doesn't contain them. `docs/TEST_RESULTS.md` has the tables.
+- §10 lists the material they must not lose.
 
 ### Rule-first extraction rebuild
 See §8.
 
 ### Housekeeping
-- Copy the test results into `data/eval/` and record them in §5.
 - Fix the tag name if the owner wants it.
 - Refresh the HF backup and add an archive.
 

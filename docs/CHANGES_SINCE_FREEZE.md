@@ -38,8 +38,9 @@ post-freeze change.
 - **Hand-made query:** a query written to exercise a case; it is not in the
   gold set.
 
-No change was tuned on recall, MRR or extraction metrics. Nothing has been
-run on the test split.
+No change was tuned on recall, MRR or extraction metrics. The test split was
+scored once, on 2026-10-29, after every change below. Nothing has changed
+since (see [2026-10-29: test split scored once](#2026-10-29-test-split-scored-once)).
 
 ## Summary
 
@@ -395,6 +396,49 @@ Across every step, nothing moves a status upward, and nothing produces
     ERROR.
   - `/health` is public and shows key variable names, though never the
     values.
+
+## 2026-10-29: test split scored once
+
+This entry is not a change. It records when the test split was scored,
+against which code, and where the scored run's understand outputs came from.
+
+- **What was scored:** the test split, once, on 2026-10-29, at commit
+  `6b1ac224`. No file under `backend/` or `scripts/` has changed since
+  2026-09-24, so the code is that of `bb0e4c4a`, including #12. The split
+  has 82 rows; the 2 `skip_scoring` rows are excluded.
+  - **Retrieval, all three modes (BM25, dense, hybrid), for raw and for
+    rewritten queries:** `data/eval/test_20261029-191521.json` (raw) and
+    `data/eval/test_20261029-192759.json` (rewritten, with profile
+    extraction).
+  - **End to end:** `data/eval/e2e_test_20261029-193348.json`.
+  - **Generation:** `data/eval/generate_test_20261029-200355.json`.
+  - **Results:** `docs/TEST_RESULTS.md`.
+- **Where the understand outputs came from (the owner's account):**
+  - the 82 understand outputs were produced about 18 hours before the scored
+    run, by a first attempt that was interrupted;
+  - that attempt was killed before it wrote any result file, and before any
+    metric was computed or read;
+  - the scored run read the outputs from the cache.
+- **What the disk shows is consistent with that account:**
+  - the cache entries were created on 2026-10-29 between 00:49:11 and
+    00:58:28 IST, and the scored files between 19:15 and 20:03 IST;
+  - both scored runs that call understand report 82 of 82 rows cached;
+  - `data/eval/` holds no earlier test result file;
+  - the scored generation run found none of its calls cached, so the first
+    attempt left no generation output;
+  - no code changed between the two;
+  - the cache also holds gold_001 twice, 15 s apart.
+- **Resuming from cache after an interrupted run is not a second scoring.**
+  - Nothing was scored or read in the first attempt, and no code changed
+    before the scored run, so no test result could have shaped the system.
+  - The cache only spared the scored run from repeating the understand
+    calls.
+- **Statuses:** none; this is measurement only.
+- **Afterwards: no change followed.**
+  - The deployed retrieval mode is still hybrid, although dense scored higher
+    on every positive retrieval metric (`docs/TEST_RESULTS.md`).
+  - Any later change can be measured on dev only. Re-scoring test would make
+    it a second dev set.
 
 ## Known gaps
 
